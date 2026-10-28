@@ -1,0 +1,153 @@
+{
+  "chapter": 18,
+  "title": "Generalized measurements and POVMs",
+  "status": "complete; independent round2 ACCEPT",
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "At_pi7kjSC0",
+      "course_order": 57,
+      "start_seconds": 1383,
+      "end_seconds": 1579,
+      "lecture_material": "Effects, completeness, and probabilities",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "instruments",
+      "video_id": "3KF16kkbdbs",
+      "course_order": 56,
+      "start_seconds": 1188,
+      "end_seconds": 1487,
+      "lecture_material": "Generalized measurement operators and conditioning",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "instruments",
+      "video_id": "At_pi7kjSC0",
+      "course_order": 57,
+      "start_seconds": 1579,
+      "end_seconds": 1685,
+      "lecture_material": "Effects do not fix conditional outputs",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "realization",
+      "video_id": "At_pi7kjSC0",
+      "course_order": 57,
+      "start_seconds": 239,
+      "end_seconds": 1230,
+      "lecture_material": "Projective pointer realization",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "distinguishability",
+      "video_id": "At_pi7kjSC0",
+      "course_order": 57,
+      "start_seconds": 1685,
+      "end_seconds": 2016,
+      "lecture_material": "Unambiguous discrimination with an inconclusive label",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    }
+  ],
+  "references": [
+    {
+      "title": "John Preskill, Quantum Information Chapter 3, October 2018",
+      "url": "https://www.preskill.caltech.edu/ph219/chap3_15.pdf",
+      "locator_checked": "PDF pp8–11; generalized measurement and POVM"
+    }
+  ],
+  "symbols": [
+    "E_j",
+    "M_j",
+    "p_j",
+    "rho",
+    "I_d"
+  ],
+  "exercises": 6,
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch18-r1.md",
+      "report_sha256": "ad37d6721656fa273fa1b4fe7c9fd8d942fefa59aaca4be511794e84b7c079f0",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch18-r2.md",
+      "report_sha256": "01a122925905c893af7aa8c4337f090c11dcd0431b5740c3ca9c3c3a3037da81",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "source_uncertainties": [
+    "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+    "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+    "Unambiguous discrimination requires the exact scale bound a <= 1/(1+s); the lecture's generic restriction does not ensure positivity.",
+    "Mixed-state conditional update is M rho M dagger, with a positive branch denominator.",
+    "Trine and paired-instrument calculations are original worked extensions."
+  ],
+  "recordings": [
+    {
+      "video_id": "At_pi7kjSC0",
+      "course_label": "W12L2",
+      "course_order": 57,
+      "duration_seconds": 2028
+    },
+    {
+      "video_id": "3KF16kkbdbs",
+      "course_label": "W12L1",
+      "course_order": 56,
+      "duration_seconds": 2131,
+      "role": "supplementary",
+      "primary_chapter": 17,
+      "source_span": {
+        "start_seconds": 1096,
+        "end_seconds": 2114
+      },
+      "reason": "Generalized measurement introduction supports Chapter18; primary teaching assignment remains Chapter17"
+    }
+  ],
+  "supporting_recording_spans": [
+    {
+      "course_order": 56,
+      "video_id": "3KF16kkbdbs",
+      "start_seconds": 1096,
+      "end_seconds": 2114,
+      "transcript_path": "sources/whisper/56_3KF16kkbdbs.txt",
+      "reason": "Generalized-measurement introduction follows the thermal discussion in the same recording"
+    }
+  ],
+  "visual_evidence": [
+    {
+      "course_order": 57,
+      "frame_paths": [
+        "sources/frames/57_At_pi7kjSC0/t1500.jpg",
+        "sources/frames/57_At_pi7kjSC0/t1800.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    },
+    {
+      "course_order": 56,
+      "frame_paths": [
+        "sources/frames/56_3KF16kkbdbs/t0950.jpg",
+        "sources/frames/56_3KF16kkbdbs/t1010.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    }
+  ],
+  "code_check": {
+    "command": "python code/ch18_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch18_lab.out"
+  },
+  "accepted_html_sha256": "e1fc51b303beb671045f8d0533b681bc654cce86c877e7fe0ee6a5bd7ad9c3a8",
+  "accepted_body_sha256": "e1fc51b303beb671045f8d0533b681bc654cce86c877e7fe0ee6a5bd7ad9c3a8",
+  "canonical_body_sha256": "e1fc51b303beb671045f8d0533b681bc654cce86c877e7fe0ee6a5bd7ad9c3a8",
+  "body_sha256": "fd558ef0794b8085d02fe7e220586081adf892bb063c43d7dd874492f656ac26"
+}

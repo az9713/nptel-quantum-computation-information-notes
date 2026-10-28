@@ -1,0 +1,204 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Quantum entropy, two-qubit entanglement, and partial trace</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>7. Quantum entropy, entanglement, and partial trace</h1>
+<p class="lead">Prepare two qubits in \(\lvert\Phi^+\rangle=(\lvert00\rangle+\lvert11\rangle)/\sqrt2\). The joint state has entropy zero, yet either qubit considered alone has entropy one bit. There is no contradiction: the joint density operator and a reduced density operator answer different experimental questions. Deriving the reduction, rather than deleting rows by intuition, identifies exactly where the joint information resides.</p>
+<p class="source-note"><strong>Lecture material:</strong> W4L1 introduces spectral entropy; W4L2 distinguishes product vectors from entangled vectors and constructs the Bell states; W4L3 works the partial trace of a Bell state. <strong>Primary-reference clarification:</strong> Preskill's <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Chapter 2, §2.3.1 and §2.5.3</a>, fixes the operational meaning of a reduced state and explains why unread distant measurements do not signal. <strong>Original teaching constructions:</strong> the index proof, the product/correlated-mixture comparison, the numerical laboratory, and the exercises. The finite-dimensional spectral theorem and Born rule are assumed; their consequences are derived below.</p>
+
+<h2 id="model">7.1 Which density operator answers the question? <a class="timestamp" href="https://www.youtube.com/watch?v=Z_KrcBOovjQ&amp;t=120s">W4L1 2:00</a></h2>
+<p>A density operator \(\rho\) on a finite-dimensional complex Hilbert space \(\mathcal H\) is a positive semidefinite Hermitian matrix with trace one. Hermitian means \(\rho^\dagger=\rho\), where the dagger is conjugate transpose. Positive semidefinite means \(\langle v|\rho|v\rangle\geq0\) for every vector \(v\). Its spectral decomposition is
+\[
+\rho=\sum_{j=1}^{d}\lambda_j\lvert e_j\rangle\langle e_j\rvert,
+\quad \lambda_j\geq0,\quad\sum_j\lambda_j=1,\tag{7.1}
+\]
+where \(d=\dim\mathcal H\) and the vectors \(\lvert e_j\rangle\) form an orthonormal basis. A pure density operator is a rank-one projector \(\lvert\psi\rangle\langle\psi\rvert\) for a normalized vector \(\psi\). A density operator of higher rank is mixed.</p>
+<p>A physical preparation may be described by probabilities over several pure vectors, but that ensemble need not be the spectral decomposition and need not be unique. Every measurement probability depends on the resulting \(\rho\), rather than a privileged hidden ensemble label. This is why an entropy defined on \(\rho\) uses its spectrum. Directly inserting the probabilities of an arbitrary preparation ensemble would generally produce a different quantity.</p>
+<div class="def"><strong>Definition 7.1 — Von Neumann entropy.</strong> The entropy of a finite-dimensional density operator, in bits, is
+\[
+S(\rho)=-\sum_j\lambda_j\log_2\lambda_j,
+\qquad 0\log_20=0.\tag{7.2}
+\]
+This spectral definition is often written \(S(\rho)=-\operatorname{Tr}(\rho\log_2\rho)\). For zero eigenvalues, the product is defined by its continuous limit; an ordinary finite matrix logarithm of a singular matrix is not required.</div>
+<p>For a positive definite density matrix, functional calculus gives \(\log_2\rho=\sum_j\log_2\lambda_j\lvert e_j\rangle\langle e_j\rvert\). Multiplying by \(\rho\), orthonormality removes all unequal-index terms. Taking the trace then gives (7.2). For a singular matrix, the same expression follows by continuity of the scalar function \(-x\log_2x\) at zero. The calculation uses a unitary eigenbasis, not a generic nonunitary similarity transformation.</p>
+<div class="prop"><strong>Proposition 7.1 — Entropy and unitary invariance.</strong> One has \(0\leq S(\rho)\leq\log_2d\). Entropy is zero exactly for a pure state, is maximal exactly at \(I_d/d\), and is unchanged by \(\rho\mapsto U\rho U^\dagger\) for a unitary \(U\).</div>
+<div class="proof"><p>The eigenvalues in (7.1) are a classical probability distribution, so the bounds and equality cases follow from the Shannon-entropy argument in <a href="chapter-06.html#entropy">Chapter 6</a>. If \(\rho\lvert e_j\rangle=\lambda_j\lvert e_j\rangle\), then \(U\rho U^\dagger(U\lvert e_j\rangle)=\lambda_jU\lvert e_j\rangle\). A unitary transformation therefore changes eigenvectors but not eigenvalues. The same entropy follows from (7.2). <span class="qed">∎</span></p></div>
+<p>For \(\rho=\operatorname{diag}(3/4,1/4)\), direct substitution gives \(S(\rho)=0.811278\) bits. For \(I_2/2\), it gives one bit. For a pure superposition, the diagonal entries in the computational basis need not be zero and one, but the eigenvalues still are. Measuring that pure state in an inconvenient basis may produce a random outcome even though its state entropy is zero. State entropy and the entropy of a specified measurement distribution are distinct.</p>
+
+<h2 id="product">7.2 Two subsystems and entangled vectors <a class="timestamp" href="https://www.youtube.com/watch?v=Nxms9nDrC_4&amp;t=480s">W4L2 8:00</a></h2>
+<p>Let \(\mathcal H_A\) and \(\mathcal H_B\) describe distinguishable subsystems, with orthonormal bases \(\{\lvert i\rangle_A\}\) and \(\{\lvert\mu\rangle_B\}\). The joint Hilbert space is \(\mathcal H_A\otimes\mathcal H_B\), with product basis \(\lvert i\mu\rangle=\lvert i\rangle_A\otimes\lvert\mu\rangle_B\). The labels specify physical access: an operation on \(A\) alone has the form \(A\otimes I_B\). Different resonances or spatially separated modes can distinguish physical qubits, but the mathematical subsystem split must be stated independently of a drawing's positions.</p>
+<p>A normalized joint pure vector is a product vector if \(\lvert\psi\rangle=\lvert a\rangle_A\otimes\lvert b\rangle_B\) for normalized local vectors. Otherwise it is entangled. For two qubits, use the fixed ordering \(00,01,10,11\). Writing \(\lvert a\rangle=a_0\lvert0\rangle+a_1\lvert1\rangle\) and \(\lvert b\rangle=b_0\lvert0\rangle+b_1\lvert1\rangle\) gives coefficients \(a_0b_0,a_0b_1,a_1b_0,a_1b_1\). Every product coefficient matrix has rank one.</p>
+<p>For example, the four equal coefficients \(1/2\) give \(\lvert+\rangle_A\lvert+\rangle_B\), where \(\lvert+\rangle=(\lvert0\rangle+\lvert1\rangle)/\sqrt2\). Inserting one minus sign to obtain
+\[
+\lvert\chi\rangle=\tfrac12(\lvert00\rangle-\lvert01\rangle
++\lvert10\rangle+\lvert11\rangle)
+\]
+produces coefficient determinant \(1/2\), so this particular vector is not a product. The determinant test applies to the full coefficient matrix; merely counting minus signs would not be an entanglement criterion. Changing amplitudes or multiplying the whole vector by a phase can change a visual sign count without changing whether it factorizes.</p>
+
+<h3 id="bell">The Bell basis and global purity</h3>
+<p>The four normalized Bell vectors are
+\[
+\lvert\Phi^\pm\rangle=\frac{\lvert00\rangle\pm\lvert11\rangle}{\sqrt2},
+\qquad
+\lvert\Psi^\pm\rangle=\frac{\lvert01\rangle\pm\lvert10\rangle}{\sqrt2}.
+\tag{7.3}
+\]
+Within each pair, the plus and minus inner product is zero. Between the two pairs, the computational-basis support is disjoint. Their norms are one, so they form an orthonormal basis of the four-dimensional joint space. Each has a rank-two coefficient matrix and is entangled.</p>
+<p>For the running vector \(\Phi^+\), the joint density operator is
+\[
+\rho_{AB}=\frac12
+\begin{pmatrix}1&amp;0&amp;0&amp;1\\0&amp;0&amp;0&amp;0\\0&amp;0&amp;0&amp;0\\1&amp;0&amp;0&amp;1\end{pmatrix}.
+\tag{7.4}
+\]
+It is not diagonal in the computational basis. Nevertheless, \(\rho_{AB}^2=\lvert\Phi^+\rangle\langle\Phi^+|\Phi^+\rangle\langle\Phi^+\rvert=\rho_{AB}\). Its eigenvalue on \(\Phi^+\) is one and its eigenvalues on the three orthogonal Bell vectors are zero. Hence \(S(\rho_{AB})=0\). Entanglement and mixedness of the joint state are different properties.</p>
+
+<h2 id="partial">7.3 Deriving the partial trace <a class="timestamp" href="https://www.youtube.com/watch?v=6qJxrIf7KeA&amp;t=43s">W4L3 0:43</a></h2>
+<p>A local experiment on \(A\) should not require carrying the entire joint matrix in every prediction. Let the matrix elements of a joint density operator be \(\rho_{i\mu,j\nu}=\langle i\mu|\rho_{AB}|j\nu\rangle\). Define
+\[
+(\rho_A)_{ij}=\sum_\mu\rho_{i\mu,j\mu},
+\qquad \rho_A=\operatorname{Tr}_B\rho_{AB}.\tag{7.5}
+\]
+The repeated \(B\) index is summed while the two \(A\) indices remain free. This produces an operator on \(\mathcal H_A\), not a scalar. It is not a submatrix selected by deleting the other subsystem's rows.</p>
+<div class="prop"><strong>Proposition 7.2 — Local prediction identity.</strong> For every operator \(A\) acting on \(\mathcal H_A\), the operator in (7.5) satisfies
+\[
+\operatorname{Tr}(\rho_AA)=\operatorname{Tr}\bigl(\rho_{AB}(A\otimes I_B)\bigr).
+\tag{7.6}
+\]</div>
+<div class="proof"><p>Expand the right-hand trace in the product basis:
+\[
+\sum_{i,\mu,j,\nu}\rho_{i\mu,j\nu}
+(A\otimes I_B)_{j\nu,i\mu}
+=\sum_{i,j,\mu}\rho_{i\mu,j\mu}A_{ji}
+=\sum_{i,j}(\rho_A)_{ij}A_{ji}.
+\]
+The last expression is exactly the left-hand trace. Conversely, choosing the matrix-unit test operators \(A=\lvert j\rangle\langle i\rvert\) determines each entry of \(\rho_A\), so the local prediction identity characterizes the reduced operator uniquely. <span class="qed">∎</span></p></div>
+<p>The reduction is itself a density operator. Hermiticity follows by complex conjugating (7.5). For any local vector \(v\),
+\[
+\langle v|\rho_A|v\rangle=\sum_\mu\langle v,\mu|\rho_{AB}|v,\mu\rangle\geq0.
+\]
+Its trace is \(\sum_{i,\mu}\rho_{i\mu,i\mu}=1\). Choosing a different orthonormal basis of \(B\) cannot change the operator because the identity (7.6) is basis independent and determines it uniquely. These observations justify interpreting the reduction as the state available to all local measurements.</p>
+<p>For two qubits, (7.5) becomes
+\[
+\rho_A=\begin{pmatrix}
+\rho_{00,00}+\rho_{01,01}&amp;\rho_{00,10}+\rho_{01,11}\\
+\rho_{10,00}+\rho_{11,01}&amp;\rho_{10,10}+\rho_{11,11}
+\end{pmatrix}.\tag{7.7}
+\]
+Off-diagonal \(A\) entries can survive. It is the equality of the two \(B\) indices that matters, not whether an entry lies on the full matrix's diagonal. For a product operator \(R_A\otimes R_B\), the definition gives \(\operatorname{Tr}_B(R_A\otimes R_B)=R_A\operatorname{Tr}R_B\). A product density operator therefore reduces to its original local factor.</p>
+
+<h2 id="local-entropy">7.4 Pure globally, mixed locally <a class="timestamp" href="https://www.youtube.com/watch?v=6qJxrIf7KeA&amp;t=1500s">W4L3 25:00</a></h2>
+<p>Apply (7.7) to the Bell density matrix (7.4). The only nonzero joint diagonal entries are \(\rho_{00,00}=\rho_{11,11}=1/2\). The Bell coherence entries \(\rho_{00,11}\) and \(\rho_{11,00}\) connect unequal \(B\) indices, so neither contributes to \(\rho_A\). The result is \(\rho_A=I_2/2\), and symmetry gives \(\rho_B=I_2/2\). Their eigenvalues are \(1/2,1/2\), giving one bit each.</p>
+<p>Contrast three preparations. The pure product \(\lvert++\rangle\) has zero
+entropy globally and locally. The pure Bell vector has zero global entropy and
+one bit in either marginal. The classically correlated mixture
+\[
+\omega_{AB}=\tfrac12\lvert00\rangle\langle00\rvert
++\tfrac12\lvert11\rangle\langle11\rvert
+\tag{7.8}
+\]
+has global entropy one bit and the same marginals \(I_2/2\) as the Bell state.</p>
+<p>A mixed bipartite state is called separable when it can be written as
+\(\sum_kp_k\rho_A^{(k)}\otimes\rho_B^{(k)}\), where \(p_k\geq0\),
+\(\sum_kp_k=1\), and each local factor is a density operator.
+The two displayed product projectors already give such a decomposition of
+\(\omega_{AB}\). Its local mixedness therefore does not establish entanglement.
+Local mixedness detects pure-state entanglement when joint purity is established;
+the general pure-state equivalence is derived in the next chapter.</p>
+<p>A useful continuous family is \(\lvert\psi(p)\rangle=\sqrt p\lvert00\rangle+\sqrt{1-p}\lvert11\rangle\), with \(0\leq p\leq1\). Its joint density operator is pure for every \(p\), whereas the reduction is \(\operatorname{diag}(p,1-p)\). Its local entropy is the binary Shannon entropy, rising from zero at a product endpoint to one at \(p=1/2\), then returning to zero. The next chapter derives the general structure that makes the two local spectra agree.</p>
+
+<h3 id="no-signalling">Discarding an outcome is not a distant physical influence</h3>
+<p>A partial trace is a description of restricted access. Taking it on paper does not perform an experiment on the remote qubit. For the Bell state, a computational-basis measurement of \(B\) has outcomes zero and one with equal probabilities. Conditioned on the outcome, \(A\) is respectively \(\lvert0\rangle\) or \(\lvert1\rangle\). If the outcome is unread, its average state is still \(I_2/2\). Measuring \(B\) in the plus/minus basis instead prepares corresponding conditional plus/minus states on \(A\), whose unread average is also \(I_2/2\).</p>
+<p>The general projective case has the same conclusion. Let \(P_k\) be orthogonal projectors on \(B\) with \(\sum_kP_k=I_B\). After measuring and ignoring the result, a local expectation becomes
+\[
+\sum_k\operatorname{Tr}\bigl[(I_A\otimes P_k)\rho_{AB}(I_A\otimes P_k)
+(A\otimes I_B)\bigr]
+=\operatorname{Tr}\bigl[\rho_{AB}(A\otimes\sum_kP_k)\bigr].
+\]
+We used cyclicity of the trace, commutation of operators on different subsystems, and \(P_k^2=P_k\). The original expectation is recovered. Conditional ensembles can differ, but without the classical outcome record no local experiment distinguishes the measurement choice. <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Preskill §2.5.3, PDF pages 30–31</a>, discusses this operational boundary.</p>
+
+<h2 id="lab">7.5 Executable reduction and entropy checks</h2>
+<p>The laboratory uses \(A\)-first lexicographic ordering. Reshaping a \(4\times4\) matrix to axes \((i,\mu,j,\nu)\) exposes the index contractions in (7.5). It compares Bell, product, and separable correlated states; checks the local prediction identity on a matrix basis; and sums the unnormalized branches of unread measurements in two bases. Every density matrix supplied to the entropy function is checked for Hermiticity, trace one, and nonnegative eigenvalues up to a declared floating-point tolerance.</p>
+<pre><code class="language-python" data-file="ch07_lab.py">"""Entropy, reductions, and local measurement checks for two-qubit states."""
+import numpy as np
+
+
+def projector(vector):
+    return np.outer(vector, vector.conj())
+
+
+def reductions(rho, dim_a=2, dim_b=2):
+    tensor = rho.reshape(dim_a, dim_b, dim_a, dim_b)
+    return np.einsum("abcb-&gt;ac", tensor), np.einsum("abad-&gt;bd", tensor)
+
+
+def entropy(rho):
+    assert np.allclose(rho, rho.conj().T)
+    eigenvalues = np.linalg.eigvalsh(rho)
+    assert eigenvalues.min() &gt;= -1e-12
+    assert abs(eigenvalues.sum() - 1) &lt; 1e-12
+    positive = eigenvalues[eigenvalues &gt; 1e-12]
+    return float(-np.sum(positive*np.log2(positive)))
+
+
+zero, one = np.eye(2, dtype=complex)
+plus = (zero + one)/np.sqrt(2)
+minus = (zero - one)/np.sqrt(2)
+bell = (np.kron(zero, zero) + np.kron(one, one))/np.sqrt(2)
+product = np.kron(plus, plus)
+correlated = (projector(np.kron(zero, zero))
+              + projector(np.kron(one, one)))/2
+for name, rho in [("Bell", projector(bell)),
+                  ("product", projector(product)),
+                  ("classical mixture", correlated)]:
+    rho_a, rho_b = reductions(rho)
+    print(f"{name}: S(AB)={entropy(rho):.6f}, "
+          f"S(A)={entropy(rho_a):.6f}, S(B)={entropy(rho_b):.6f}")
+    for i in range(2):
+        for j in range(2):
+            observable = np.outer(np.eye(2)[i], np.eye(2)[j])
+            assert np.allclose(np.trace(rho_a @ observable),
+                               np.trace(rho @ np.kron(observable, np.eye(2))))
+
+rho = projector(bell)
+for name, basis in [("Z", [zero, one]), ("X", [plus, minus])]:
+    averaged = np.zeros((2, 2), dtype=complex)
+    for vector in basis:
+        local = np.kron(np.eye(2), projector(vector))
+        unnormalized = local @ rho @ local.conj().T
+        reduced, _ = reductions(unnormalized)
+        averaged += reduced
+    assert np.allclose(averaged, np.eye(2)/2)
+    print(f"unread {name}-measurement on B: A remains I/2")
+
+print(f"S(diag(3/4,1/4))={entropy(np.diag([0.75, 0.25])):.6f}")
+for value in [0.0, 0.25, 0.5, 0.75, 1.0]:
+    state = np.sqrt(value)*np.kron(zero, zero)
+    state += np.sqrt(1 - value)*np.kron(one, one)
+    rho_a, _ = reductions(projector(state))
+    print(f"p={value:.2f}: local entropy={entropy(rho_a):.6f}")
+</code></pre>
+<pre><code class="output">Bell: S(AB)=0.000000, S(A)=1.000000, S(B)=1.000000
+product: S(AB)=0.000000, S(A)=0.000000, S(B)=0.000000
+classical mixture: S(AB)=1.000000, S(A)=1.000000, S(B)=1.000000
+unread Z-measurement on B: A remains I/2
+unread X-measurement on B: A remains I/2
+S(diag(3/4,1/4))=0.811278
+p=0.00: local entropy=-0.000000
+p=0.25: local entropy=0.811278
+p=0.50: local entropy=1.000000
+p=0.75: local entropy=0.811278
+p=1.00: local entropy=-0.000000
+</code></pre>
+<p>Ignoring eigenvalues of magnitude at most \(10^{-12}\) in the logarithmic sum handles roundoff near exact zero. The input checks reject materially negative spectra instead of treating them as physical states. These finite tests verify index ordering and the stated examples. They do not replace the algebraic local-prediction proof or independently establish the measurement postulate.</p>
+
+<h2 id="limits">7.6 What the reduction retains and loses</h2>
+<p>A reduced state retains every prediction for measurements confined to its subsystem. It generally loses information about joint correlations, including the distinction between (7.4) and (7.8). It also loses a unique account of preparation: one mixed matrix can arise through classical mixing or by restricting access to an entangled pure state. Neither interpretation can be inferred from the marginal matrix alone.</p>
+<p>The entropy formula here is finite dimensional and uses base-two logarithms. It does not assert that every measurement on a pure state is deterministic, that local entropy alone quantifies mixed-state entanglement, or that forgetting a subsystem causes a signal. Those distinctions are necessary for the Schmidt decomposition, Bell tests, and communication protocols that follow.</p>
+
+<h2 id="exercises">7.7 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex7-1">Exercise 7.1 — Measurement uncertainty versus state entropy</h3><p>For \(\lvert+\rangle\), compute the density spectrum and the outcome distributions for computational-basis and plus/minus-basis measurements.</p><details><summary>Solution</summary><p>The density operator is \(\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}\). Its eigenvectors are \(\lvert+\rangle,\lvert-\rangle\), with eigenvalues one and zero, so its state entropy is zero. Computational-basis outcomes have probabilities \(1/2,1/2\), hence classical outcome entropy one bit. In the plus/minus basis the probabilities are one and zero, giving zero outcome entropy. Randomness is a property of the measurement and state together.</p></details></article>
+<article class="exercise"><h3 id="ex7-2">Exercise 7.2 — Retained off-diagonal entries</h3><p>Reduce the pure product state \(\lvert+\rangle_A\lvert0\rangle_B\) explicitly using (7.7). Identify an off-diagonal entry that survives.</p><details><summary>Solution</summary><p>The only amplitudes are those of 00 and 10, both \(1/\sqrt2\). Thus joint entries \(00,00\), \(00,10\), \(10,00\), and \(10,10\) are \(1/2\). Every pair has equal \(B\) indices. Formula (7.7) gives \(\rho_A=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}\), whose \(0,1\) entry comes from joint entry \(00,10\). A rule that kept only full-matrix diagonal entries would wrongly erase the local coherence.</p></details></article>
+<article class="exercise"><h3 id="ex7-3">Exercise 7.3 — Distinguish equal marginals</h3><p>Find a joint observable whose expectation distinguishes the Bell state (7.4) from the mixture (7.8), even though their local states are identical.</p><details><summary>Solution</summary><p>Use \(X\otimes X\), where \(X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\). It exchanges 00 with 11 and 01 with 10. The Bell vector is a +1 eigenvector, so its expectation is one. Each product component 00 or 11 has zero diagonal expectation of \(X\otimes X\), giving zero for the mixture. This is a correlation measurement requiring access to both systems or comparison of their local outcomes.</p></details></article>
+<article class="exercise"><h3 id="ex7-4">Exercise 7.4 — Prove reduction positivity</h3><p>Starting from the matrix-element definition, prove that partial trace preserves positivity and trace. Explain why ordinary matrix truncation need not preserve the trace-one normalization.</p><details><summary>Solution</summary><p>For any \(v\in\mathcal H_A\), its reduced quadratic form is a sum \(\sum_\mu\langle v,\mu|\rho_{AB}|v,\mu\rangle\), and each term is nonnegative. Summing diagonal elements of the reduction gives the full trace \(\sum_{i,\mu}\rho_{i\mu,i\mu}=1\). A principal submatrix of a positive operator is positive, but its trace sums only selected diagonal entries and can be below one. Renormalizing such a submatrix would describe conditioning on an event, not discarding a subsystem.</p></details></article>
+<article class="exercise"><h3 id="ex7-5">Exercise 7.5 — Diagnose a signaling argument</h3><p>A proposed transmitter chooses whether to measure \(B\) in the computational or plus/minus basis. A receiver on \(A\) claims to distinguish the resulting ensembles without receiving the outcomes. Locate the error.</p><details><summary>Solution</summary><p>Both unread ensembles have density operator \(I_2/2\), so every local projector \(P\) has probability \(\operatorname{Tr}(P)/2\) in either case. The receiver has no physical access to which member of an ensemble was prepared. Correlations with the outcome record can distinguish the preparation methods after that record arrives, but those correlations do not change the marginal distribution. Conditioning and averaging have been interchanged in the proposed argument.</p></details></article>
+<article class="exercise"><h3 id="ex7-6">Exercise 7.6 — A correlation-preserving sweep</h3><p>Modify the laboratory to compare \(\sqrt p|00\rangle+\sqrt{1-p}|11\rangle\) with the incoherent mixture \(p|00\rangle\langle00|+(1-p)|11\rangle\langle11|\) over a grid of \(p\). Track global entropy, local entropy, and \(X\otimes X\).</p><details><summary>Solution</summary><p>Both families reduce to \(\operatorname{diag}(p,1-p)\), so their local entropy curves coincide with binary entropy. The coherent family is pure and has global entropy zero; the mixture has global entropy equal to binary entropy. Its \(X\otimes X\) expectation is zero, while direct evaluation for the coherent vector gives \(2\sqrt{p(1-p)}\). The endpoints agree because both preparations become the same product state. At \(p=1/2\), the laboratory's Bell and classical-mixture rows give the entropy contrast. Implementing the extra observable tests joint coherence that no marginal spectrum can reveal.</p></details></article>
+
+<h2 id="primary-sources">7.8 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=Z_KrcBOovjQ">W4L1 — Introduction to Von-Neumann Entropy</a>: spectral functional calculus and entropy examples.</li><li><a href="https://www.youtube.com/watch?v=Nxms9nDrC_4">W4L2 — Two qubits: Entanglement</a>: physical subsystem examples, product vectors, Bell vectors, and joint purity.</li><li><a href="https://www.youtube.com/watch?v=6qJxrIf7KeA">W4L3 — Reduced Density matrices</a>: Bell-state partial trace and the global/local entropy contrast.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Quantum Information, Chapter 2: Foundations I — States and Ensembles</a>, updated July 2015. §2.3.1, PDF pages 19–20, equations (2.62)–(2.67), gives the local prediction identity and partial trace; §2.5.3, PDF pages 30–31, distinguishes conditional ensembles from signaling. The proofs and numerical constructions here are independently developed.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-06.html">Previous chapter</a> <a href="chapter-08.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

@@ -1,0 +1,11 @@
+n=1, M=2: circuit=dense, H=1, controlled phases=0, swaps=0
+n=2, M=4: circuit=dense, H=2, controlled phases=1, swaps=1
+n=3, M=8: circuit=dense, H=3, controlled phases=3, swaps=1
+n=4, M=16: circuit=dense, H=4, controlled phases=6, swaps=2
+n=5, M=32: circuit=dense, H=5, controlled phases=10, swaps=2
+x=5, M=8: tensor-product phase reconstruction passed
+M=16, period=4, offset=1, length=4
+Largest bins: 0:0.250000, 4:0.250000, 8:0.250000, 12:0.250000
+M=16, period=3, offset=1, length=5
+Largest bins: 0:0.312500, 5:0.227055, 11:0.227055
+Truncated n=5, cutoff=3: operator error=0.942793, bound=3.926991

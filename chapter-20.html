@@ -1,0 +1,182 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Concurrence, spin flip, and entanglement of formation</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>20. Concurrence, spin flip, and entanglement of formation</h1>
+<p class="lead">A singlet mixed with equal four-state white noise has concurrence 0.25 when the singlet weight is one half. Its entanglement of formation is about 0.117619 bits, even though either local qubit is maximally mixed for every weight. The local entropy, joint entropy, concurrence, and formation measure answer different questions. This chapter derives their pure-state connection and applies the cited exact two-qubit mixed-state formula.</p>
+<p class="source-note"><strong>Lecture material:</strong> Concurrence and the Spin-Flip Analysis, official W12L5. <strong>Verified theorem:</strong> Wootters, <a href="https://arxiv.org/pdf/quant-ph/9709029">equations (5), (8)–(10), PDF pages 3–4</a>, supplies the mixed-state formula. Its full convex-roof proof is cited, not claimed as a proof presented here. <strong>Original teaching constructions:</strong> the coefficient-matrix derivation, singlet–white-noise calculation, Hermitian numerical implementation, checks, and exercises.</p>
+
+<h2 id="model">20.1 Pure-state entanglement and a minimization over preparations</h2>
+<p>Let \(\mathcal H_A=\mathcal H_B=\mathbb C^2\). Fix the computational product basis \((|00\rangle,|01\rangle,|10\rangle,|11\rangle)\). A normalized pure state has the expansion</p>
+\[
+|\psi\rangle=\alpha_{00}|00\rangle+\alpha_{01}|01\rangle+
+\alpha_{10}|10\rangle+\alpha_{11}|11\rangle,
+\qquad\sum_{a,b=0}^1|\alpha_{ab}|^2=1.
+\tag{20.1}
+\]
+<p>The coefficients \(\alpha_{ab}\) are complex numbers. Collect them into the two-by-two coefficient matrix \(C_{\mathrm{coef}}=(\alpha_{ab})\). The reduced density matrix on A is \(\rho_A=C_{\mathrm{coef}}C_{\mathrm{coef}}^\dagger\). Its nonzero eigenvalues are the squared Schmidt coefficients, so its entropy equals that of the reduced state on B.</p>
+<p>For a pure joint state, define its entanglement entropy in bits as \(E(|\psi\rangle)=-\operatorname{Tr}(\rho_A\log_2\rho_A)\), using the convention \(0\log_2 0=0\). This is zero for a product vector and one for a maximally entangled qubit pair. It is the entropy of a reduced state of a pure joint vector. Applying that local-entropy formula directly to a mixed joint state would confuse classical uncertainty with entanglement.</p>
+<p>For a mixed two-qubit density operator \(\rho\), the <dfn>entanglement of formation</dfn> is the least average pure-state entanglement among all pure-state ensemble descriptions of that density operator:</p>
+\[
+E_F(\rho)=\inf_{\{p_j,|\psi_j\rangle\}}
+\sum_jp_jE(|\psi_j\rangle),
+\quad\rho=\sum_jp_j|\psi_j\rangle\langle\psi_j|.
+\tag{20.2}
+\]
+<p>Weights are nonnegative and sum to one; the vectors are normalized. The definition minimizes over alternative preparations of the same state, rather than taking the entanglement of a particular chosen ensemble. This construction is often called a convex roof. A product-state decomposition makes the average zero, so every separable state has \(E_F=0\). The difficult direction is computing the minimum when no such decomposition exists.</p>
+<p>The label entropy \(-\sum_jp_j\log_2p_j\) is not being minimized in (20.2). It measures uncertainty in an ensemble label rather than pure-state entanglement. For \(I_4/4\), a computational-basis product ensemble gives zero average entanglement, while the joint von Neumann entropy is two bits and the local entropies are one bit each. Those values coexist because their definitions refer to different objects.</p>
+
+<h2 id="spin-flip">20.2 The spin flip and a determinant <a class="timestamp" href="https://www.youtube.com/watch?v=7RMSjNKvAdw&amp;t=66s">[01:06]</a></h2>
+<p>Let \(Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}\). Define the spin-flipped vector by \(|\widetilde\psi\rangle=(Y\otimes Y)|\psi^*\rangle\), where the star means entrywise complex conjugation in the fixed computational basis. Complex conjugation makes this an antilinear transformation on vectors. It preserves norms but is not a linear unitary gate acting on arbitrary unknown state vectors.</p>
+<p>The basis action of \(Y\otimes Y\) is \(|00\rangle\mapsto-|11\rangle\), \(|01\rangle\mapsto|10\rangle\), \(|10\rangle\mapsto|01\rangle\), and \(|11\rangle\mapsto-|00\rangle\). Therefore the components of \(|\widetilde\psi\rangle\) are \((-\alpha_{11}^*,\alpha_{10}^*,\alpha_{01}^*,-\alpha_{00}^*)\). Taking the inner product with (20.1) gives</p>
+\[
+|\langle\psi|\widetilde\psi\rangle|
+=2|\alpha_{00}\alpha_{11}-\alpha_{01}\alpha_{10}|
+=2|\det C_{\mathrm{coef}}|.
+\tag{20.3}
+\]
+<div class="def"><strong>Definition 20.1 — pure-state concurrence.</strong> For a normalized two-qubit vector, \(C(|\psi\rangle)=|\langle\psi|\widetilde\psi\rangle|\).</div>
+<p>The determinant derivation proves that concurrence vanishes exactly when the coefficient matrix has rank one. A nonzero normalized vector has nonzero coefficient matrix, so rank zero is excluded. Rank one is equivalent to factorization of its entries as \(\alpha_{ab}=u_av_b\), which is exactly a product vector \(|u\rangle\otimes|v\rangle\). Thus zero pure-state concurrence identifies separability in this setting.</p>
+<p>Cauchy–Schwarz gives \(0\leq C\leq1\), since both vectors in the overlap have norm one. A Bell state has \(C=1\); a basis product has \(C=0\). For a local basis transformation \(U_A\otimes U_B\), the coefficient matrix becomes \(U_AC_{\mathrm{coef}}U_B^{\mathsf T}\). Determinants multiply and the determinant of a unitary has unit magnitude, so (20.3) is unchanged. This proves local-unitary invariance for pure-state concurrence without choosing a special Schmidt basis.</p>
+<p>The spin flip is a mathematical ingredient of an entanglement calculation, not a proposed physical operation on an unknown qubit pair. Confusing an antilinear transformation with an available gate would change the permitted computational model. The formula is evaluated from a specified density matrix or state vector.</p>
+<p>For one normalized spinor \(|\chi\rangle=a|0\rangle+b|1\rangle\), the operation gives \(Y|\chi^*\rangle=-ib^*|0\rangle+ia^*|1\rangle\). Its overlap with \(\chi\) is \(-ia^*b^*+ib^*a^*=0\). Thus a single-qubit pure spin flip reaches the orthogonal, antipodal Bloch vector. Complex conjugation is essential: applying Y alone to \(|+y\rangle=(|0\rangle+i|1\rangle)/\sqrt2\) leaves it unchanged, whereas the spin flip reaches its orthogonal partner. For a two-qubit product, both factors flip to orthogonal partners, making the joint overlap zero. An entangled vector need not have that property, as the singlet's unit overlap demonstrates.</p>
+<p>The lecture begins with Pauli expansions of the Bell projectors. Their correlation signs can be checked without relying on names attached to handwritten vectors: for \(|\Phi^\pm\rangle=(|00\rangle\pm|11\rangle)/\sqrt2\) and \(|\Psi^\pm\rangle=(|01\rangle\pm|10\rangle)/\sqrt2\), each projector is \([I_4+c_xX\otimes X+c_yY\otimes Y+c_zZ\otimes Z]/4\), with the coefficients below. For example, X exchanges 0 and 1, so \(X\otimes X\) fixes \(\Phi^+\) but negates \(\Phi^-\). The other entries follow by applying Y and Z in the same way. These definitions fix the singlet as \(\Psi^-\), with all three correlations negative.</p>
+<table><thead><tr><th>Bell vector</th><th>\(c_x\)</th><th>\(c_y\)</th><th>\(c_z\)</th></tr></thead><tbody><tr><td>\(\Phi^+\)</td><td>1</td><td>−1</td><td>1</td></tr><tr><td>\(\Phi^-\)</td><td>−1</td><td>1</td><td>1</td></tr><tr><td>\(\Psi^+\)</td><td>1</td><td>1</td><td>−1</td></tr><tr><td>\(\Psi^-\)</td><td>−1</td><td>−1</td><td>−1</td></tr></tbody></table>
+
+<h2 id="pure-entropy">20.3 Recover the pure-state entropy from concurrence</h2>
+<p>The reduced matrix \(\rho_A=C_{\mathrm{coef}}C_{\mathrm{coef}}^\dagger\) has trace one and determinant \(|\det C_{\mathrm{coef}}|^2=C^2/4\). Its eigenvalues \(\nu_+\) and \(\nu_-\) solve the characteristic equation \(\nu^2-\nu+C^2/4=0\), giving</p>
+\[
+\nu_\pm=\frac{1\pm\sqrt{1-C^2}}2.
+\tag{20.4}
+\]
+<p>Define the binary entropy function \(h_2(u)=-u\log_2u-(1-u)\log_2(1-u)\) for \(u\in[0,1]\), with zero terms interpreted by continuity. Substitution of the two eigenvalues gives the pure-state relation</p>
+\[
+E(|\psi\rangle)=h_2\!\left(\frac{1+\sqrt{1-C(|\psi\rangle)^2}}2\right).
+\tag{20.5}
+\]
+<p>At \(C=0\), the reduced spectrum is \((1,0)\) and entropy is zero. At \(C=1\), it is \((1/2,1/2)\) and entropy is one bit. These endpoint checks follow from the eigenvalue derivation, rather than from assuming an arbitrary mapping between two different measures.</p>
+<p>For a Schmidt vector \(\sqrt u|00\rangle+\sqrt{1-u}|11\rangle\), equation (20.3) gives \(C=2\sqrt{u(1-u)}\). Equation (20.4) recovers the unordered spectrum \(\{u,1-u\}\); the plus root selects its larger value. The entropy is consequently \(h_2(u)\), as required. Pure-state concurrence repackages the two Schmidt coefficients into one scalar because their normalization leaves only one independent spectral parameter.</p>
+
+<h2 id="mixed-formula">20.4 The exact two-qubit mixed-state formula <a class="timestamp" href="https://www.youtube.com/watch?v=7RMSjNKvAdw&amp;t=1276s">[21:16]</a></h2>
+<p>For a density operator \(\rho\), define \(\widetilde\rho=(Y\otimes Y)\rho^*(Y\otimes Y)\), again using conjugation in the fixed product basis. This matrix is positive with trace one. Let</p>
+\[
+R=\sqrt{\sqrt\rho\,\widetilde\rho\,\sqrt\rho},
+\qquad c_1\geq c_2\geq c_3\geq c_4\geq0
+\tag{20.6}
+\]
+<p>be its four eigenvalues in decreasing order. Every square root here is the nonnegative Hermitian square root. The inner matrix is positive because \(\langle v|\sqrt\rho\widetilde\rho\sqrt\rho|v\rangle=\langle\sqrt\rho v|\widetilde\rho|\sqrt\rho v\rangle\geq0\). Its square root \(R\) therefore has a real nonnegative spectrum.</p>
+<div class="thm"><strong>Cited Theorem 20.1 — Wootters' two-qubit formula.</strong> For every two-qubit density operator,
+\[
+C(\rho)=\max(0,c_1-c_2-c_3-c_4),\qquad
+E_F(\rho)=h_2\!\left(\frac{1+\sqrt{1-C(\rho)^2}}2\right).
+\tag{20.7}
+\]
+The formula is equations (9)–(10), using equations (5) and (8), in <a href="https://arxiv.org/pdf/quant-ph/9709029">Wootters, PDF pages 3–4</a>. Its convex-roof proof is a cited result.</div>
+<p>For a pure state \(\rho=|\psi\rangle\langle\psi|\), its square root is itself, and \(\rho\widetilde\rho\rho=|\langle\psi|\widetilde\psi\rangle|^2\rho\). Thus \(R=C(|\psi\rangle)\rho\), whose eigenvalues are the pure-state concurrence and three zeros. Equation (20.7) then reduces to (20.3) and (20.5). This verifies consistency of the cited mixed-state expression with the pure-state derivation.</p>
+<p>The \(c_j\) are not the eigenvalues of \(\rho\), nor those of its partial transpose. They combine \(\rho\) with its spin flip and take a matrix square root. An equivalent exact expression uses square roots of eigenvalues of \(\rho\widetilde\rho\), which need not be Hermitian. The Hermitian construction in (20.6) is convenient for numerical work because it uses Hermitian eigensolvers and exposes positivity at every square-root step.</p>
+<p>The scalar formula is special to two qubits. It does not follow from the existence of a partial-transpose criterion alone, and applying it unchanged to a two-by-three or higher-dimensional density operator has no justification. The cited theorem resolves the full minimization in (20.2) for this particular dimension; the lab verifies examples of its use rather than independently proving that minimization theorem.</p>
+
+<h2 id="worked-family">20.5 A singlet mixed with white noise <a class="timestamp" href="https://www.youtube.com/watch?v=7RMSjNKvAdw&amp;t=1506s">[25:06]</a></h2>
+<p>Use the same family as Chapter 19, \(\rho(p)=p|\Psi^-\rangle\langle\Psi^-|+(1-p)I_4/4\), for \(0\leq p\leq1\), with \(|\Psi^-\rangle=(|01\rangle-|10\rangle)/\sqrt2\). Spin flip preserves the singlet projector and identity, so \(\widetilde\rho(p)=\rho(p)\). Consequently \(R=\rho(p)\): the inner matrix in (20.6) is \(\rho(p)^2\), whose positive square root is \(\rho(p)\).</p>
+<p>The eigenvalue along the singlet vector is \(p+(1-p)/4=(1+3p)/4\). Each of the three orthogonal directions has eigenvalue \((1-p)/4\). Inserting this decreasing spectrum into (20.7) gives</p>
+\[
+C(\rho(p))=\max\left(0,\frac{3p-1}{2}\right).
+\tag{20.8}
+\]
+<p>The zero-concurrence interval is \(p\leq1/3\), agreeing with the explicit separability threshold previously proved for this family. Above it, concurrence rises linearly. The formation measure is a nonlinear function of that value. At \(p=1/2\), concurrence is \(1/4\), and equation (20.7) yields approximately 0.117619 bits. At \(p=1\), both concurrence and formation entanglement are one; at \(p=0\), both are zero.</p>
+<p>The local density operators remain \(I_2/2\) at every weight, so their entropies stay at one bit. For mixed joint states, that local entropy contains uncertainty that does not necessarily represent entanglement between A and B. The changing concurrence and formation measure quantify a property of the joint state that those fixed marginals do not reveal.</p>
+
+<h2 id="numerics">20.6 A numerical contract for matrix square roots</h2>
+<p>The implementation first checks Hermiticity and unit trace, then diagonalizes the supplied matrix. A substantially negative eigenvalue causes failure rather than being silently discarded. Eigenvalues between a declared negative tolerance and zero can arise from rounding at a rank-deficient boundary; replacing only those small values by zero defines the numerical convention used here. The tolerance is \(10^{-10}\) in absolute matrix units for the finite examples.</p>
+<p>For a Hermitian matrix \(A=V\operatorname{diag}(a_j)V^\dagger\), the positive square root is \(V\operatorname{diag}(\sqrt{a_j})V^\dagger\). Multiplication can introduce a tiny anti-Hermitian residual in \(\sqrt\rho\widetilde\rho\sqrt\rho\). The code first checks that residual against the tolerance and only then replaces it by its Hermitian part. Symmetrization must not be used to conceal an arbitrary non-Hermitian input.</p>
+<p>The lab tests a singlet, a product state, the maximally mixed state, and 41 points of the singlet–white-noise family. It compares numerical concurrence with (20.8) and prints the analytical family values and their formation measure. The slightly looser \(10^{-7}\) concurrence comparison accommodates square-root sensitivity at zero eigenvalues; the matrix-validity tolerance remains the separately declared \(10^{-10}\).</p>
+<p>Twenty-four seeded complex pure vectors additionally compare the spin-flip overlap, coefficient determinant, mixed-state routine, and reduced entropy. Their nonreal amplitudes help expose an omitted conjugation that tests on real Bell vectors could miss. The seed makes the finite experiment reproducible; agreement on that sample remains an implementation check.</p>
+<!-- LAB_SOURCE_START -->
+<div class="codewrap"><pre><code class="language-python" data-file="ch20_lab.py">"""Evaluate two-qubit concurrence using Hermitian matrix square roots."""
+import numpy as np
+
+y = np.array([[0, -1j], [1j, 0]])
+flip = np.kron(y, y)
+tolerance = 1e-10
+
+
+def positive_sqrt(matrix):
+    assert np.allclose(matrix, matrix.conj().T, atol=tolerance, rtol=0)
+    eigenvalues, vectors = np.linalg.eigh(matrix)
+    if eigenvalues.min() &lt; -tolerance:
+        raise ValueError("Matrix is not positive within the stated tolerance")
+    return (vectors * np.sqrt(np.maximum(eigenvalues, 0))) @ vectors.conj().T
+
+
+def concurrence(state):
+    assert np.isclose(np.trace(state), 1, atol=tolerance, rtol=0)
+    root = positive_sqrt(state)
+    flipped = flip @ state.conj() @ flip
+    middle = root @ flipped @ root
+    assert np.allclose(middle, middle.conj().T, atol=tolerance, rtol=0)
+    middle = (middle + middle.conj().T) / 2
+    spectrum = np.linalg.eigvalsh(positive_sqrt(middle))[::-1]
+    return max(0.0, spectrum[0] - spectrum[1:].sum())
+
+
+def binary_entropy(p):
+    return max(0.0, -sum(q * np.log2(q) for q in [p, 1 - p] if q &gt; 0))
+
+
+singlet = np.array([0, 1, -1, 0]) / np.sqrt(2)
+singlet_rho = np.outer(singlet, singlet)
+assert np.isclose(concurrence(singlet_rho), 1, atol=1e-7)
+assert np.isclose(concurrence(np.diag([1, 0, 0, 0])), 0)
+assert np.isclose(concurrence(np.eye(4) / 4), 0)
+for p in np.linspace(0, 1, 41):
+    state = p * singlet_rho + (1 - p) * np.eye(4) / 4
+    assert np.isclose(concurrence(state), max(0, (3 * p - 1) / 2),
+                      atol=1e-7)
+for p in [0, 1 / 3, 0.5, 1]:
+    value = max(0, (3 * p - 1) / 2)
+    entropy = binary_entropy((1 + np.sqrt(1 - value**2)) / 2)
+    print(f"p={p:.6f}: C={value:.6f}; E_F={entropy:.6f} bits")
+print("Forty-one-point concurrence sweep passed: True")
+
+# Complex pure vectors expose missing conjugations that real Bell states hide.
+random = np.random.default_rng(20261028)
+for _ in range(24):
+    vector = random.normal(size=4) + 1j * random.normal(size=4)
+    vector /= np.linalg.norm(vector)
+    coefficients = vector.reshape(2, 2)
+    determinant_value = 2 * abs(np.linalg.det(coefficients))
+    overlap_value = abs(np.vdot(vector, flip @ vector.conj()))
+    projector = np.outer(vector, vector.conj())
+    assert np.isclose(determinant_value, overlap_value, atol=1e-12)
+    assert np.isclose(concurrence(projector), determinant_value, atol=1e-7)
+    reduced = coefficients @ coefficients.conj().T
+    eigenvalues = np.linalg.eigvalsh(reduced)
+    direct_entropy = -sum(q * np.log2(q) for q in eigenvalues if q &gt; 0)
+    argument = (1 + np.sqrt(max(0, 1 - determinant_value**2))) / 2
+    assert np.isclose(direct_entropy, binary_entropy(argument), atol=1e-12)
+print("Twenty-four seeded complex pure-state checks passed: True")
+</code></pre></div>
+<!-- LAB_SOURCE_END -->
+<!-- LAB_OUTPUT_START -->
+<pre><code class="output">p=0.000000: C=0.000000; E_F=0.000000 bits
+p=0.333333: C=0.000000; E_F=0.000000 bits
+p=0.500000: C=0.250000; E_F=0.117619 bits
+p=1.000000: C=1.000000; E_F=1.000000 bits
+Forty-one-point concurrence sweep passed: True
+Twenty-four seeded complex pure-state checks passed: True
+</code></pre>
+<!-- LAB_OUTPUT_END -->
+<p>Near \(p=1/3\), the exact formula is a nondifferentiable maximum of zero and a linear function. Numerical output close to zero should therefore be interpreted with its tolerance and input uncertainty. An approximate reconstructed density matrix can require a separate statistically justified state-estimation procedure; this program does not supply one.</p>
+
+<h2 id="limits">20.7 What this measure does and does not establish</h2>
+<p>A positive concurrence detects entanglement for a two-qubit density state, but its numerical value is not a success probability for teleportation, a Bell-test violation, a quantum computing speedup, or a directly measured energy. Entanglement of formation has an ensemble-minimization definition in bits. Converting it into an operational resource statement requires the conditions of the relevant resource theory, which are not established by evaluating one scalar formula.</p>
+<p>The pure-state determinant proof and reduced-spectrum relation were derived here. The mixed-state convex-roof theorem was cited with its exact source. Matrix calculations and limiting cases check an implementation. These levels of evidence remain distinct: reproducing the formula on a finite grid does not independently reproduce Wootters' proof for every mixed state.</p>
+<p>The course's main descriptions now fit together. State vectors describe coherent pure preparations; density operators retain all measurement statistics when ensembles or discarded systems matter. Channels describe unobserved dynamics, instruments describe outcomes and disturbance, and separability or concurrence concerns correlations of a joint state. Each representation answers a particular question, with its own assumptions and information boundary.</p>
+
+<h2 id="exercises">20.8 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex20-1">1. Derive the determinant criterion</h3><p>For the state in equation (20.1), write the spin-flipped vector and calculate its overlap with the original. State when the concurrence vanishes.</p><details><summary>Solution</summary><p>The spin-flipped components are \((-\alpha_{11}^*,\alpha_{10}^*,\alpha_{01}^*,-\alpha_{00}^*)\). The overlap is \(2(\alpha_{01}\alpha_{10}-\alpha_{00}\alpha_{11})^*\). Its magnitude is twice the absolute determinant of the coefficient matrix. It vanishes exactly when that nonzero matrix has rank one, equivalent to a normalized product vector.</p></details></article>
+<article class="exercise"><h3 id="ex20-2">2. Recover the Schmidt spectrum</h3><p>A normalized pure state has concurrence one half. Find its reduced eigenvalues and express its entanglement entropy exactly.</p><details><summary>Solution</summary><p>Insert \(C=1/2\) into (20.4): \(\nu_\pm=(1\pm\sqrt3/2)/2=(2\pm\sqrt3)/4\). The entropy is \(h_2((2+\sqrt3)/4)\). The two roots sum to one and have product \(1/16=C^2/4\), checking the characteristic equation.</p></details></article>
+<article class="exercise"><h3 id="ex20-3">3. A misleading Bell-state ensemble</h3><p>The maximally mixed two-qubit state is the equal mixture of four Bell projectors. Does that decomposition force its entanglement of formation to be one bit?</p><details><summary>Solution</summary><p>No. That ensemble gives one possible average of one bit, hence only an upper bound on the infimum. The same state is the equal mixture of four computational-basis product projectors, giving average zero. Nonnegative pure-state entanglement makes zero the minimum. The optimization concerns the density operator, not one chosen preparation story.</p></details></article>
+<article class="exercise"><h3 id="ex20-4">4. Diagnose the wrong spectrum</h3><p>A program applies \(\max(0,\lambda_1-\lambda_2-\lambda_3-\lambda_4)\) directly to the eigenvalues of an arbitrary \(\rho\). Explain the error and give a pure-state counterexample.</p><details><summary>Solution</summary><p>The theorem requires the eigenvalues of \(R=\sqrt{\sqrt\rho\widetilde\rho\sqrt\rho}\), not those of \(\rho\). Every pure state has density spectrum \((1,0,0,0)\), so the faulty program reports concurrence one for both a Bell state and the product \(|00\rangle\). The latter has concurrence zero by the determinant criterion. Density eigenvalues alone do not determine mixed or pure bipartite entanglement relative to a fixed partition.</p></details></article>
+<article class="exercise"><h3 id="ex20-5">5. Compare thresholds without changing the question</h3><p>For the singlet–white-noise family, identify the zero-concurrence interval, the entangled interval, and the interval detected by the fixed CHSH settings of Chapter 19. Explain the intermediate regime.</p><details><summary>Solution</summary><p>Equation (20.8) gives zero concurrence for \(0\leq p\leq1/3\), which is the explicitly separable interval. The state is entangled for \(p\gt1/3\). The stated CHSH settings have magnitude \(2\sqrt2p\), so they violate the local bound only for \(p\gt1/\sqrt2\). The intermediate regime contains entanglement not detected by that particular Bell test. These statements do not establish a local hidden-variable model for every other possible measurement protocol.</p></details></article>
+<article class="exercise"><h3 id="ex20-6">6. Verify complex pure states numerically</h3><p>Extend the lab to sample normalized complex four-vectors with a fixed random seed. Compare the mixed-state routine applied to each projector with equation (20.3), and compare the reduced entropy with equation (20.5). State a meaningful failure condition.</p><details><summary>Solution</summary><p>Generate real and imaginary Gaussian components, form their complex vector, and divide by its Euclidean norm. Reshape it to \(C_{\mathrm{coef}}\) and compute \(2|\det C_{\mathrm{coef}}|\). Form \(\rho=|\psi\rangle\langle\psi|\), run the Hermitian-root routine, and require agreement within a declared square-root tolerance. Diagonalize \(C_{\mathrm{coef}}C_{\mathrm{coef}}^\dagger\) for the reduced entropy and compare it with \(h_2((1+\sqrt{1-C^2})/2)\). A stable discrepancy beyond tolerance on a valid input identifies an implementation or convention error; agreement on a finite seeded sample checks those cases rather than proving the cited mixed-state theorem.</p></details></article>
+
+<h2 id="primary-sources">20.9 Primary sources and attribution</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra, <a href="https://www.youtube.com/watch?v=7RMSjNKvAdw">Concurrence and the Spin-Flip Analysis</a>, official W12L5.</li><li>William K. Wootters, <a href="https://arxiv.org/pdf/quant-ph/9709029">Entanglement of Formation of an Arbitrary State of Two Qubits</a>, arXiv quant-ph/9709029v2 (1997), subsequently Physical Review Letters 80, 2245–2248 (1998). PDF pages 2–4 define the ensemble minimum, spin flip, concurrence, and mixed-state formula. The general convex-roof proof is cited; the pure-state algebra and finite numerical checks here are independently developed teaching material.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-19.html">Previous chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

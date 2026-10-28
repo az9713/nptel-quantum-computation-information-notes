@@ -1,0 +1,208 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>EPR correlations and Bell inequalities</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>9. EPR correlations and Bell inequalities</h1>
+<p class="lead">Two distant instruments each output either \(+1\) or \(-1\). For four specified pairs of settings, a Bell-pair calculation gives correlations \(1/\sqrt2,1/\sqrt2,1/\sqrt2,-1/\sqrt2\). Adding the first three and subtracting the last gives \(2\sqrt2\), while every local hidden-variable model with a setting-independent source distribution is bounded by two. The contradiction concerns a precisely defined family of joint statistical models. It does not mean that a user can send a message by choosing a distant measurement.</p>
+<p class="source-note"><strong>Lecture material:</strong> W5L3–W6L1 introduce the singlet EPR scenario, a three-setting probability inequality, its quantum violation, and controlled-NOT. <strong>Primary-reference extensions:</strong> <a href="https://csiflabs.cs.ucdavis.edu/~gusfield/Bell-paper.pdf">Bell's original paper, §§II and IV</a>, fixes the locality model; <a href="https://www.informationphilosopher.com/solutions/scientists/bell/CHSH.pdf">Clauser, Horne, Shimony, and Holt, PDF page 2</a>, explicitly separates local response functions from setting independence. <strong>Original teaching constructions:</strong> the CHSH sign convention, its algebraic proof, the operator-norm bound, finite enumeration, and all exercises. Correlations are derived from ideal quantum measurements, not presented as newly measured experimental data.</p>
+
+<h2 id="model">9.1 The singlet experiment and compatible distant operations <a class="timestamp" href="https://www.youtube.com/watch?v=LrYMvbuA20Q&amp;t=60s">W5L3 1:00</a></h2>
+<p>A source prepares a normalized singlet
+\[
+|\Psi^-\rangle=\frac{|01\rangle-|10\rangle}{\sqrt2}
+\tag{9.1}
+\]
+on two distinguishable qubits, \(A\) and \(B\). Alice receives \(A\), and Bob receives \(B\). Let \(X,Y,Z\) denote the Pauli matrices, with \(X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\), \(Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}\), and \(Z=\operatorname{diag}(1,-1)\). For a real unit vector \(u=(u_x,u_y,u_z)\), define the dimensionless spin observable \(\sigma_u=u_xX+u_yY+u_zZ\). Its eigenvalues are \(+1,-1\); multiplying by \(\hbar/2\) would give physical angular-momentum components.</p>
+<p>Alice's observable is \(\sigma_u\otimes I_B\) and Bob's is \(I_A\otimes\sigma_v\). They commute, because their product in either order equals \(\sigma_u\otimes\sigma_v\). Noncommutation of Alice's alternative \(X\) and \(Z\) settings does not make an \(A\)-measurement fail to commute with a \(B\)-measurement. The alternatives describe different experiments on a local qubit; each run uses one setting per party.</p>
+<p>Direct application of the Pauli matrices gives
+\(\langle X\otimes X\rangle=\langle Y\otimes Y\rangle=\langle Z\otimes Z\rangle=-1\) in the singlet, and every cross term \(\langle\sigma_j\otimes\sigma_k\rangle\), \(j\ne k\), vanishes. Linearity therefore gives the correlator
+\[
+E(u,v):=\langle\Psi^-|\sigma_u\otimes\sigma_v|\Psi^-\rangle=-u\cdot v.
+\tag{9.2}
+\]
+For equal axes the outcomes are perfectly anticorrelated. For orthogonal axes the product expectation is zero. Each individual outcome is still unbiased, since both reduced density matrices are \(I_2/2\).</p>
+<p>For example, if Alice measures \(Z\) and obtains \(+1\), Bob's conditional state is \(|1\rangle\), which yields \(Z=-1\) with certainty and \(X=\pm1\) with equal probability. Without Alice's outcome record, Bob's state remains \(I_2/2\), whether she measured \(Z\), measured \(X\), or did nothing. The distinction between a conditional prediction and an unread marginal is essential to interpreting the EPR argument.</p>
+
+<h2 id="local-model">9.2 A local hidden-variable model with explicit assumptions <a class="timestamp" href="https://www.youtube.com/watch?v=77esgRSwPps&amp;t=720s">W5L4 12:00</a></h2>
+<p>The EPR motivation asks whether a more detailed description could supply the outcomes missing from a quantum state vector while retaining a suitable locality requirement. A Bell inequality tests a mathematical realization of that idea. Write \(\lambda\) for all shared hidden data emitted by the source, and \(d\mu(\lambda)\) for a normalized nonnegative probability measure over those data.</p>
+<p>In a deterministic local model, Alice's output is \(A(u,\lambda)\in\{+1,-1\}\) and Bob's is \(B(v,\lambda)\in\{+1,-1\}\). Locality means that Alice's response has no Bob-setting argument and Bob's response has no Alice-setting argument. Setting independence additionally means that the same measure \(\mu\) applies to every chosen pair \(u,v\). The predicted correlation is
+\[
+E_{\rm L}(u,v)=\int A(u,\lambda)B(v,\lambda)\,d\mu(\lambda).
+\tag{9.3}
+\]
+These assumptions are distinct. Removing either the local response restriction or the common setting-independent distribution invalidates the proof that follows.</p>
+<p>For a stochastic Bell-local model, require conditional factorization:
+\[
+\Pr(A=\alpha,B=\beta\mid u,v,\lambda)
+=P_A(\alpha\mid u,\lambda)P_B(\beta\mid v,\lambda),
+\qquad \alpha,\beta\in\{+1,-1\}.
+\]
+The hidden-data measure is again independent of the chosen settings.
+Introduce two independent uniform seeds in \([0,1]\), independent of both
+settings and \(\lambda\). Alice outputs \(+1\) when her seed is below
+\(P_A(+1\mid u,\lambda)\), and Bob uses the analogous threshold.
+The seeds reproduce the factorized joint distribution. Adding them to the
+probability space therefore expresses this stochastic model as a mixture of
+deterministic local assignments. Requiring only that each conditional marginal
+omit the remote setting would not establish this construction: conditional
+joint correlations must also obey the displayed factorization.</p>
+<p>The values assigned to unchosen settings are part of the model being tested; they are not simultaneous quantum measurements. Quantum theory itself does not require a joint distribution for incompatible local observables. The algebra is meaningful because the hidden-variable model assumes that all its response functions exist on the same probability space. Bell's conclusion is a conflict between that family of models and certain quantum predictions, rather than an inconsistency within quantum probability.</p>
+
+<h2 id="three-setting">9.3 The three-setting probability inequality <a class="timestamp" href="https://www.youtube.com/watch?v=2k_gYqzZueI&amp;t=720s">W5L5 12:00</a></h2>
+<p>The source lectures use three directions \(u,v,w\) and perfect same-axis singlet anticorrelation. In the local model, the latter requires \(B(u,\lambda)=-A(u,\lambda)\) apart from a set of zero measure. Define \(P_{++}(u,v)\) to be the joint probability that Alice, using \(u\), and Bob, using \(v\), both obtain \(+1\).</p>
+<p>Consider the hidden events giving \(A(u)=+1,A(v)=-1\), which are precisely those counted by \(P_{++}(u,v)\). For every such hidden assignment, either \(A(w)=-1\) or \(A(w)=+1\). The first case belongs to \(P_{++}(u,w)\), and the second to \(P_{++}(w,v)\). Event inclusion and nonnegative probability therefore give
+\[
+P_{++}(u,v)\leq P_{++}(u,w)+P_{++}(w,v).
+\tag{9.4}
+\]
+No outcome of an unperformed experiment has been measured in this argument. Instead, a proposed common assignment of those outcomes has forced a testable restriction on actual pairwise probabilities.</p>
+<p>The singlet's local marginals vanish and its outcomes are \(\pm1\). The projector onto outcome \(+1\) for direction \(u\) is \((I+\sigma_u)/2\). Multiplying the two local projectors and using (9.2) gives
+\[
+P_{++}^{\rm Q}(u,v)=\frac{1-u\cdot v}{4}
+=\frac12\sin^2\frac{\theta_{uv}}2,
+\tag{9.5}
+\]
+where \(\theta_{uv}\) is the angle between the spin axes. The factor \(1/2\) accounts for Alice's own probability of obtaining \(+1\); omitting it would confuse a conditional probability with a joint probability.</p>
+<p>Place \(w\) halfway between \(u\) and \(v\) in a plane, with \(\theta_{uw}=\theta_{wv}=60^\circ\) and \(\theta_{uv}=120^\circ\). Equation (9.5) gives \(P_{++}^{\rm Q}(u,v)=3/8\) while the right-hand side of (9.4) is \(1/4\). The positive violation is \(1/8\), reproduced in the laboratory. The quantum probabilities cannot be marginals of a local assignment satisfying all the assumptions used to prove (9.4). Perfect anticorrelation is an additional premise of this three-setting version; the next inequality avoids it.</p>
+
+<h2 id="chsh">9.4 CHSH without perfect anticorrelation</h2>
+<p>Let Alice choose between two settings labeled 0 and 1, and Bob do likewise. Write \(A_0(\lambda),A_1(\lambda),B_0(\lambda),B_1(\lambda)\) for the four local response values. Define
+\[
+B_{\rm CHSH}=E_{00}+E_{01}+E_{10}-E_{11},
+\quad E_{xy}=\int A_x(\lambda)B_y(\lambda)\,d\mu(\lambda).
+\tag{9.6}
+\]
+The minus sign defines the convention. Relabeling settings or outcomes can produce other equivalent versions, but the data and bound must use the same convention.</p>
+<div class="thm"><strong>Theorem 9.1 — Local CHSH bound.</strong> Every local model with outputs \(\pm1\) and one setting-independent hidden-variable distribution satisfies \(|B_{\rm CHSH}|\leq2\).</div>
+<div class="proof"><p>For one fixed hidden assignment, the combination is
+\[
+b(\lambda)=A_0(B_0+B_1)+A_1(B_0-B_1).
+\]
+Since \(B_0,B_1\) are each \(\pm1\), exactly one bracket is zero and the other is \(\pm2\). Hence \(b(\lambda)=\pm2\). Averaging with the same nonnegative normalized measure gives
+\(|B_{\rm CHSH}|=|\int b\,d\mu|\leq\int|b|\,d\mu=2\).
+No perfect anticorrelation premise was needed. <span class="qed">∎</span></p></div>
+<p>For a quantum violation it is convenient to use \(|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2\), rather than the singlet. Let Alice's observables be \(A_0=Z,A_1=X\), and Bob's be \(B_0=(Z+X)/\sqrt2,B_1=(Z-X)/\sqrt2\). Each squares to identity because \(XZ+ZX=0\), so each has outcomes \(\pm1\). The Bell state has \(\langle Z\otimes Z\rangle=\langle X\otimes X\rangle=1\) and cross correlations zero. Thus
+\[
+E_{00}=E_{01}=E_{10}=1/\sqrt2,\qquad E_{11}=-1/\sqrt2,
+\quad B_{\rm CHSH}=2\sqrt2.
+\tag{9.7}
+\]
+The laboratory obtains 2.828427, exceeding the local bound two. Changing from the singlet to \(\Phi^+\) changes correlation signs and suitable settings; it does not change the local bound.</p>
+
+<h3 id="quantum-bound">The maximum within the stated quantum model</h3>
+<p>For Hermitian quantum observables with \(A_x^2=B_y^2=I\), define the Bell operator
+\(\mathcal B=A_0\otimes(B_0+B_1)+A_1\otimes(B_0-B_1)\).
+Expanding its square gives
+\[
+\mathcal B^2=4I-[A_0,A_1]\otimes[B_0,B_1],
+\tag{9.8}
+\]
+where \([R,S]=RS-SR\) is a commutator. To check the cross terms, put \(C=B_0+B_1,D=B_0-B_1\). Then \(C^2+D^2=4I\), \(CD=-[B_0,B_1]\), and \(DC=[B_0,B_1]\), yielding (9.8).</p>
+<p>The operator norm is the largest singular value, or equivalently the maximum stretch of a unit vector. Each observable has norm one, so each commutator has norm at most two by the triangle inequality and submultiplicativity. Therefore \(\|\mathcal B^2\|\leq4+4=8\). Hermiticity gives \(\|\mathcal B\|\leq2\sqrt2\), and every normalized state's expectation has absolute value at most that norm. Equation (9.7) reaches the bound. This is a bound for the stated quantum-observable model, derived here rather than inferred from one numerical example.</p>
+
+<h2 id="conventions">9.5 What a Bell test does and does not establish</h2>
+<p>No-signalling constrains a marginal distribution: Alice's outcome probabilities must not change with Bob's freely chosen setting, and vice versa. The Bell-pair construction in (9.7) satisfies this condition because each local density matrix is \(I_2/2\). Bell locality is stronger: it requires the factorized local response model conditioned on shared data. Quantum correlations can violate a Bell inequality while preserving every no-signalling marginal.</p>
+<p>An experimental comparison also requires declaring which events enter the sample. Dropping nondetections or retaining only coincident pairs can make the selected hidden-variable distribution depend on settings, even when a larger unselected population has a local model. A valid interpretation must justify any sampling assumption or include the missing outcomes in an appropriate inequality. Finite samples introduce statistical uncertainty; the exact numbers in (9.7) are theoretical expectations, not statements that a finite observed mean must equal them. Spacelike separation of relevant choices and outcomes constrains ordinary causal influences but does not, by itself, guarantee setting independence.</p>
+<p>For spin observables the angle in (9.5) is a Bloch-axis angle. For linear photon polarizations, a physical polarizer angle \(\alpha\) corresponds to a doubled angle on the relevant Bloch great circle. Replacing a spin angle by a polarizer angle without that mapping changes the prediction. The laboratory's angles refer explicitly to Pauli spin axes.</p>
+
+<h2 id="cnot">9.6 Controlled-NOT as a preparation mechanism <a class="timestamp" href="https://www.youtube.com/watch?v=NpCk9p3BqRM&amp;t=1440s">W6L1 24:00</a></h2>
+<p>A Bell test presupposes a shared entangled preparation. One ideal circuit starts with \(|0\rangle_A|0\rangle_B\), applies the Hadamard matrix \(H=(X+Z)/\sqrt2\) to \(A\), and then applies controlled-NOT with \(A\) as control. Its action is
+\[
+|a,b\rangle\longmapsto|a,b\oplus a\rangle,\qquad
+U_{\rm CNOT}=\begin{pmatrix}
+1&amp;0&amp;0&amp;0\\0&amp;1&amp;0&amp;0\\0&amp;0&amp;0&amp;1\\0&amp;0&amp;1&amp;0
+\end{pmatrix}.
+\tag{9.9}
+\]
+The basis ordering is \(00,01,10,11\), and \(\oplus\) is addition modulo two. The matrix is a permutation, hence unitary and self-inverse. It has no extra factor of \(1/\sqrt2\); such a factor would destroy normalization.</p>
+<p>Linearity gives \(U_{\rm CNOT}|+0\rangle=(|00\rangle+|11\rangle)/\sqrt2\). This demonstrates its ability to entangle a product input. It does not entangle every product input: \(U_{\rm CNOT}|0+\rangle=|0+\rangle\), because the control is fixed at zero. Gate capability and a particular gate-input combination must be distinguished. The next chapter uses the same controlled-NOT convention to prepare and analyze communication resources.</p>
+
+<h2 id="lab">9.7 Executable assignment and angle checks</h2>
+<p>The program enumerates all sixteen deterministic local assignments, computes quantum correlators as matrix expectations, checks unbiased local marginals, and verifies the singlet's angle law. It then sweeps Bob's symmetric spin-axis angle in the CHSH construction and tests the two controlled-NOT inputs just discussed. The finite grid locates the displayed optimum; the analytic expression \(2(\cos\theta+\sin\theta)\), or the operator bound, establishes its exact value.</p>
+<pre><code class="language-python" data-file="ch09_lab.py">"""Deterministic local bounds, quantum correlators, and angle conventions."""
+import itertools
+import numpy as np
+
+x = np.array([[0, 1], [1, 0]], dtype=complex)
+y = np.array([[0, -1j], [1j, 0]], dtype=complex)
+z = np.diag([1, -1]).astype(complex)
+identity = np.eye(2)
+phi = np.array([1, 0, 0, 1], dtype=complex)/np.sqrt(2)
+singlet = np.array([0, 1, -1, 0], dtype=complex)/np.sqrt(2)
+local = [a0*(b0 + b1) + a1*(b0 - b1)
+         for a0, a1, b0, b1 in itertools.product([-1, 1], repeat=4)]
+assert set(local) == {-2, 2}
+print("local CHSH values:", sorted(set(local)))
+
+
+def expectation(state, operator):
+    return float(np.vdot(state, operator @ state).real)
+
+
+a0, a1 = z, x
+b0, b1 = (z + x)/np.sqrt(2), (z - x)/np.sqrt(2)
+terms = [expectation(phi, np.kron(a, b))
+         for a, b in [(a0, b0), (a0, b1), (a1, b0), (a1, b1)]]
+value = terms[0] + terms[1] + terms[2] - terms[3]
+assert np.isclose(value, 2*np.sqrt(2))
+print("quantum correlators:", " ".join(f"{v:.6f}" for v in terms))
+print(f"quantum CHSH={value:.6f}")
+for a in [a0, a1]:
+    assert abs(expectation(phi, np.kron(a, identity))) &lt; 1e-12
+for b in [b0, b1]:
+    assert abs(expectation(phi, np.kron(identity, b))) &lt; 1e-12
+print("all chosen single-party expectations=0")
+
+
+def spin(angle):
+    return np.sin(angle)*x + np.cos(angle)*z
+
+
+for angle in [0, np.pi/3, np.pi/2, np.pi]:
+    direct = expectation(singlet, np.kron(z, spin(angle)))
+    assert np.isclose(direct, -np.cos(angle))
+    print(f"singlet angle={np.degrees(angle):.0f} deg: E={direct:.6f}")
+
+left = (1 - np.cos(2*np.pi/3))/4
+right = 2*(1 - np.cos(np.pi/3))/4
+print(f"three-setting test: left={left:.6f}, right={right:.6f}, "
+      f"violation={left - right:.6f}")
+
+grid = np.linspace(0, np.pi/2, 1001)
+values = 2*(np.cos(grid) + np.sin(grid))
+best = int(np.argmax(values))
+print(f"CHSH angle optimum={np.degrees(grid[best]):.6f} deg, "
+      f"value={values[best]:.6f}")
+
+cnot = np.array([[1, 0, 0, 0], [0, 1, 0, 0],
+                 [0, 0, 0, 1], [0, 0, 1, 0]], dtype=complex)
+plus = np.array([1, 1], dtype=complex)/np.sqrt(2)
+zero = np.array([1, 0], dtype=complex)
+assert np.allclose(cnot.conj().T @ cnot, np.eye(4))
+assert np.allclose(cnot @ np.kron(plus, zero), phi)
+assert np.allclose(cnot @ np.kron(zero, plus), np.kron(zero, plus))
+print("CNOT: |+0&gt; becomes Bell; |0+&gt; remains product")
+</code></pre>
+<pre><code class="output">local CHSH values: [-2, 2]
+quantum correlators: 0.707107 0.707107 0.707107 -0.707107
+quantum CHSH=2.828427
+all chosen single-party expectations=0
+singlet angle=0 deg: E=-1.000000
+singlet angle=60 deg: E=-0.500000
+singlet angle=90 deg: E=-0.000000
+singlet angle=180 deg: E=1.000000
+three-setting test: left=0.375000, right=0.250000, violation=0.125000
+CHSH angle optimum=45.000000 deg, value=2.828427
+CNOT: |+0&gt; becomes Bell; |0+&gt; remains product
+</code></pre>
+
+<h2 id="limits">9.8 Scope of the conclusion</h2>
+<p>A violation excludes the conjunction of the stated local response, setting-distribution, and outcome assumptions for the tested correlations. It is not a proof that every possible hidden-variable theory is impossible, an instruction for faster-than-light communication, or a deduction of quantum theory from logic alone. The quantum predictions use the state preparation, tensor-product measurement model, and Born rule. An actual experiment must connect those ideal objects to its apparatus and statistical analysis.</p>
+
+<h2 id="exercises">9.9 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex9-1">Exercise 9.1 — Distinguish local incompatibility from distant compatibility</h3><p>Compute \([Z\otimes I,I\otimes X]\). Compare it with \([Z,X]\), and explain which comparison is relevant when Alice and Bob measure on the same run.</p><details><summary>Solution</summary><p>Both distant operator products equal \(Z\otimes X\), so their commutator is zero. Locally, \(ZX=iY\) and \(XZ=-iY\), giving \([Z,X]=2iY\). The distant observables refer to separate factors and admit joint outcome probabilities. Local \(Z\) and \(X\) are alternative settings on one factor. Their noncommutation is not a noncommutation between the two parties' actual observables.</p></details></article>
+<article class="exercise"><h3 id="ex9-2">Exercise 9.2 — Recover all singlet joint probabilities</h3><p>For outcomes \(a,b\in\{+1,-1\}\), derive their joint probability for settings \(u,v\), and verify both local marginals.</p><details><summary>Solution</summary><p>The outcome projectors are \((I+a\sigma_u)/2\) and \((I+b\sigma_v)/2\). Their product expectation is \([1-ab\,u\cdot v]/4\), since the local means vanish and the correlator is \(-u\cdot v\). Summing over either sign cancels the correlation term and gives \(1/2\). Nonnegativity follows from \(|u\cdot v|\leq1\). The \(a=b=+1\) case reproduces (9.5).</p></details></article>
+<article class="exercise"><h3 id="ex9-3">Exercise 9.3 — Identify a missing assumption</h3><p>Why can the CHSH proof fail if a different hidden-variable distribution is used for each setting pair, even though each response remains a local function?</p><details><summary>Solution</summary><p>The proof rewrites four correlators as one integral of \(b(\lambda)\). With four different distributions there need be no common averaging measure, so the step is invalid. For an extreme construction, choose each setting-pair subensemble so that its product has the desired sign, giving products \(+1,+1,+1,-1\). The resulting four correlators sum to four. That construction is not a setting-independent local model; it demonstrates why naming local response functions alone is insufficient.</p></details></article>
+<article class="exercise"><h3 id="ex9-4">Exercise 9.4 — White noise and the violation threshold</h3><p>Replace the Bell state in (9.7) by \(\rho_v=v|\Phi^+\rangle\langle\Phi^+|+(1-v)I_4/4\), with \(0\leq v\leq1\). Find the CHSH value for the same settings and its violation condition.</p><details><summary>Solution</summary><p>Every local Pauli observable is traceless, so \(I_4/4\) contributes zero to each product correlation. Linearity gives \(B_{\rm CHSH}=2\sqrt2\,v\). It exceeds two exactly when \(v\gt 1/\sqrt2\). Failure to violate for these settings below that threshold does not by itself prove separability. This is a statement about one witness and one state family.</p></details></article>
+<article class="exercise"><h3 id="ex9-5">Exercise 9.5 — Diagnose an entangling-gate claim</h3><p>A circuit description applies controlled-NOT to \(|0+\rangle\) and claims to produce \(\Phi^+\). Repair the circuit without changing the controlled-NOT control convention.</p><details><summary>Solution</summary><p>With the first qubit as control, \(|0+\rangle\) is unchanged. Start with \(|00\rangle\), apply Hadamard to the first qubit to obtain \(|+0\rangle\), then apply controlled-NOT. Linearity maps its two terms to 00 and 11 with equal amplitudes, producing \(\Phi^+\). The laboratory checks both inputs to expose the ordering error.</p></details></article>
+<article class="exercise"><h3 id="ex9-6">Exercise 9.6 — Optimize a symmetric setting family</h3><p>Hold \(A_0=Z,A_1=X\) and use \(B_0=\cos\theta Z+\sin\theta X\), \(B_1=\cos\theta Z-\sin\theta X\) on \(\Phi^+\). Derive the CHSH function, optimize it on \(0\leq\theta\leq\pi/2\), and compare with the laboratory sweep.</p><details><summary>Solution</summary><p>The four correlators are \(\cos\theta,\cos\theta,\sin\theta,-\sin\theta\), yielding \(2(\cos\theta+\sin\theta)\). Its derivative is \(2(-\sin\theta+\cos\theta)\), zero at \(\theta=\pi/4\). The derivative changes from positive to negative, and the endpoint values are both two, so the maximum is \(2\sqrt2\). The grid includes \(45^\circ\) and returns 2.828427 there. Varying \(v\) as in Exercise 9.4 scales this entire curve and leaves its maximizing angle unchanged for \(v\gt 0\).</p></details></article>
+
+<h2 id="primary-sources">9.10 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=LrYMvbuA20Q">W5L3 — EPR paradox and Bell's inequality I</a> and <a href="https://www.youtube.com/watch?v=77esgRSwPps">W5L4 — EPR paradox and Bell's inequality II</a>: singlet conditional predictions and local-realistic motivation.</li><li><a href="https://www.youtube.com/watch?v=2k_gYqzZueI">W5L5 — Bell's inequality III</a> and <a href="https://www.youtube.com/watch?v=NpCk9p3BqRM">W6L1 — Bell's inequality IV</a>: three-setting event counts, spin-axis violation, and controlled-NOT.</li><li>J. S. Bell, <a href="https://csiflabs.cs.ucdavis.edu/~gusfield/Bell-paper.pdf">On the Einstein Podolsky Rosen paradox</a>, <em>Physics</em> 1, 195–200 (1964). §II, PDF pages 1–2, states the local response model; §IV, pages 3–4, gives the contradiction. The CHSH formulation above is separately derived.</li><li>J. F. Clauser, M. A. Horne, A. Shimony, R. A. Holt, <a href="https://www.informationphilosopher.com/solutions/scientists/bell/CHSH.pdf">Proposed Experiment to Test Local Hidden-Variable Theories</a>, <em>Physical Review Letters</em> 23, 880–884 (1969). PDF page 2, printed page 881, states local response functions and source-distribution independence and discusses the limitations of perfect correlations and detected-pair sampling. This source is historical evidence, not an account of current detector performance.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-08.html">Previous chapter</a> <a href="chapter-10.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

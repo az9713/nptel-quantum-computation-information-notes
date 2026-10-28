@@ -1,0 +1,9 @@
+* text=auto
+# Preserve the byte digests of authored HTML and Python companions.
+*.html -text
+*.json text eol=lf
+*.py -text
+*.out text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.png binary

@@ -1,0 +1,151 @@
+{
+  "chapter": 12,
+  "title": "Cryptographic motivation and the reduction to order finding",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "0bNjIOh6mKw",
+      "course_label": "W7L3",
+      "course_order": 33,
+      "duration_seconds": 1924,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "VgNVfmBSJEg",
+      "course_label": "W7L4",
+      "course_order": 34,
+      "duration_seconds": 1951,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "dHlQTZiDDaw",
+      "course_label": "W7L5",
+      "course_order": 35,
+      "duration_seconds": 1791,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    }
+  ],
+  "sections": [
+    {
+      "id": "arithmetic",
+      "video_id": "0bNjIOh6mKw",
+      "start_seconds": 397,
+      "end_seconds": 951,
+      "lecture_material": "modulo operations and modular-power cycles",
+      "research_extension": "elementary unit-group derivation",
+      "teaching_construction": "binary input-length and repeated-squaring analysis"
+    },
+    {
+      "id": "rsa",
+      "video_id": "VgNVfmBSJEg",
+      "start_seconds": 153,
+      "end_seconds": 891,
+      "lecture_material": "toy RSA example and factoring attack",
+      "research_extension": "RSA original paper and RFC8017 primitive/scheme distinction",
+      "teaching_construction": "correctness proof including nonunit message representatives"
+    },
+    {
+      "id": "factoring-reduction",
+      "video_id": "0bNjIOh6mKw",
+      "start_seconds": 951,
+      "end_seconds": 1221,
+      "lecture_material": "gcd extraction from an even period",
+      "research_extension": "Shor factoring reduction",
+      "teaching_construction": "minimal-order proof and full failure classification"
+    },
+    {
+      "id": "registers",
+      "video_id": "VgNVfmBSJEg",
+      "start_seconds": 1132,
+      "end_seconds": 1946,
+      "lecture_material": "two registers and coherent modular evaluation",
+      "research_extension": "explicit reversible extension",
+      "teaching_construction": "XOR oracle contract"
+    },
+    {
+      "id": "cosets",
+      "video_id": "dHlQTZiDDaw",
+      "start_seconds": 162,
+      "end_seconds": 478,
+      "lecture_material": "output-register measurement and periodic first-register state",
+      "research_extension": "normalized conditional probabilities",
+      "teaching_construction": "finite progression formula"
+    },
+    {
+      "id": "fourier-preview",
+      "video_id": "dHlQTZiDDaw",
+      "start_seconds": 689,
+      "end_seconds": 1787,
+      "lecture_material": "DFT and QFT introduction",
+      "research_extension": "unitary normalization convention",
+      "teaching_construction": "raw-data versus normalized-state example"
+    }
+  ],
+  "references": [
+    {
+      "title": "Rivest, Shamir, Adleman, A Method for Obtaining Digital Signatures and Public-Key Cryptosystems",
+      "url": "https://people.csail.mit.edu/rivest/Rsapaper.pdf",
+      "supports": "RSA modular-power construction and arithmetic correctness",
+      "locator_checked": "PDF page7, equations3-5 and surrounding proof"
+    },
+    {
+      "title": "Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer",
+      "url": "https://arxiv.org/pdf/quant-ph/9508027",
+      "supports": "factoring through order finding",
+      "locator_checked": "PDF pages15-16, Section5, factoring reduction and order-finding setup"
+    },
+    {
+      "title": "RFC8017, PKCS #1 v2.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc8017#section-7.1",
+      "supports": "RSA primitives versus encoded encryption schemes",
+      "locator_checked": "Sections7 and7.1, displayed RFC pages18-19"
+    }
+  ],
+  "source_uncertainties": [
+    "All assigned caption text read; source whiteboard frames not reviewed.",
+    "Caption arithmetic/indexing errors repaired using exact calculations; no historical workstation runtime is repeated.",
+    "Factoring hardness, arbitrary RSA inversion equivalence, password-strength implications, and quantum-key-distribution claims are not inferred."
+  ],
+  "symbols": [
+    "N",
+    "a",
+    "r_ord",
+    "g_minus,g_plus",
+    "p,q",
+    "phi(N)",
+    "e,d",
+    "m_msg,c_txt",
+    "ell",
+    "M,m_A",
+    "L_s",
+    "U_f"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch12_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch12_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch12-r1.md",
+      "report_sha256": "006ea02899859121d179bbcc5cc2a93ba13b7007e9826c2ff67c22de5b762c62",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch12-r2.md",
+      "report_sha256": "3dac63a73f54cfe6631d45777d6d5d35668fd0718cedbff52ad24442574ed39e",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "262ac1b281783f94a42763848a8eff779f23f98308fb6ead872ab885bb95fc2a",
+  "canonical_body_sha256": "262ac1b281783f94a42763848a8eff779f23f98308fb6ead872ab885bb95fc2a",
+  "body_sha256": "02de3dc89d3d828443936b0535de5910135d7c7aef2f2bd2df7aad500edf3035"
+}

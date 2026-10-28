@@ -1,0 +1,89 @@
+{
+  "chapter": 2,
+  "title": "Deutsch's algorithm: one query and observable interference",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "XU-Y8Nay3wo",
+      "course_label": "W1L3",
+      "course_order": 3,
+      "duration_seconds": 2180
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "XU-Y8Nay3wo",
+      "start_seconds": 300,
+      "end_seconds": 478,
+      "lecture_material": "Constant and balanced Boolean functions and classical evaluation comparison",
+      "research_extension": "Explicit worst-case and uniform-prior query proofs",
+      "teaching_construction": "Four-table enumeration"
+    },
+    {
+      "id": "oracle",
+      "video_id": "XU-Y8Nay3wo",
+      "start_seconds": 480,
+      "end_seconds": 1375,
+      "lecture_material": "Reversible XOR oracle, Hadamard states, phase kickback",
+      "research_extension": "Coherent phase specification of an oracle",
+      "teaching_construction": "Block-matrix and eigenstate derivations"
+    },
+    {
+      "id": "interference",
+      "video_id": "XU-Y8Nay3wo",
+      "start_seconds": 1381,
+      "end_seconds": 2160,
+      "lecture_material": "Complete one-query circuit and readout",
+      "research_extension": "Exact algorithm provenance",
+      "teaching_construction": "Controlled target-preparation error sweep"
+    }
+  ],
+  "references": [
+    {
+      "title": "Cleve, Ekert, Macchiavello, Mosca, Quantum Algorithms Revisited",
+      "url": "https://arxiv.org/pdf/quant-ph/9708016",
+      "supports": "Exact one-query Deutsch circuit and historical formulation distinction",
+      "locator_checked": "section2, PDF pp4–5, equations2.1–2.4"
+    }
+  ],
+  "source_uncertainties": [
+    "Full auto-caption text read; no complete audiovisual review.",
+    "Transcript labels balanced/equality inconsistently in one passage; classification is fixed by the exact Boolean definition."
+  ],
+  "symbols": [
+    "f",
+    "U_f",
+    "x",
+    "y",
+    "X",
+    "H_gate",
+    "s",
+    "theta"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch02_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch02_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch02-r1.md",
+      "report_sha256": "775ecb3fd60fd2c96964336894e970b2f429d875ce8c6ba33553901881fd3957",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch02-r2.md",
+      "report_sha256": "27329d2536d8b12319fe4dc56802ea32a08c10aa6eed55548cd38962bb1900bd",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "f5d028e6b3f132e3d5f21592bc73bdcabdad24d74ef00c3791dc507ea5191b3e",
+  "canonical_body_sha256": "f5d028e6b3f132e3d5f21592bc73bdcabdad24d74ef00c3791dc507ea5191b3e",
+  "body_sha256": "f5d028e6b3f132e3d5f21592bc73bdcabdad24d74ef00c3791dc507ea5191b3e"
+}

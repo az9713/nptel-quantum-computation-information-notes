@@ -1,0 +1,248 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Density operators, mixtures, and time evolution</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>5. Density operators, mixtures, and time evolution</h1>
+<p class="lead">One apparatus prepares \(|0\rangle\) or \(|1\rangle\) with equal probabilities. Another prepares \(|+\rangle\) or \(|-\rangle\) with equal probabilities. If their preparation labels are hidden, no measurement on a single supplied qubit distinguishes these two procedures. The pure preparation \(|+\rangle\), however, has different X-measurement statistics: its positive outcome has probability one, whereas either mixture gives one half. This difference does not promise perfect identification from one copy. Density operators preserve every measurement probability while removing an inaccessible ensemble label.</p>
+<p class="source-note"><strong>Lecture material:</strong> W2L4 constructs pure and mixed density matrices, populations, coherence, purity and expectation values; W2L5 develops general qubit parameters and spectra; W3L1 completes Bloch coordinates and contrasts Schrödinger and Heisenberg evolution. <strong>Primary-reference clarification:</strong> <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Preskill, Chapter 2, §§2.1 and 2.3–2.5</a>, separates states, ensembles and measurement probabilities. <strong>Original teaching constructions:</strong> the operational-equivalence proof, coherence comparison, spectral purity bounds, explicitly unitful evolution, finite-difference laboratory, and exercises. The conjugation convention is fixed throughout; ambiguous matrix-entry ordering in captions is resolved by outer-product multiplication.</p>
+
+<h2 id="model">5.1 An ensemble is a probability distribution over preparations <a class="timestamp" href="https://www.youtube.com/watch?v=GbsmGwAnbXM&amp;t=37s">W2L4 0:37</a></h2>
+<p>Let \(\mathcal H=\mathbb C^d\) be a finite-dimensional Hilbert space with fixed orthonormal basis \(\{|k\rangle\}_{k=1}^d\). An <dfn>ensemble</dfn> is a list of normalized vectors \(|\psi_j\rangle\) with classical probabilities \(p_j\geq0\), \(\sum_jp_j=1\). A preparation chooses label \(j\), prepares that vector, and supplies the system without supplying the label. The index \(j\) labels preparations, not necessarily orthogonal basis states. The vectors in the list can overlap or repeat.</p>
+<p>Suppose an observable \(A=A^\dagger\) has spectral projectors \(P_a\) for eigenvalues \(a\). The Born rule gives the conditional probability \(\langle\psi_j|P_a|\psi_j\rangle\). Averaging over the classical preparation choice gives
+\[
+\Pr(a)=\sum_jp_j\langle\psi_j|P_a|\psi_j\rangle.
+\tag{5.1}
+\]
+We assume the classical law of total probability and the quantum Born rule. The operator representation below derives from those inputs; it is not a derivation of the measurement postulate itself.</p>
+<div class="def"><strong>Definition 5.1 — Density operator of an ensemble.</strong> Set
+\[
+\rho=\sum_jp_j|\psi_j\rangle\langle\psi_j|.
+\tag{5.2}
+\]
+The ket is a column and its bra is the conjugate row. The matrix of this operator in a chosen basis is the density matrix. A pure-state preparation has \(\rho=|\psi\rangle\langle\psi|\).</div>
+<p>For a qubit \(|\psi\rangle=a|0\rangle+b|1\rangle\), outer multiplication gives
+\[
+|\psi\rangle\langle\psi|=
+\begin{pmatrix}|a|^2&amp;ab^*\\a^*b&amp;|b|^2\end{pmatrix}.
+\tag{5.3}
+\]
+Thus the row-zero, column-one entry is \(ab^*\), not \(a^*b\). Equivalently, \(\rho_{kl}=\langle k|\rho|l\rangle\). An arbitrary interchange of the off-diagonal entries would change predictions for complex states. For \((|0\rangle+i|1\rangle)/\sqrt2\), the top-right entry is \(-i/2\) and its Y expectation is \(+1\).</p>
+
+<h3 id="populations">Populations, coherence, and the missing interference term</h3>
+<p>The diagonal entries are probabilities for the specified basis measurement and are called <dfn>populations</dfn> in that basis. Off-diagonal entries are <dfn>coherences</dfn> relative to that basis. A pure superposition and a mixture can have the same populations but different coherences:
+\[
+|+\rangle\langle+|=\frac12\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix},
+\qquad
+\frac12|0\rangle\langle0|+\frac12|1\rangle\langle1|=\frac{I_2}{2}.
+\tag{5.4}
+\]
+Both give equal Z-basis outcomes. The first gives the X-basis positive outcome with certainty, whereas the second gives it with probability one half. Averaging probabilities over alternatives does not add their amplitudes coherently.</p>
+<p>The lecture's six-up/four-down ensemble gives \(\rho=\operatorname{diag}(3/5,2/5)\), when up and down mean the fixed Z eigenstates. Its Z expectation is \(1/5\) and its X and Y expectations are zero. This is a one-system description of a randomly sampled ensemble member. A known ten-spin configuration would instead be a joint state on a \(2^{10}\)-dimensional space. Discarding the sampled member's identity is part of the preparation model, not a claim that every ten-spin arrangement is intrinsically mixed.</p>
+<p>Vanishing coherence is basis dependent. The pure projector \(|0\rangle\langle0|\) is diagonal in the computational basis and still pure. In the X basis it becomes a matrix with all entries \(1/2\). Diagonalizing a density matrix always removes its off-diagonal entries in its eigenbasis, while preserving all its state information. Therefore “diagonal” does not mean “no information,” “maximally mixed,” or “produced by physical dephasing.” A basis change and a dynamical noise process are different operations.</p>
+
+<h2 id="expectations">5.2 Measurements depend on the operator, not its ensemble labels <a class="timestamp" href="https://www.youtube.com/watch?v=Rb7HP05x0Vo&amp;t=54s">W2L5 0:54</a></h2>
+<p>The trace of a matrix is the sum of its diagonal elements in an orthonormal basis. For any vector \(\psi\) and matrix \(A\), expanding indices gives
+\[
+\operatorname{Tr}(|\psi\rangle\langle\psi|A)
+=\sum_{k,l}\psi_k\psi_l^*A_{lk}
+=\langle\psi|A|\psi\rangle.
+\tag{5.5}
+\]
+Applying linearity to (5.2) yields the ensemble expectation and measurement probabilities:
+\[
+\langle A\rangle=\operatorname{Tr}(\rho A),\qquad
+\Pr(a)=\operatorname{Tr}(\rho P_a).
+\tag{5.6}
+\]
+The identity holds for every matrix \(A\); a physical observable is Hermitian so its expectation is real.</p>
+<div class="prop"><strong>Proposition 5.1 — Operational equivalence.</strong> Two ensembles with the same density operator give the same probabilities for every projective measurement on the supplied system. Conversely, equality of probabilities for every rank-one projector determines the density operator uniquely.</div>
+<div class="proof"><p>The first implication follows immediately from (5.6). For the converse let \(\Delta=\rho-\sigma\), a Hermitian matrix whose expectation vanishes on every normalized vector. Computational-basis projectors give \(\Delta_{kk}=0\). Projectors onto \((|k\rangle+|l\rangle)/\sqrt2\) then give \(\operatorname{Re}\Delta_{kl}=0\). Projectors onto \((|k\rangle+i|l\rangle)/\sqrt2\) give \(-\operatorname{Im}\Delta_{kl}=0\). All entries vanish, so \(\rho=\sigma\). <span class="qed">∎</span></p></div>
+<p>For the opening example, expanding the plus and minus projectors cancels their off-diagonal terms:
+\[
+\frac{|+\rangle\langle+|+|-\rangle\langle-|}{2}
+=\frac{|0\rangle\langle0|+|1\rangle\langle1|}{2}
+=\frac{I_2}{2}.
+\tag{5.7}
+\]
+No measurement on the qubit reveals which unrecorded decomposition was used. A separate register containing the preparation label would supply additional information and would change the experimental question. The density matrix of the qubit alone does not claim to encode that record.</p>
+<p>Trace is invariant under a unitary change of basis because \(\operatorname{Tr}(AB)=\operatorname{Tr}(BA)\), as follows from \(\sum_{kl}A_{kl}B_{lk}\). For three matrices cyclic permutations give \(\operatorname{Tr}(ABC)=\operatorname{Tr}(BCA)=\operatorname{Tr}(CAB)\). Arbitrary reordering does not follow. For example, \(\operatorname{Tr}(XYZ)=2i\), while \(\operatorname{Tr}(XZY)=-2i\). This distinction matters when simplifying evolution formulas.</p>
+
+<h2 id="positivity">5.3 Which matrices represent states? <a class="timestamp" href="https://www.youtube.com/watch?v=GbsmGwAnbXM&amp;t=910s">W2L4 15:10</a></h2>
+<div class="prop"><strong>Proposition 5.2 — Finite-dimensional state characterization.</strong> An ensemble density operator is Hermitian, positive semidefinite, and has trace one. Conversely, every matrix with those three properties has an ensemble representation.</div>
+<div class="proof"><p>Each projector is Hermitian, so their real weighted sum is Hermitian. For any vector \(v\),
+\[
+\langle v|\rho|v\rangle=\sum_jp_j|\langle\psi_j|v\rangle|^2\geq0.
+\]
+This is positivity. Also \(\operatorname{Tr}|\psi_j\rangle\langle\psi_j|=\langle\psi_j|\psi_j\rangle=1\), giving unit trace. Conversely, the finite Hermitian spectral theorem supplies orthonormal eigenvectors and real eigenvalues:
+\[
+\rho=\sum_{k=1}^d\lambda_k|e_k\rangle\langle e_k|.
+\tag{5.8}
+\]
+Positivity gives \(\lambda_k=\langle e_k|\rho|e_k\rangle\geq0\), and the trace gives \(\sum_k\lambda_k=1\). Equation (5.8) is therefore an ensemble representation. <span class="qed">∎</span></p></div>
+<p>Hermiticity is an assumption to check, not a consequence of merely having real eigenvalues. The triangular matrix \(\begin{pmatrix}1/2&amp;1\\0&amp;1/2\end{pmatrix}\) has a real trace-one spectrum but is not Hermitian and is not a density operator. Even Hermitian trace-one matrices can fail positivity: \(\operatorname{diag}(1.1,-0.1)\) assigns a negative probability to the second basis projector.</p>
+<p>The spectral ensemble is useful for calculations, but it is not the unique physical preparation. In (5.7), even the maximally mixed state has several incompatible-looking descriptions. An eigenvalue is a probability in the spectral ensemble; it need not equal a weight in every other preparation ensemble. This prevents circular arguments that assume orthogonal ensemble vectors before diagonalizing the state.</p>
+
+<h2 id="purity">5.4 Purity measures a spectral property</h2>
+<p>A state is <dfn>pure</dfn> if it is one normalized vector projector; otherwise it is <dfn>mixed</dfn>. Its <dfn>purity</dfn> is \(\mathcal P(\rho)=\operatorname{Tr}(\rho^2)\). This definition is basis independent because trace is unchanged under unitary conjugation.</p>
+<div class="prop"><strong>Proposition 5.3 — Purity bounds and equality cases.</strong> For dimension \(d\),
+\[
+\frac1d\leq\operatorname{Tr}(\rho^2)\leq1.
+\tag{5.9}
+\]
+The upper equality holds exactly for pure states, equivalently \(\rho^2=\rho\). The lower equality holds exactly at \(\rho=I_d/d\), the maximally mixed state.</div>
+<div class="proof"><p>Equation (5.8) gives \(\operatorname{Tr}\rho^2=\sum_k\lambda_k^2\). Since \(0\leq\lambda_k\leq1\), every \(\lambda_k^2\leq\lambda_k\), proving the upper bound. Equality forces each eigenvalue to be zero or one; trace one then leaves exactly one unit eigenvalue. This is precisely a rank-one projector and is equivalent to idempotence. Cauchy–Schwarz gives \(1=(\sum_k\lambda_k)^2\leq d\sum_k\lambda_k^2\). Equality requires all eigenvalues equal, hence each \(1/d\), giving \(I_d/d\). <span class="qed">∎</span></p></div>
+<p>The six-up/four-down state has purity \(9/25+4/25=13/25=0.52\). The qubit center has purity \(1/2\), while every pure superposition has purity one. An ensemble with many labels can still be pure if all its positive-weight vectors lie on the same ray. Counting preparation labels does not determine purity.</p>
+
+<h2 id="bloch">5.5 The Bloch sphere expands to a ball <a class="timestamp" href="https://www.youtube.com/watch?v=Rb7HP05x0Vo&amp;t=441s">W2L5 7:21</a> <a class="timestamp" href="https://www.youtube.com/watch?v=387YoH3R0zo&amp;t=610s">W3L1 10:10</a></h2>
+<p>A Hermitian two-by-two trace-one matrix has the form \(\rho=\begin{pmatrix}a&amp;b\\b^*&amp;1-a\end{pmatrix}\), with real \(a\) and complex \(b\). Define \(r_z=2a-1\), \(r_x=2\operatorname{Re}b\), and \(r_y=-2\operatorname{Im}b\). Then
+\[
+\rho=\frac{I_2+\mathbf r\cdot\boldsymbol{\sigma}}2
+=\frac12\begin{pmatrix}1+r_z&amp;r_x-ir_y\\r_x+ir_y&amp;1-r_z\end{pmatrix}.
+\tag{5.10}
+\]
+There are three real coordinates before positivity is imposed. Here \(\boldsymbol{\sigma}=(X,Y,Z)\) is the Pauli tuple from Chapter 4; it is not another density operator.</p>
+<p>The Pauli identities give \((\mathbf r\cdot\boldsymbol{\sigma})^2=\|\mathbf r\|^2I_2\). Alternatively, expanding the determinant gives
+\[
+\det(\rho-\lambda I_2)=
+(\lambda-\tfrac12)^2-\frac{\|\mathbf r\|^2}{4}.
+\]
+Thus the eigenvalues are \((1\pm\|\mathbf r\|)/2\). Positivity is equivalent to \(\|\mathbf r\|\leq1\), so valid states fill the Bloch ball. Pure states have unit length; mixed states are interior; the unique center is \(I_2/2\). Squaring (5.10) and tracing gives \(\operatorname{Tr}\rho^2=(1+\|\mathbf r\|^2)/2\), agreeing with the spectral test.</p>
+<p>Because \(\operatorname{Tr}\sigma_k=0\) and \(\operatorname{Tr}(\sigma_j\sigma_k)=2\delta_{jk}\), one also obtains \(r_k=\operatorname{Tr}(\rho\sigma_k)\). The matrices X,Y,Z are traceless; the density matrix has trace one. The three coordinates remain directly measurable expectation values for mixed as well as pure inputs. For \(\operatorname{diag}(.6,.4)\), the vector is \((0,0,.2)\), and its purity formula gives \((1+.04)/2=.52\).</p>
+
+<h2 id="dynamics">5.6 Isolated evolution rotates eigenvectors and preserves eigenvalues <a class="timestamp" href="https://www.youtube.com/watch?v=387YoH3R0zo&amp;t=1255s">W3L1 20:55</a></h2>
+<p>Let the system be isolated and let \(U(t)\) be its common unitary evolution from time zero. Each preparation vector evolves to \(U(t)|\psi_j\rangle\), while the preparation probabilities remain fixed. Averaging the evolved projectors gives
+\[
+\rho(t)=\sum_jp_jU(t)|\psi_j\rangle\langle\psi_j|U^\dagger(t)
+=U(t)\rho(0)U^\dagger(t).
+\tag{5.11}
+\]
+This law acts on all ensembles with the same initial density operator identically. It does not depend on choosing the spectral ensemble as the actual preparation.</p>
+<p>If \(\rho(0)|e_k\rangle=\lambda_k|e_k\rangle\), multiplication gives \(\rho(t)U|e_k\rangle=\lambda_kU|e_k\rangle\). Unitary evolution therefore preserves the full spectrum. Squaring the conjugation and using \(U^\dagger U=I\) also gives \(\rho(t)^2=U\rho(0)^2U^\dagger\); trace cyclicity preserves purity. An isolated unitary cannot take a pure state to the Bloch-ball center. Rotating an ensemble changes its orientation without making it intrinsically more mixed.</p>
+<p>Let \(H_{\mathrm{phys}}(t)\) be a Hermitian Hamiltonian with energy units of joules, and let time \(t\) have units of seconds. Schrödinger dynamics assumes \(i\hbar\,\dot U(t)=H_{\mathrm{phys}}(t)U(t)\), where \(\hbar\) has units of joule seconds. Taking the adjoint gives \(\dot U^\dagger=(i/\hbar)U^\dagger H_{\mathrm{phys}}\). Differentiating both factors of (5.11) yields
+\[
+\frac{d\rho}{dt}=-\frac{i}{\hbar}H_{\mathrm{phys}}\rho
++\frac{i}{\hbar}\rho H_{\mathrm{phys}}
+=-\frac{i}{\hbar}[H_{\mathrm{phys}},\rho].
+\tag{5.12}
+\]
+Here \([A,B]=AB-BA\) is the commutator. Equation (5.12) is the <dfn>Liouville–von Neumann equation</dfn> in the Schrödinger picture. It holds also for a specified time-dependent Hamiltonian. That dependence does not add an arbitrary second derivative term to the state equation.</p>
+<p>For a constant Hamiltonian, \(U(t)=e^{-itH_{\mathrm{phys}}/\hbar}\). For a time-varying Hamiltonian, substituting \(H_{\mathrm{phys}}(t)\) into this simple exponential is generally wrong: matrices at different times can fail to commute. One must solve the differential equation with its initial condition, or use a time-ordered propagator. If populations are being injected, preparation probabilities are being changed externally, or an environment is discarded, those effects require a different model. They cannot be hidden inside a claim of isolated unitary evolution.</p>
+<p>The Heisenberg picture assigns the time dependence to an observable instead. Set \(A_H(t)=U^\dagger(t)AU(t)\) for an observable with no explicit time dependence. Trace cyclicity gives
+\[
+\operatorname{Tr}[\rho(t)A]
+=\operatorname{Tr}[\rho(0)A_H(t)].
+\tag{5.13}
+\]
+For a constant Hamiltonian, differentiating gives \(\dot A_H=(i/\hbar)[H_{\mathrm{phys}},A_H]\). The opposite commutator sign from (5.12) comes from the reversed order of U and its adjoint. States and observables are not both evolved in these two pictures at once. An observable with explicit time dependence contributes the additional term \(U^\dagger(\partial A/\partial t)U\); this is a statement about that observable's definition.</p>
+<p>For a worked case, take \(H_{\mathrm{phys}}=\hbar\omega Z/2\), where \(\omega\) is a real angular frequency in inverse seconds. The propagator is \(\operatorname{diag}(e^{-i\omega t/2},e^{i\omega t/2})\). Starting from \(|+\rangle\), the populations remain \(1/2,1/2\), while \(\rho_{01}(t)=e^{-i\omega t}/2\). Thus \(\mathbf r(t)=(\cos\omega t,\sin\omega t,0)\) follows the active Z rotation of Chapter 4. At \(\omega t=\pi/2\), the X-positive outcome probability has changed from one to one half, although purity stays exactly one.</p>
+<p>A stationary state satisfies \([H_{\mathrm{phys}},\rho]=0\), as is immediate from (5.12). For constant H, diagonal states in an energy eigenbasis are stationary. With degeneracies, coherences inside a degenerate eigenspace can also persist: H acts there as a scalar and commutes with every operator supported on that space. Stationarity is therefore not equivalent to diagonality in an arbitrarily chosen basis.</p>
+
+<h3 id="classical">A precise classical analogy</h3>
+<p>The final lecture compares quantum density evolution with classical phase-space evolution. For one classical coordinate \(q\) and conjugate momentum \(p\), let \(f(q,p,t)\) be a probability density and \(H_{\mathrm{cl}}(q,p)\) a smooth Hamiltonian. Hamilton's equations give \(\dot q=\partial_pH_{\mathrm{cl}}\), \(\dot p=-\partial_qH_{\mathrm{cl}}\). Conservation of probability gives \(\partial_tf+\partial_q(f\dot q)+\partial_p(f\dot p)=0\). The flow divergence vanishes because the mixed second derivatives of H cancel. Consequently \(\partial_tf=-\{f,H_{\mathrm{cl}}\}\), where the Poisson bracket is \(\{A,B\}=\partial_qA\,\partial_pB-\partial_pA\,\partial_qB\).</p>
+<p>This comparison distinguishes evolution of a probability description from evolution of an observable in both theories. It does not identify a quantum density matrix with a nonnegative probability density on ordinary phase space, or derive quantum mechanics by formally replacing a Poisson bracket with a commutator. The objects, state spaces and measurement rules still differ.</p>
+
+<h2 id="lab">5.7 Executable ensemble and evolution checks</h2>
+<p>The NumPy lab constructs the opening ensembles, compares all Pauli expectations, tests the six-up/four-down state, and evolves a state with nonzero imaginary coherence. It uses a constant Hamiltonian whose axis has both X and Z components. The analytic exponential is compared with the differential commutator using a central finite difference, while eigenvalues, trace, energy expectation and purity are checked on a time grid.</p>
+<pre><code class="language-python" data-file="ch05_lab.py">"""Ensemble equivalence, state validity, and isolated density evolution."""
+import numpy as np
+
+identity = np.eye(2, dtype=complex)
+x = np.array([[0, 1], [1, 0]], complex)
+y = np.array([[0, -1j], [1j, 0]])
+z = np.diag([1, -1])
+paulis = [x, y, z]
+zero, one = np.eye(2, dtype=complex)
+plus, minus = (zero + one) / np.sqrt(2), (zero - one) / np.sqrt(2)
+
+
+def projector(vector):
+    return np.outer(vector, vector.conj())
+
+
+def check_state(state):
+    assert np.allclose(state, state.conj().T, atol=1e-12)
+    assert np.isclose(np.trace(state), 1)
+    assert np.linalg.eigvalsh(state).min() &gt; -1e-12
+
+
+def bloch(state):
+    return np.array([np.trace(state @ p).real for p in paulis])
+
+
+def purity(state):
+    return np.trace(state @ state).real
+
+
+z_ensemble = (projector(zero) + projector(one)) / 2
+x_ensemble = (projector(plus) + projector(minus)) / 2
+assert np.allclose(z_ensemble, x_ensemble)
+for observable in paulis:
+    assert np.isclose(np.trace(z_ensemble @ observable),
+                      np.trace(x_ensemble @ observable))
+pure_x_probability = np.trace(projector(plus) @ projector(plus)).real
+mixed_x_probability = np.trace(z_ensemble @ projector(plus)).real
+print("Hidden Z and X ensembles have identical density operators: True")
+print(f"X-positive probabilities: pure={pure_x_probability:.6f}, "
+      f"mixed={mixed_x_probability:.6f}")
+biased = np.diag([0.6, 0.4])
+print(f"Six-up/four-down purity = {purity(biased):.6f}")
+psi = np.array([np.sqrt(3) / 2, 0.5j])
+initial = 0.7 * projector(psi) + 0.3 * projector(zero)
+check_state(initial)
+omega = 1.3  # radians per second; H_phys/hbar has inverse-second units.
+axis = np.array([0.6, 0.0, 0.8])
+axis_matrix = sum(v * p for v, p in zip(axis, paulis))
+hamiltonian_frequency = omega * axis_matrix / 2
+
+
+def evolved(time):
+    unitary = (np.cos(omega * time / 2) * identity
+               - 1j * np.sin(omega * time / 2) * axis_matrix)
+    return unitary @ initial @ unitary.conj().T
+
+
+initial_spectrum = np.linalg.eigvalsh(initial)
+initial_energy = np.trace(initial @ hamiltonian_frequency)
+largest_residual = 0.0
+step = 1e-5
+for time in np.linspace(0, 4, 41):
+    state = evolved(time)
+    check_state(state)
+    assert np.allclose(np.linalg.eigvalsh(state), initial_spectrum)
+    assert np.isclose(purity(state), purity(initial))
+    assert np.isclose(np.trace(state @ hamiltonian_frequency), initial_energy)
+    finite_difference = ((evolved(time + step) - evolved(time - step))
+                         / (2 * step))
+    direct = -1j * (hamiltonian_frequency @ state
+                    - state @ hamiltonian_frequency)
+    residual = np.max(np.abs(finite_difference - direct))
+    largest_residual = max(largest_residual, residual)
+    assert residual &lt; 1e-9
+print("Initial complex-state Bloch vector:", bloch(initial).round(6).tolist())
+print(f"Unitary-invariant purity = {purity(initial):.6f}")
+print("Forty-one-point spectrum, trace, energy, and purity checks "
+      "passed: True")
+print("Central-difference commutator residual below 1e-9:",
+      largest_residual &lt; 1e-9)
+</code></pre>
+<pre><code class="output">Hidden Z and X ensembles have identical density operators: True
+X-positive probabilities: pure=1.000000, mixed=0.500000
+Six-up/four-down purity = 0.520000
+Initial complex-state Bloch vector: [0.0, 0.606218, 0.65]
+Unitary-invariant purity = 0.895000
+Forty-one-point spectrum, trace, energy, and purity checks passed: True
+Central-difference commutator residual below 1e-9: True
+</code></pre>
+<p>The finite-difference residual must be small at the declared step, but need not be exactly zero: truncation contributes an error proportional to the square of the step, while excessively small steps amplify floating-point subtraction. Invariant checks test distinct properties from that derivative comparison. Neither procedure measures a real Hamiltonian or establishes that an experimental system is isolated.</p>
+
+<h2 id="limits">5.8 Which information has been discarded?</h2>
+<p>The density operator retains every probability for measurements on the supplied system, given the preparation model. It need not retain an inaccessible preparation label, a unique mixture decomposition, or correlations with another system. Later chapters construct reduced states when the missing information resides in a joint quantum state rather than a classical record. The same positive trace-one operator can describe both situations operationally.</p>
+<p>Pure and mixed are basis-independent properties of the operator. Coherence entries and populations refer to a chosen basis. Ensemble-label uncertainty, measurement-outcome uncertainty and the entropy of a density spectrum are different quantities; their information-theoretic definitions begin in the following chapters. The present results establish the operator and its dynamics before those quantities are assigned.</p>
+
+<h2 id="exercises">5.9 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex5-1">1. Detect the missing conjugation</h3><p>Construct the projector of \((\sqrt3/2,i/2)^{\mathsf T}\). Calculate its Y expectation and purity. What happens if its off-diagonal entries are interchanged?</p><details><summary>Solution</summary><p>The projector is \(\begin{pmatrix}3/4&amp;-i\sqrt3/4\\i\sqrt3/4&amp;1/4\end{pmatrix}\). Thus \(r_y=\sqrt3/2\) and purity is one. Interchanging those entries gives the projector of the conjugate vector, with \(r_y=-\sqrt3/2\). Its populations and purity are unchanged, so those two checks alone cannot detect the wrong physical state.</p></details></article>
+<article class="exercise"><h3 id="ex5-2">2. Refute a false purity test</h3><p>A routine classifies a density matrix as pure whenever it has no off-diagonal entries. Give one pure and one mixed diagonal counterexample, then state a correct test.</p><details><summary>Solution</summary><p>The matrix \(\operatorname{diag}(1,0)\) is pure, while \(\operatorname{diag}(1/2,1/2)\) is mixed. Both are diagonal, so diagonality cannot distinguish them. After verifying positivity, Hermiticity and trace one, compute \(\operatorname{Tr}\rho^2\): one characterizes purity, while a value below one characterizes mixedness. The prerequisite validity checks matter; a nonphysical matrix is not classified by this state theorem.</p></details></article>
+<article class="exercise"><h3 id="ex5-3">3. A nonorthogonal preparation</h3><p>Prepare \(|0\rangle\) with probability \(1/2\) and \(|+\rangle\) with probability \(1/2\). Find the matrix, Bloch vector, purity and eigenvalues. Compare eigenvalues with the preparation weights.</p><details><summary>Solution</summary><p>The matrix is \(\begin{pmatrix}3/4&amp;1/4\\1/4&amp;1/4\end{pmatrix}\), giving \(\mathbf r=(1/2,0,1/2)\). Its squared length is \(1/2\), so purity is \(3/4\). The eigenvalues are \((1\pm1/\sqrt2)/2\), not the preparation weights \(1/2,1/2\). The two preparation vectors are nonorthogonal, so their ensemble expansion is not a spectral decomposition.</p></details></article>
+<article class="exercise"><h3 id="ex5-4">4. Diagnose a purported isolated reset</h3><p>A proposed unitary maps every unknown qubit state to \(I_2/2\). Use both a spectral argument and an injectivity argument to reject it.</p><details><summary>Solution</summary><p>A pure input has density spectrum \((1,0)\); the center has spectrum \((1/2,1/2)\). Unitary conjugation preserves eigenvalues and cannot do this. Independently, if \(U\rho U^\dagger=U\sigma U^\dagger\), multiplying by \(U^\dagger\) and U recovers \(\rho=\sigma\). A constant-output map identifies distinct inputs and violates this injectivity. An enlarged system followed by discarding part of it can implement a different reduced process, but that is not the isolated unitary claimed.</p></details></article>
+<article class="exercise"><h3 id="ex5-5">5. Design sufficient measurements</h3><p>Suppose repeated preparations yield X and Z expectations zero. Can the qubit be certified as maximally mixed? Give the missing measurement and counterexample.</p><details><summary>Solution</summary><p>No. The Y eigenstate \((|0\rangle+i|1\rangle)/\sqrt2\) has vector \((0,1,0)\), while the center has \((0,0,0)\). Both agree on X and Z. Measure Y on additional copies; its expectation determines the remaining coordinate. Only all three zero expectations identify the center by (5.10). Finite sample estimates additionally require statistical uncertainties before an experimental certification claim.</p></details></article>
+<article class="exercise"><h3 id="ex5-6">6. Sweep a derivative check</h3><p>Modify the lab to compare central finite-difference derivatives at steps from \(10^{-2}\) to \(10^{-7}\) seconds. Compare spectral invariants separately. Explain the expected residual pattern and a failure that the invariant checks cannot detect.</p><details><summary>Solution</summary><p>Use \([\rho(t+h)-\rho(t-h)]/(2h)\) and compare with \(-i[H_{\mathrm{phys}}/\hbar,\rho(t)]\). Smooth exact evolution gives an \(O(h^2)\) truncation error until rounding and cancellation dominate. Trace, purity and eigenvalues remain invariant for every exact unitary output. Replacing U by its adjoint reverses the direction of motion while preserving all those invariants; the derivative comparison detects the commutator sign error. Therefore matching invariants is necessary but does not establish the correct dynamics.</p></details></article>
+
+<h2 id="primary-sources">5.10 Primary sources</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra: <a href="https://www.youtube.com/watch?v=GbsmGwAnbXM">W2L4, Density matrices I</a>; <a href="https://www.youtube.com/watch?v=Rb7HP05x0Vo">W2L5, Density matrices II</a>; <a href="https://www.youtube.com/watch?v=387YoH3R0zo">W3L1, Density matrices III</a>. The final recording supplies the classical Liouville analogy and the reversed order of state and observable conjugation.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Quantum Information, Chapter 2</a>, §2.1, PDF pages 4–7, equations (2.7)–(2.12), for measurement and unitary dynamics; §2.3.1, pages 18–21, for density operators and local expectations; §2.5 for ensemble interpretation and its nonuniqueness. The finite-dimensional characterization, purity proof, index calculations and numerical construction here are derived teaching material.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-04.html">Previous chapter</a> <a href="chapter-06.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

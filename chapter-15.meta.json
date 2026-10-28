@@ -1,0 +1,143 @@
+{
+  "chapter": 15,
+  "title": "Open systems, environment dilation, and Kraus operators",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "o7aOXwvLHlk",
+      "course_label": "W10L1",
+      "course_order": 46,
+      "duration_seconds": 1835
+    },
+    {
+      "video_id": "VTOWAgZmDKU",
+      "course_label": "W10L2",
+      "course_order": 47,
+      "duration_seconds": 1714
+    },
+    {
+      "video_id": "WelzrFCFi58",
+      "course_label": "W10L3",
+      "course_order": 48,
+      "duration_seconds": 1746
+    },
+    {
+      "video_id": "FCNrdpeOi_g",
+      "course_label": "W10L4",
+      "course_order": 49,
+      "duration_seconds": 1851
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "o7aOXwvLHlk",
+      "start_seconds": 531,
+      "end_seconds": 1385,
+      "lecture_material": "Closed/open dynamics, partial trace, quantum nondemolition energy condition",
+      "research_extension": "Explicit qualification of the conserved-observable condition",
+      "teaching_construction": "Correlated-preparation boundary"
+    },
+    {
+      "id": "dilation",
+      "video_id": "VTOWAgZmDKU",
+      "start_seconds": 693,
+      "end_seconds": 1705,
+      "lecture_material": "Controlled-NOT environment circuit and reduced populations",
+      "research_extension": "Distinguish arbitrary diagonal output from maximally mixed state",
+      "teaching_construction": "Amplitude-damping unitary and finite complex input"
+    },
+    {
+      "id": "kraus",
+      "video_id": "WelzrFCFi58",
+      "start_seconds": 1123,
+      "end_seconds": 1365,
+      "lecture_material": "Operator sum and completeness",
+      "research_extension": "Nonuniqueness of Kraus labels",
+      "teaching_construction": "Explicit extracted matrices"
+    },
+    {
+      "id": "complete-positivity",
+      "video_id": "FCNrdpeOi_g",
+      "start_seconds": 112,
+      "end_seconds": 568,
+      "lecture_material": "Hermiticity, trace and positivity properties",
+      "research_extension": "Complete positivity and transpose counterexample from primary reference",
+      "teaching_construction": "Smallest explicit ancillary matrix"
+    },
+    {
+      "id": "converse",
+      "video_id": "FCNrdpeOi_g",
+      "start_seconds": 814,
+      "end_seconds": 1841,
+      "lecture_material": "Unitary representation and inner-product preservation",
+      "research_extension": "Orthogonal completion stated explicitly",
+      "teaching_construction": "Dilation construction and composition distinction"
+    }
+  ],
+  "references": [
+    {
+      "title": "John Preskill, Quantum Information Chapter 3, October 2018",
+      "url": "https://www.preskill.caltech.edu/ph219/chap3_15.pdf",
+      "supports": "Operator sums, complete positivity, dilation",
+      "locator_checked": "PDF pp11–13,18–22; sections3.2.1,3.2.6,3.3.2"
+    }
+  ],
+  "source_uncertainties": [
+    "Local faster-whisper small.en transcripts are machine evidence; technical recognition errors are corrected using explicit derivation and the checked reference.",
+    "All assigned transcript text read sequentially; no full audiovisual review claimed.",
+    "Complete positivity and the correlated-input counterexample are extensions, not attributed verbatim to the recordings."
+  ],
+  "symbols": [
+    "rho",
+    "H_E",
+    "U",
+    "Phi",
+    "K_j",
+    "H_tot",
+    "H_S",
+    "H_int",
+    "d",
+    "d_E",
+    "gamma",
+    "c",
+    "s",
+    "H_R"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch15_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch15_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch15-r1.md",
+      "report_sha256": "d43ecabdbf9147ceafc3143841400a51d83def5ef6558cef32b9b1accf5582b7",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch15-r2.md",
+      "report_sha256": "91b55aa4dcb8aa2a7b56c8bd5f2034b0ab08ab0662ceb1142c8d47f868cecb99",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "visual_evidence": [
+    {
+      "course_order": 46,
+      "frame_paths": [
+        "sources/frames/46_o7aOXwvLHlk/t1110.jpg",
+        "sources/frames/46_o7aOXwvLHlk/t1348.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    }
+  ],
+  "accepted_html_sha256": "034b37f220550c20428a3e489c36e9c814039f76eb06230d51d120a61dc12e3c",
+  "accepted_body_sha256": "034b37f220550c20428a3e489c36e9c814039f76eb06230d51d120a61dc12e3c",
+  "canonical_body_sha256": "034b37f220550c20428a3e489c36e9c814039f76eb06230d51d120a61dc12e3c",
+  "body_sha256": "54ffb03fca242ef4fc5df3151b5a5bc472db41ad032ddb24258baeca678c8885"
+}

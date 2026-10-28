@@ -1,0 +1,131 @@
+{
+  "chapter": 11,
+  "title": "Entangled photons and experimental protocol accounting",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "b_buCwPz5vE",
+      "course_label": "W6L5",
+      "course_order": 30,
+      "duration_seconds": 1873,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "v5shBFNplkI",
+      "course_label": "W7L1",
+      "course_order": 31,
+      "duration_seconds": 1930,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "sPg5IlAo6Bw",
+      "course_label": "W7L2",
+      "course_order": 32,
+      "duration_seconds": 2038,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "b_buCwPz5vE",
+      "start_seconds": 79,
+      "end_seconds": 1196,
+      "lecture_material": "nonlinear optics and type-II pair generation",
+      "research_extension": "Kwiat type-II source and distinguishability",
+      "teaching_construction": "environment-overlap reduced-state model"
+    },
+    {
+      "id": "bell-analysis",
+      "video_id": "v5shBFNplkI",
+      "start_seconds": 365,
+      "end_seconds": 1926,
+      "lecture_material": "balanced-splitter symmetry and output patterns",
+      "research_extension": "restricted passive-optics bound",
+      "teaching_construction": "creation-operator proof and normalized Fock calculation"
+    },
+    {
+      "id": "dense-coding-optics",
+      "video_id": "sPg5IlAo6Bw",
+      "start_seconds": 79,
+      "end_seconds": 1562,
+      "lecture_material": "dense-coding recap and optical apparatus",
+      "research_extension": "distinguish preparation from measurement capability",
+      "teaching_construction": "partial-versus-ideal Bell analyzer"
+    },
+    {
+      "id": "teleportation-optics",
+      "video_id": "sPg5IlAo6Bw",
+      "start_seconds": 1562,
+      "end_seconds": 2032,
+      "lecture_material": "teleportation and coincidence records",
+      "research_extension": "primary historical abstract",
+      "teaching_construction": "conditional probability and loss budget"
+    }
+  ],
+  "references": [
+    {
+      "title": "Kwiat et al., New High-Intensity Source of Polarization-Entangled Photon Pairs",
+      "url": "https://doi.org/10.1103/PhysRevLett.75.4337",
+      "supports": "type-II coherent pair state and compensation",
+      "locator_checked": "printed page4338, equations1-2; primary PDF read through web tool; local retrieval blocked"
+    },
+    {
+      "title": "Calsamiglia and Lutkenhaus, Maximum efficiency of a linear-optical Bell-state analyzer",
+      "url": "https://arxiv.org/pdf/quant-ph/0007058",
+      "supports": "one-half bound for fixed passive network, vacuum ancillary modes, equal Bell priors",
+      "locator_checked": "PDF pages1-3, SectionIII"
+    },
+    {
+      "title": "Bouwmeester et al., Experimental quantum teleportation",
+      "url": "https://doi.org/10.1038/37539",
+      "supports": "historical transfer mechanism only",
+      "locator_checked": "Publisher abstract and author-deposited arXiv abstract, whose journal reference and DOI identify Nature390,575-579(1997); primarysource web page opened",
+      "alternate_url": "https://arxiv.org/abs/1901.11004"
+    }
+  ],
+  "source_uncertainties": [
+    "Auto-captions contain technical errors; source slide layouts and detailed detector diagrams were not reviewed.",
+    "No apparatus-specific efficiency/fidelity number is asserted.",
+    "Corrected down-conversion/second-harmonic, same/different-port versus homodyne/heterodyne, and complete/partial Bell-measurement conflations."
+  ],
+  "symbols": [
+    "H,V",
+    "rho",
+    "P_j",
+    "chi^(1),chi^(2)",
+    "omega_p,omega_s,omega_i",
+    "mu,phi",
+    "g,tau",
+    "a_lambda dagger,b_lambda dagger,c_lambda dagger,d_lambda dagger",
+    "p_pair,p_succ,eta"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch11_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch11_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch11-r1.md",
+      "report_sha256": "b0a08d86b11a508bee5946864e1592e4ce37abb70e4d33fd973185b0092ff014",
+      "verdict": "ACCEPT WITH FIXES",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch11-r2.md",
+      "report_sha256": "71685055ec3336e2e328ed4e13059ff4674544f98374c848cf1702531f10e8c2",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "0bbcdf971eba3ba0ac1616e6c6f61a0dd59d308bd1c2753e0a3400d32ff240c4",
+  "canonical_body_sha256": "0bbcdf971eba3ba0ac1616e6c6f61a0dd59d308bd1c2753e0a3400d32ff240c4",
+  "body_sha256": "94ad75c8ffce4c7b020f8840b0d1e2991e50b9c4aef727691961bc58077b6254"
+}

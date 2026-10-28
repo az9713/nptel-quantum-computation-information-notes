@@ -1,0 +1,114 @@
+{
+  "chapter": 1,
+  "title": "What quantum computation changes: states, resources, and qubits",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "1NA7u71SUjg",
+      "course_label": "W1L1",
+      "course_order": 1,
+      "duration_seconds": 2497
+    },
+    {
+      "video_id": "32jXI3i460M",
+      "course_label": "W1L2",
+      "course_order": 2,
+      "duration_seconds": 2036
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "1NA7u71SUjg",
+      "start_seconds": 1118,
+      "end_seconds": 2488,
+      "lecture_material": "Computability, complexity, integer factoring, motivation",
+      "research_extension": "Qualify computation-model theses and distinguish known costs from lower bounds",
+      "teaching_construction": "Input length proof and explicit state-vector storage accounting"
+    },
+    {
+      "id": "states",
+      "video_id": "32jXI3i460M",
+      "start_seconds": 65,
+      "end_seconds": 501,
+      "lecture_material": "Two-dimensional Hilbert spaces, normalized qubits, physical realizations",
+      "research_extension": "Rays and explicit physical postulates",
+      "teaching_construction": "Complex normalized state"
+    },
+    {
+      "id": "composites",
+      "video_id": "32jXI3i460M",
+      "start_seconds": 507,
+      "end_seconds": 1318,
+      "lecture_material": "Multiple-qubit basis and tensor products",
+      "research_extension": "Explicit basis convention and entangled-vector obstruction",
+      "teaching_construction": "Product example and basis proof"
+    },
+    {
+      "id": "evolution",
+      "video_id": "32jXI3i460M",
+      "start_seconds": 1338,
+      "end_seconds": 2026,
+      "lecture_material": "Initialization, unitary evolution, readout",
+      "research_extension": "Unitary converse and qualification of Hamiltonian assumptions",
+      "teaching_construction": "Hadamard phase discrimination and independent-shot variance"
+    }
+  ],
+  "references": [
+    {
+      "title": "John Preskill, Foundations I: States and Ensembles",
+      "url": "https://www.preskill.caltech.edu/ph219/chap2_15.pdf",
+      "supports": "Physical postulates and finite-dimensional state model",
+      "locator_checked": "section2.1, PDF pp3–7"
+    },
+    {
+      "title": "Peter Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer",
+      "url": "https://arxiv.org/pdf/quant-ph/9508027",
+      "supports": "Computability versus efficiency and input-size distinction",
+      "locator_checked": "section1, PDF pp2–3"
+    }
+  ],
+  "source_uncertainties": [
+    "Complete available auto-captions read; no full audiovisual review claimed.",
+    "Storage counts are exact representation calculations, not a hardware memory benchmark."
+  ],
+  "symbols": [
+    "H",
+    "n",
+    "d",
+    "alpha_x",
+    "ket(psi)",
+    "x",
+    "U",
+    "H_gate",
+    "ell",
+    "m",
+    "X_k",
+    "p_hat"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch01_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch01_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch01-r1.md",
+      "report_sha256": "97b157d907bdcc146c52e5414129dd2571cd9014b4c151ae56b704b4573321d8",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch01-r2.md",
+      "report_sha256": "313d44c9df6c6fea11dd2bc40d3e0bbb8143d055934c77145f0c874ab6512bfc",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "2e1c88e854c27f9b28ca0ea209a09bfde509b1eb691d8bf34c8ed85897a32ec1",
+  "canonical_body_sha256": "2e1c88e854c27f9b28ca0ea209a09bfde509b1eb691d8bf34c8ed85897a32ec1",
+  "body_sha256": "2e1c88e854c27f9b28ca0ea209a09bfde509b1eb691d8bf34c8ed85897a32ec1"
+}

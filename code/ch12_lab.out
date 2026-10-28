@@ -1,0 +1,13 @@
+Toy RSA: N=21, phi=12, e=5, d=5
+Message 4 -> ciphertext 16 -> 4
+All 21 message representatives decrypt correctly
+N=15, a=2: powers=[1, 2, 4, 8, 1, 2, 4, 8], order=4
+N=15, a=7: powers=[1, 7, 4, 13, 1, 7, 4, 13], order=4
+N=15: direct-gcd=6, minus-one=1, useful-order=6
+N=21: direct-gcd=8, minus-one=3, odd-order=2, useful-order=6
+N=33: direct-gcd=12, minus-one=5, odd-order=4, useful-order=10
+N=15, a=2: ('useful-order', 4, (3, 5))
+N=15, a=4: ('useful-order', 2, (3, 5))
+N=15, a=14: ('minus-one', 2, None)
+N=21, a=4: ('odd-order', 3, None)
+Binary input lengths: 15:4, 21:5, 33:6, 255:8, 256:9

@@ -1,0 +1,203 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Mixed-state entanglement, convexity, and partial transpose</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>19. Mixed-state entanglement, convexity, and partial transpose</h1>
+<p class="lead">A Bell pair and an equal classical mixture of the strings 00 and 11 give the same local density matrix to either party. Local mixedness therefore cannot decide whether a mixed joint state contains entanglement. For two qubits, a partial-transpose calculation supplies an exact separability test. For larger dimensions, the same calculation has a narrower logical meaning.</p>
+<p class="source-note"><strong>Lecture material:</strong> Entanglement in Mixed States and Convexity and Peres–Horodecki Criterion, official W12L3–W12L4. <strong>Verified theorem:</strong> Horodecki, Horodecki, and Horodecki, <a href="https://arxiv.org/pdf/quant-ph/9605038">Theorem 3, PDF page 8</a>, supplies low-dimensional sufficiency; that general sufficiency proof is cited rather than reproduced. <strong>Original teaching constructions:</strong> the local-marginal comparison, explicit spectrum, six-product-state boundary decomposition, witness calculation, lab, and exercises. PPT necessity is proved directly below.</p>
+
+<h2 id="thermal">19.1 A thermal two-spin state motivates the question <a class="timestamp" href="https://www.youtube.com/watch?v=LzHRsvVpYpg&amp;t=36s">[00:36]</a></h2>
+<p>The lecture introduces mixed-state entanglement through an interacting spin pair. Set \(\hbar=1\), so the spin components are dimensionless matrices \(S_i=\sigma_i/2\), where \(\sigma_x=X\), \(\sigma_y=Y\), and \(\sigma_z=Z\). On the joint space, a component of spin A is \(S_i\otimes I_2\) and a component of spin B is \(I_2\otimes S_i\). Their product is \(\sigma_i\otimes\sigma_i/4\). Define the isotropic Heisenberg Hamiltonian, including a uniform longitudinal field, by</p>
+\[
+H=\frac J4(X\otimes X+Y\otimes Y+Z\otimes Z)
++\frac b2(Z\otimes I_2+I_2\otimes Z)
+=\begin{pmatrix}
+J/4+b&amp;0&amp;0&amp;0\\
+0&amp;-J/4&amp;J/2&amp;0\\
+0&amp;J/2&amp;-J/4&amp;0\\
+0&amp;0&amp;0&amp;J/4-b
+\end{pmatrix}.
+\tag{19.T1}
+\]
+<p>The parameters \(J\) and \(b\) have units of energy; our positive-Z eigenvector is \(|0\rangle\). The equal-spin vectors \(|00\rangle\) and \(|11\rangle\) are eigenvectors with energies \(J/4+b\) and \(J/4-b\). Diagonalizing the central block gives the symmetric triplet \(|\Psi^+\rangle=(|01\rangle+|10\rangle)/\sqrt2\), with energy \(J/4\), and the antisymmetric singlet \(|\Psi^-\rangle=(|01\rangle-|10\rangle)/\sqrt2\), with energy \(-3J/4\). At zero field the triplet energy is threefold degenerate. The relative minus sign in the singlet is essential both to its energy and to its off-diagonal density entries.</p>
+<p>At absolute temperature \(\Theta\gt0\), define \(\beta=1/(k_B\Theta)\), where \(k_B\) is Boltzmann's constant. The Gibbs state is \(\rho_\beta=e^{-\beta H}/Z_\beta\), with <dfn>partition function</dfn> \(Z_\beta=\operatorname{Tr}(e^{-\beta H})\). It is the trace of the unnormalized Boltzmann operator, not the trace of the already normalized state. Write \(u=e^{3\beta J/4}\) for the singlet Boltzmann weight and \(v=e^{-\beta J/4}\) for the zero-field triplet weight. The spectral decomposition above gives</p>
+\[
+Z_\beta=u+v[1+2\cosh(\beta b)],\qquad
+\rho_\beta=\frac1{Z_\beta}\begin{pmatrix}
+ve^{-\beta b}&amp;0&amp;0&amp;0\\
+0&amp;(u+v)/2&amp;(v-u)/2&amp;0\\
+0&amp;(v-u)/2&amp;(u+v)/2&amp;0\\
+0&amp;0&amp;0&amp;ve^{\beta b}
+\end{pmatrix}.
+\tag{19.T2}
+\]
+<p>For example, the singlet projector contributes \(u/2\) to each central diagonal entry and \(-u/2\) to each central off-diagonal entry. The symmetric triplet contributes \(v/2\) to all four central entries. The other two eigenvectors supply the corner populations. Adding these contributions proves (19.T2) and makes its normalization transparent. Every Boltzmann weight is positive, so the spectral form also proves positivity without an additional matrix test.</p>
+<p>At high temperature, \(\beta\) tends to zero and the state tends to \(I_4/4\). That state is the equal mixture of four computational-basis product projectors and hence is separable. For antiferromagnetic coupling \(J\gt0\) and zero field, the unique ground state is the singlet, so the zero-temperature limit is maximally entangled. The field qualification matters: the singlet remains the unique ground state only for \(|b|\lt J\). For \(|b|\gt J\), one of the equal-spin product vectors has lower energy; at \(|b|=J\), the ground space is degenerate. An unrestricted assertion that the zero-temperature state is always the singlet would therefore be false.</p>
+<p>At \(b=0\), the singlet has weight \(u/(u+3v)\) and each triplet has weight \(v/(u+3v)\). Consequently the thermal state is precisely the family used later in this chapter:</p>
+\[
+\rho_\beta=p_\beta|\Psi^-\rangle\langle\Psi^-|+(1-p_\beta)\frac{I_4}{4},
+\qquad p_\beta=\frac{u-v}{u+3v}=\frac{e^{\beta J}-1}{e^{\beta J}+3}.
+\tag{19.T3}
+\]
+<p>For \(J\gt0\), \(p_\beta\) runs from zero to one as temperature decreases from infinity to zero. The partial-transpose threshold \(p_\beta\gt1/3\), proved below, is equivalent to \(e^{\beta J}\gt3\). Thus this zero-field model is entangled exactly when \(k_B\Theta\lt J/\ln3\). This is a statement about a specified equilibrium spin Hamiltonian; it is not a universal entanglement temperature for qubits or a thermalization-rate prediction.</p>
+
+<h2 id="model">19.2 A joint state is separable only if a product-mixture description exists <a class="timestamp" href="https://www.youtube.com/watch?v=LzHRsvVpYpg&amp;t=1853s">[30:53]</a></h2>
+<p>Consider finite-dimensional subsystems A and B with Hilbert spaces \(\mathcal H_A\) and \(\mathcal H_B\). A joint density operator \(\rho_{AB}\) is positive semidefinite and has trace one. Its local states are \(\rho_A=\operatorname{Tr}_B\rho_{AB}\) and \(\rho_B=\operatorname{Tr}_A\rho_{AB}\). A pure joint vector is a product if it can be written \(|a\rangle\otimes|b\rangle\); otherwise it is entangled.</p>
+<div class="def"><strong>Definition 19.1 — mixed-state separability.</strong> A finite-dimensional bipartite density operator is <dfn>separable</dfn> if it has a decomposition
+\[
+\rho_{AB}=\sum_jp_j\rho_{A,j}\otimes\rho_{B,j},
+\quad p_j\geq0,\quad\sum_jp_j=1,
+\tag{19.1}
+\]
+where every local factor is a density operator. If no such decomposition exists, the state is entangled.</div>
+<p>The decomposition need not be unique, and its labels need not be physically recorded. The definition asks whether at least one product-mixture representation exists. Each local density matrix can itself be spectrally decomposed, so an equivalent finite-dimensional definition uses mixtures of pure product projectors. Finding one entangled ensemble representation does not prove that all product representations are impossible.</p>
+<p>For example, let \(|\Phi^\pm\rangle=(|00\rangle\pm|11\rangle)/\sqrt2\). Their equal mixture is</p>
+\[
+\rho_{\mathrm{corr}}=\frac12|\Phi^+\rangle\langle\Phi^+|
++\frac12|\Phi^-\rangle\langle\Phi^-|
+=\frac12|00\rangle\langle00|+\frac12|11\rangle\langle11|.
+\tag{19.2}
+\]
+<p>The off-diagonal terms cancel in the first representation. The second representation displays separability explicitly, despite the first being an ensemble of entangled vectors. Both local density matrices are \(I_2/2\). The pure state \(|\Phi^+\rangle\langle\Phi^+|\) has exactly those same local marginals and is entangled because its Schmidt rank is two. The reduced states alone do not retain the distinction.</p>
+<p>The separable states form a convex set. If \(\rho\) and \(\sigma\) each have a product-mixture decomposition, then \(q\rho+(1-q)\sigma\), for \(0\leq q\leq1\), combines the two lists with weights \(qp_j\) and \((1-q)s_k\). All weights remain nonnegative and their sum is one. This constructive argument proves convexity. The entangled states are not a convex set: equation (19.2) mixes two entangled states into a separable one.</p>
+<p>The underlying geometric definition is that a set contains the whole segment \((1-t)v+tw\), \(0\leq t\leq1\), between each pair of its points. A segment is a convex set, and a filled parallelogram is another, but they use different parameter constraints. Independent parameters \(a,b\in[0,1]\) in \(av+bw\), for independent vectors \(v,w\), fill a parallelogram. Imposing \(a+b=1\) leaves only the segment joining \(v\) and \(w\). The latter constraint is the one relevant to mixing two normalized density matrices. This distinction resolves a geometric simplification in the lecture's discussion <a class="timestamp" href="https://www.youtube.com/watch?v=ykHW2-iBznk&amp;t=323s">[05:23]</a>.</p>
+
+<h2 id="partial-transpose">19.3 Transpose only one subsystem <a class="timestamp" href="https://www.youtube.com/watch?v=ykHW2-iBznk&amp;t=1059s">[17:39]</a></h2>
+<p>Choose orthonormal local bases \(\{|a\rangle_A\}\) and \(\{|b\rangle_B\}\). The <dfn>partial transpose on B</dfn>, denoted \(T_B\), acts linearly according to</p>
+\[
+(|a\rangle\langle c|\otimes|b\rangle\langle d|)^{T_B}
+=|a\rangle\langle c|\otimes|d\rangle\langle b|.
+\tag{19.3}
+\]
+<p>In matrix indices, \((\rho^{T_B})_{ab,cd}=\rho_{ad,cb}\). For a qubit pair, reshape the matrix to four indices ordered as A-bra, B-bra, A-ket, B-ket; swap the two B indices and reshape back. Transposing the entire four-by-four matrix would transpose both subsystems and would miss the entanglement test.</p>
+<p>Ordinary transpose preserves positivity: if \(\tau\geq0\), then for any \(|v\rangle\), \(\langle v|\tau^{\mathsf T}|v\rangle=\langle v^*|\tau|v^*\rangle\geq0\). The equality follows by interchanging summation indices and using that the expectation of a Hermitian matrix is real. However, transpose is not completely positive. Chapter 15's Bell-state example already demonstrated a negative eigenvalue when transpose is extended by an identity on another subsystem.</p>
+<div class="prop"><strong>Proposition 19.1 — separability implies positive partial transpose.</strong> If \(\rho_{AB}\) has the separable form (19.1), then \(\rho_{AB}^{T_B}\geq0\).</div>
+<div class="proof"><p>Partial transpose sends each term to \(\rho_{A,j}\otimes\rho_{B,j}^{\mathsf T}\). Both factors are positive, so their tensor product is positive: diagonalizing the two factors gives tensor-product eigenvalues that are products of nonnegative eigenvalues. A sum of positive matrices with nonnegative weights remains positive because every quadratic form is such a weighted sum. Applying this to the weights \(p_j\) proves the claim. <span class="qed">∎</span></p></div>
+<p>A state with \(\rho^{T_B}\geq0\) is called <dfn>PPT</dfn>, for positive partial transpose. If \(\rho^{T_B}\) has a negative eigenvalue, the contrapositive of Proposition 19.1 proves entanglement. This conclusion holds in every finite bipartite dimension. The converse requires an additional theorem and is not established by this proof.</p>
+<p>The test concerns positivity, not whether the matrix changes. For a counterexample to the latter rule, take the separable product \(|0\rangle\langle0|\otimes|+y\rangle\langle+y|\), where \(|+y\rangle=(|0\rangle+i|1\rangle)/\sqrt2\). Partial transpose replaces the second factor by \(|-y\rangle\langle-y|\), with \(|-y\rangle=(|0\rangle-i|1\rangle)/\sqrt2\). The matrix changes but remains a positive product projector. Conversely, for \(|\Phi^+\rangle\langle\Phi^+|\), partial transpose gives \(\tfrac12\begin{pmatrix}1&amp;0&amp;0&amp;0\\0&amp;0&amp;1&amp;0\\0&amp;1&amp;0&amp;0\\0&amp;0&amp;0&amp;1\end{pmatrix}\), with eigenvalues \(1/2,1/2,1/2,-1/2\). The factor one half preserves trace one and must be retained when reporting the lecture's Bell example.</p>
+<p>The definition uses a basis, but the signs of the partial-transpose eigenvalues do not depend on local basis choice. For a local unitary change \(\rho'=(U_A\otimes U_B)\rho(U_A^\dagger\otimes U_B^\dagger)\), expansion of the B indices gives \((\rho')^{T_B}=(U_A\otimes U_B^*)\rho^{T_B}(U_A^\dagger\otimes U_B^{\mathsf T})\). The outside matrices are mutually adjoint unitaries, so this is unitary conjugation and preserves the spectrum.</p>
+
+<h2 id="low-dimensions">19.4 Where PPT becomes a complete criterion</h2>
+<div class="thm"><strong>Cited Theorem 19.1 — Peres–Horodecki criterion in small dimensions.</strong> A density operator on \(\mathbb C^2\otimes\mathbb C^2\) or \(\mathbb C^2\otimes\mathbb C^3\) is separable if and only if it is PPT. The statement is Theorem 3 in <a href="https://arxiv.org/pdf/quant-ph/9605038">Horodecki, Horodecki, and Horodecki, PDF page 8</a>.</div>
+<p>Only necessity has been proved in this chapter. The cited sufficiency theorem uses the structure of positive maps in those dimensions. It licenses a finite eigenvalue test for every two-qubit or qubit–qutrit density matrix. In higher bipartite dimensions, PPT can hold for entangled states, so a nonnegative spectrum is not a universal separability certificate. A test report must state both the subsystem dimensions and which direction of implication it uses.</p>
+<p>For numerical work, eigenvalues within a declared tolerance of zero require care. A computed value such as \(-10^{-15}\) can reflect floating-point error at a separable boundary. A substantially negative eigenvalue, stable under precision and implementation checks, is a robust entanglement witness for the supplied matrix. Numerical tolerance does not turn an experimentally uncertain matrix into an exact state specification.</p>
+
+<h2 id="white-noise-family">19.5 A complete worked threshold, with a constructive boundary <a class="timestamp" href="https://www.youtube.com/watch?v=ykHW2-iBznk&amp;t=1632s">[27:12]</a></h2>
+<p>Let \(|\Psi^-\rangle=(|01\rangle-|10\rangle)/\sqrt2\) be the two-qubit singlet, and define the singlet–white-noise family</p>
+\[
+\rho(p)=p|\Psi^-\rangle\langle\Psi^-|+(1-p)\frac{I_4}{4},
+\qquad0\leq p\leq1.
+\tag{19.4}
+\]
+<p>The parameter \(p\) is the weight of the singlet component. The other term is the maximally mixed joint state. Every member is a density matrix by convexity of the positive trace-one matrices. Its local marginals are \(I_2/2\) for every \(p\), so local entropy is uninformative about where entanglement disappears.</p>
+<p>In computational order \((00,01,10,11)\), direct expansion and partial transpose give</p>
+\[
+\rho(p)^{T_B}=\frac14\begin{pmatrix}
+1-p&amp;0&amp;0&amp;-2p\\0&amp;1+p&amp;0&amp;0\\
+0&amp;0&amp;1+p&amp;0\\-2p&amp;0&amp;0&amp;1-p
+\end{pmatrix}.
+\tag{19.5}
+\]
+<p>The middle basis vectors each have eigenvalue \((1+p)/4\). The remaining two-by-two block has symmetric and antisymmetric eigenvectors with eigenvalues \((1-3p)/4\) and \((1+p)/4\). Hence the full spectrum is one copy of \((1-3p)/4\) and three copies of \((1+p)/4\). The state is PPT exactly when \(p\leq1/3\). The cited two-qubit theorem therefore gives separability exactly on that interval.</p>
+<p>For this family, we can also demonstrate sufficiency without appealing to the general theorem. Let \(\sigma_i\) denote X, Y, or Z, and let \(|\pm i\rangle\) be their normalized eigenvectors with eigenvalues \(\pm1\). The equal mixture of the two oppositely aligned product states on axis \(i\) is</p>
+\[
+\tau_i=\frac12|+i,-i\rangle\langle+i,-i|
++\frac12|-i,+i\rangle\langle-i,+i|
+=\frac14(I_4-\sigma_i\otimes\sigma_i).
+\tag{19.6}
+\]
+<p>To check the last equality, write the one-qubit projectors as \((I_2\pm\sigma_i)/2\), expand both tensor products, and add. The terms linear in \(\sigma_i\) cancel. Averaging the three axes produces</p>
+\[
+\frac13(\tau_x+\tau_y+\tau_z)
+=\frac14\left(I_4-\frac13\sum_i\sigma_i\otimes\sigma_i\right)
+=\rho(1/3),
+\tag{19.7}
+\]
+<p>where the last equality uses the directly verifiable singlet identity \(|\Psi^-\rangle\langle\Psi^-|=(I_4-\sum_i\sigma_i\otimes\sigma_i)/4\). Equation (19.7) displays six pure product terms, each with probability \(1/6\). For any \(0\leq p\leq1/3\), write \(\rho(p)=3p\rho(1/3)+(1-3p)I_4/4\). Both coefficients are nonnegative, and both states are separable. This constructs a product-mixture description throughout the PPT interval.</p>
+<p>At \(p=1/2\), the negative eigenvalue is \(-1/8\), proving entanglement. At \(p=0\), all partial-transpose eigenvalues are \(1/4\). At the boundary \(p=1/3\), one eigenvalue vanishes. These cases test the spectrum formula and show why a zero eigenvalue at a boundary is expected rather than a numerical failure.</p>
+
+<h2 id="witness">19.6 A measurable witness and its relation to Bell tests</h2>
+<p>An <dfn>entanglement witness</dfn> is a Hermitian matrix \(W\) with nonnegative expectation on every separable state and a negative expectation on at least one entangled state. For a two-qubit singlet, choose \(W=I_4/2-|\Psi^-\rangle\langle\Psi^-|\). Any normalized product vector has singlet squared overlap at most \(1/2\): the singlet has Schmidt coefficients \(1/\sqrt2,1/\sqrt2\), and Cauchy–Schwarz bounds its overlap with a fixed local product by its largest squared Schmidt coefficient. More explicitly, its overlap amplitude with \((a_0|0\rangle+a_1|1\rangle)\otimes(b_0|0\rangle+b_1|1\rangle)\) is \((a_0b_1-a_1b_0)/\sqrt2\), whose magnitude is at most \(1/\sqrt2\) for unit local vectors.</p>
+<p>Thus \(\langle W\rangle\geq0\) on pure products and, by linearity, on separable mixtures. For (19.4), the singlet population is \((1+3p)/4\), so \(\operatorname{Tr}(W\rho(p))=(1-3p)/4\). The witness detects exactly the threshold already obtained from partial transpose for this family. Using the singlet identity, \(W=[I_4+X\otimes X+Y\otimes Y+Z\otimes Z]/4\). Its expectation can therefore be assembled from three specified local correlation settings.</p>
+<p>This entanglement criterion is distinct from violation of a particular Bell inequality. For the CHSH observables \(A_0=Z\), \(A_1=X\), \(B_0=(Z+X)/\sqrt2\), \(B_1=(Z-X)/\sqrt2\), the singlet CHSH expectation has magnitude \(2\sqrt2\), while the white-noise term has zero correlators. The family consequently gives magnitude \(2\sqrt2p\) for those settings, exceeding the local bound two only when \(p\gt1/\sqrt2\). An entangled state with \(1/3\lt p\leq1/\sqrt2\) is not detected by that particular CHSH test. Failure of a chosen witness or Bell test is not by itself proof of separability.</p>
+
+<h2 id="lab">19.7 Compute the spectra and test the boundary</h2>
+<p>The lab compares local marginals of a singlet and a correlated separable mixture. It then sweeps 61 weights in (19.4), comparing every partial-transpose spectrum with equation (19.5). The supplied function transposes only the second subsystem. The printed values include the maximally mixed state, boundary, an interior entangled state, and the singlet.</p>
+<p>It also diagonalizes the zero-field Heisenberg Hamiltonian directly at 21 inverse temperatures and checks the thermal-family parameter in (19.T3). Finally, it constructs all six product projectors in (19.7) and verifies the boundary matrix. Subtracting the minimum energy before exponentiating the Boltzmann weights improves numerical scaling without changing their normalized probabilities.</p>
+<!-- LAB_SOURCE_START -->
+<div class="codewrap"><pre><code class="language-python" data-file="ch19_lab.py">"""Compare mixed-state marginals and a partial-transpose threshold."""
+import numpy as np
+
+
+def partial_transpose(state):
+    return state.reshape(2, 2, 2, 2).transpose(0, 3, 2, 1).reshape(4, 4)
+
+
+def marginal(state):
+    return np.trace(state.reshape(2, 2, 2, 2), axis1=1, axis2=3)
+
+
+singlet = np.array([0, 1, -1, 0]) / np.sqrt(2)
+singlet_rho = np.outer(singlet, singlet)
+correlated = np.diag([0.5, 0, 0, 0.5])
+assert np.allclose(marginal(singlet_rho), marginal(correlated))
+assert np.allclose(np.linalg.eigvalsh(partial_transpose(correlated)),
+                   [0, 0, 0.5, 0.5])
+for p in np.linspace(0, 1, 61):
+    state = p * singlet_rho + (1 - p) * np.eye(4) / 4
+    eigenvalues = np.linalg.eigvalsh(partial_transpose(state))
+    expected = np.array([(1 - 3 * p) / 4] + [(1 + p) / 4] * 3)
+    assert np.allclose(eigenvalues, expected)
+print("Equal local marginals for Bell and correlated mixture: True")
+for p in [0, 1 / 3, 0.5, 1]:
+    value = (1 - 3 * p) / 4
+    print(f"p={p:.6f}: minimum partial-transpose eigenvalue={value:.6f}")
+print("Sixty-one-point spectrum sweep passed: True")
+
+# Reconstruct the zero-field Heisenberg thermal state from its Hamiltonian.
+x = np.array([[0, 1], [1, 0]], complex)
+y = np.array([[0, -1j], [1j, 0]])
+z = np.diag([1, -1])
+coupling = 1.0  # J fixes the energy unit; beta is in inverse energy units.
+hamiltonian = sum(np.kron(q, q) for q in [x, y, z]) * coupling / 4
+energy, vectors = np.linalg.eigh(hamiltonian)
+for beta in np.linspace(0, 4, 21):
+    weights = np.exp(-beta * (energy - energy.min()))
+    thermal = (vectors * (weights / weights.sum())) @ vectors.conj().T
+    exp_beta_j = np.exp(beta * coupling)
+    p = (exp_beta_j - 1) / (exp_beta_j + 3)
+    assert np.allclose(thermal, p * singlet_rho + (1 - p) * np.eye(4) / 4)
+
+boundary = np.zeros((4, 4), complex)
+for axis in [x, y, z]:
+    _, spin_vectors = np.linalg.eigh(axis)
+    minus, plus = spin_vectors[:, 0], spin_vectors[:, 1]
+    for pair in [np.kron(plus, minus), np.kron(minus, plus)]:
+        boundary += np.outer(pair, pair.conj()) / 6
+assert np.allclose(boundary, singlet_rho / 3 + np.eye(4) / 6)
+print("Heisenberg thermal family and six-product boundary passed: True")
+</code></pre></div>
+<!-- LAB_SOURCE_END -->
+<!-- LAB_OUTPUT_START -->
+<pre><code class="output">Equal local marginals for Bell and correlated mixture: True
+p=0.000000: minimum partial-transpose eigenvalue=0.250000
+p=0.333333: minimum partial-transpose eigenvalue=0.000000
+p=0.500000: minimum partial-transpose eigenvalue=-0.125000
+p=1.000000: minimum partial-transpose eigenvalue=-0.500000
+Sixty-one-point spectrum sweep passed: True
+Heisenberg thermal family and six-product boundary passed: True
+</code></pre>
+<!-- LAB_OUTPUT_END -->
+<p>The equality of local marginals persists while the minimum joint partial-transpose eigenvalue changes sign. This finite computation checks the implementation and the derived spectrum. The constructive decomposition proves the separable side of this family, and the general low-dimensional theorem supplies the wider two-qubit criterion.</p>
+
+<h2 id="limits">19.8 A test has a domain and a direction</h2>
+<p>For every finite bipartite state, a negative partial transpose proves entanglement. For two qubits and qubit–qutrit pairs, a nonnegative partial transpose also proves separability. For larger dimensions, the latter implication fails. A program that returns “separable” from PPT without inspecting subsystem dimensions overstates its result.</p>
+<p>Separability is qualitative. A negative eigenvalue detects a failure of the product-mixture description but does not automatically equal a communication rate, Bell violation, or entanglement of formation. Such quantities require their own definitions. The next chapter treats one exact quantitative measure for two qubits, while keeping its spectral ingredients distinct from the spectrum of \(\rho\) or \(\rho^{T_B}\).</p>
+
+<h2 id="exercises">19.9 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex19-1">1. A separable ensemble of entangled vectors</h3><p>Expand equation (19.2), and show explicitly which entries disappear when the Bell projectors are averaged.</p><details><summary>Solution</summary><p>Each Bell projector has diagonal terms \((|00\rangle\langle00|+|11\rangle\langle11|)/2\). Their cross terms are respectively plus and minus \((|00\rangle\langle11|+|11\rangle\langle00|)/2\). The equal outer mixture cancels those cross terms and leaves the two product projectors with weight one half each. This one product decomposition proves separability regardless of the entangled vectors in the alternative ensemble.</p></details></article>
+<article class="exercise"><h3 id="ex19-2">2. Partial transpose by indices</h3><p>Apply \(T_B\) to the matrix element \(|01\rangle\langle10|\). Explain why full transpose gives a different matrix element.</p><details><summary>Solution</summary><p>Write the operator as \(|0\rangle\langle1|_A\otimes|1\rangle\langle0|_B\). Partial transpose on B gives \(|0\rangle\langle1|_A\otimes|0\rangle\langle1|_B=|00\rangle\langle11|\). Full transpose also exchanges the A indices and instead gives \(|10\rangle\langle01|\). The distinction is why the reshape permutation must swap only the two B slots.</p></details></article>
+<article class="exercise"><h3 id="ex19-3">3. Derive the noise threshold</h3><p>Diagonalize the two-by-two corner block in equation (19.5). State the exact entanglement interval for \(0\leq p\leq1\).</p><details><summary>Solution</summary><p>The block has equal diagonals \((1-p)/4\) and off-diagonals \(-p/2\). The equal-sign vector has eigenvalue \((1-3p)/4\); the opposite-sign vector has eigenvalue \((1+p)/4\). The remaining two eigenvalues are also \((1+p)/4\). A negative eigenvalue appears exactly for \(p\gt1/3\), proving entanglement there. Equation (19.7) and its convex extension prove separability for \(0\leq p\leq1/3\).</p></details></article>
+<article class="exercise"><h3 id="ex19-4">4. Diagnose a dimensional overclaim</h3><p>A routine receives a nine-by-nine joint density matrix labeled as two three-level subsystems. It finds a nonnegative partial-transpose spectrum and returns “separable by Peres–Horodecki.” Identify the faulty implication and give a valid report.</p><details><summary>Solution</summary><p>The routine has a 3-by-3 bipartition, outside the cited 2-by-2 and 2-by-3 sufficiency cases. The valid report is that the supplied state is PPT within the stated numerical tolerance; this test alone has not determined separability. A negative eigenvalue would still have proved entanglement in that dimension, but nonnegativity is inconclusive without a stronger criterion or an explicit separable decomposition.</p></details></article>
+<article class="exercise"><h3 id="ex19-5">5. Compare a witness and a fixed Bell test</h3><p>Take \(p=1/2\). Compute the witness expectation and the CHSH magnitude for the settings in <a href="#witness">section 19.6</a>. Interpret both results.</p><details><summary>Solution</summary><p>The witness expectation is \((1-3/2)/4=-1/8\), detecting entanglement. The CHSH magnitude is \(\sqrt2\), below the local bound two, so those settings do not show CHSH violation. These conclusions are compatible: entanglement is necessary for such nonlocal correlations, but a failure to violate this test is not a separability certificate.</p></details></article>
+<article class="exercise"><h3 id="ex19-6">6. Implement the separable boundary</h3><p>Extend the lab to build the six product projectors in equation (19.7). Verify the boundary matrix and then reconstruct a separable member with any \(p\) in \([0,1/3]\).</p><details><summary>Solution</summary><p>Diagonalize each of X, Y, and Z to obtain normalized \(|\pm i\rangle\). Form the products \(|+i,-i\rangle\) and \(|-i,+i\rangle\), take their outer products, and sum all six with weight \(1/6\). The result must equal \((1/3)|\Psi^-\rangle\langle\Psi^-|+(2/3)I_4/4\). For a chosen \(p\leq1/3\), combine it with \(I_4/4\) using weights \(3p\) and \(1-3p\). All weights remain nonnegative. The maximally mixed term is itself the equal mixture of four computational-basis products, giving an explicit finite product decomposition to compare numerically with (19.4).</p></details></article>
+
+<h2 id="primary-sources">19.10 Primary sources and attribution</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra: <a href="https://www.youtube.com/watch?v=LzHRsvVpYpg">Entanglement in Mixed States</a> and <a href="https://www.youtube.com/watch?v=ykHW2-iBznk">Convexity and Peres–Horodecki Criterion</a>, official W12L3–W12L4.</li><li>M. Horodecki, P. Horodecki, and R. Horodecki, <a href="https://arxiv.org/pdf/quant-ph/9605038">Separability of mixed states: necessary and sufficient conditions</a>, arXiv quant-ph/9605038v2 (1996), Theorem 3, PDF page 8. The theorem's dimension restriction and distinction between necessity and sufficiency were checked against the source. Its full positive-map proof is not independently audited here.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-18.html">Previous chapter</a> <a href="chapter-20.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

@@ -1,0 +1,12 @@
+dense coding: 00->00, 01->01, 10->10, 11->11
+Bell codeword Gram matrix equals I_4
+input 1: branch probabilities=0.25,0.25,0.25,0.25
+  corrected fidelities=1.000000,1.000000,1.000000,1.000000
+  unread receiver state=I/2
+input 2: branch probabilities=0.25,0.25,0.25,0.25
+  corrected fidelities=1.000000,1.000000,1.000000,1.000000
+  unread receiver state=I/2
+input 3: branch probabilities=0.25,0.25,0.25,0.25
+  corrected fidelities=1.000000,1.000000,1.000000,1.000000
+  unread receiver state=I/2
+corrected branch operators K=I/2; sum K rho K^dagger=rho

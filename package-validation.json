@@ -1,0 +1,169 @@
+{
+  "chapters_checked": 20,
+  "pages_checked": 26,
+  "laboratory_execution_performed": true,
+  "failures": [],
+  "chapters": [
+    {
+      "chapter": 1,
+      "exercises": 6,
+      "code_sha256": "a8461e72c13f9fdfafa81af48a2f36f607d552c3a6f3625235dbe2dd976e06c8",
+      "body_sha256": "966fcf4ae1fdc8ff080e39db5db32116b737db344727fb2a9556efc93a167b7c",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 2,
+      "exercises": 6,
+      "code_sha256": "b2f6e6f1eeb891094f65746fc883057c31ab7700747c44bfd82dd23ad8f2c090",
+      "body_sha256": "ad1aa9d6f3befd427efd5ab9908ae6d1b7a5e2c1cf90e70284e450af8fba42bf",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 3,
+      "exercises": 6,
+      "code_sha256": "5b47f206fe4c604c37a86d4090962269b458ed5157bc05a33995ee3b5219b1c3",
+      "body_sha256": "4294d38b8d497c49be8d509bcdc18bdfcdd219f2927ac743b2615b2158299c81",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 4,
+      "exercises": 6,
+      "code_sha256": "a10753b6d206c4f936e5564c9c0c78aee83c2f4a5c8fa0b3ec76c0877a731868",
+      "body_sha256": "e741af1f3376017ce0bd16103c33a182bdeaeedbd8f8a7a37a76a949fdc4a32d",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 5,
+      "exercises": 6,
+      "code_sha256": "20bae14962af49cc3296d52cf0ac4a1ac61385407ec28e57d59f7e40174c3942",
+      "body_sha256": "624ec4e1e5e654c1f9ff390cbf46ef9781e50a6bd3c71a8e956666ab107733dc",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 6,
+      "exercises": 6,
+      "code_sha256": "15814996fc4fe32a7038f658c666b19d774db11745627131cbf1dfc1408d6318",
+      "body_sha256": "fdc33c9d2677454c20be2ec7613c67ef7fe7b3ec1c0a30561f71bd1dbd580e6d",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 7,
+      "exercises": 6,
+      "code_sha256": "3d24cabc8396ce6209bc4969ccac4fba1373be6616c82bf297e4e47b201d5b9d",
+      "body_sha256": "e6daafc66b9216ad1d35664406e2af32d2699b304b3dd673c65ce8582172e220",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 8,
+      "exercises": 6,
+      "code_sha256": "970d221617edd8174d95ba1f291a6b4d07bd581b943578be2d6cb9ddfaa0c8f9",
+      "body_sha256": "3de46e2a5beeb6b8a18325179ad65b53d4ea7eebfe91138d54b9e95caf3b4b9a",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 9,
+      "exercises": 6,
+      "code_sha256": "a63d3e4645d0f4dfee94fa318412e67f78a5bbf336066e968a6e0d028e9c9310",
+      "body_sha256": "c2b71b6a2270280ab4fa497b6a35b5092cb9afa877f80c61eaf2e72537eac13e",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 10,
+      "exercises": 6,
+      "code_sha256": "d9cbe5db36a546ed883963255edc78860bea6fb9338c3f5a6870f69ebe29ce79",
+      "body_sha256": "740b96f4f9b45b5d21f23878ea5da9ebbd46457d8436ad1752a9816e7a4547f8",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 11,
+      "exercises": 6,
+      "code_sha256": "b2f429e04ef235307b383774398ec328b5aa99201b86873b38331ae750147d3e",
+      "body_sha256": "1c7a530bb95aa1b834a76150ccbcf2904ce7bc082e4148383f99f287d12c34b2",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 12,
+      "exercises": 6,
+      "code_sha256": "50539a494e8752c02bcf1e0b86f491ce027af3a1fe40eb5a8f735b7ab4c25908",
+      "body_sha256": "2e9786efbbfe9cdb2d1a7925ffaa7987e74fbee24b8f42744a2edb7de87ab304",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 13,
+      "exercises": 6,
+      "code_sha256": "1db12600474df7cfbcae9932ce22abac83e06fe677b5d3437f1b54411bdf304d",
+      "body_sha256": "5c434ae4a999fa7a14780ac1f271175113e982d1adce186cab758cc61ae0aca6",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 14,
+      "exercises": 6,
+      "code_sha256": "8385f5243fa8734c69a8f49b7f73739bcdb2a6498a6b2c61160e92affd880bdc",
+      "body_sha256": "e844a3c89c76db662cb62099cd7763ab9eecd3ef67c7c1d51c298bb580ae6ba6",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 15,
+      "exercises": 6,
+      "code_sha256": "6575fc7648cdc4ea38fe244aaccef09be9399bf8d62b9302ed7987fb7ffbaa8d",
+      "body_sha256": "0ec1d52a4dd92252c7aae9420dceb2c74cc12d5dc779e61885ff7c8bfd01002c",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 16,
+      "exercises": 6,
+      "code_sha256": "07ff0bc530a81ada976b654e0b91a59cd4bb547e9e3ba9205ce0e43192a84c33",
+      "body_sha256": "9b1bff494721563dd8a93940361b0f75e14d2187e310545840c7bc47fe674aed",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 17,
+      "exercises": 6,
+      "code_sha256": "af123ea0f4fcd1d53f3238aafeaf56ee85bd182b2105d6d1fc17ae6dc8e1eaad",
+      "body_sha256": "8b4905116f8e04295259dbcc1c5b2bd9af9a0f8334f0be9f7adfbd5f7ef1597c",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 18,
+      "exercises": 6,
+      "code_sha256": "312abe900a880bdad5f666c20b48b65f54656d5bbe3f2b85fa28674e914f15c0",
+      "body_sha256": "4a919a9f68120126b9fe170fab89d8eee4e53a2b750df23c6bfd4f939fe87dca",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 19,
+      "exercises": 6,
+      "code_sha256": "5a31c300a29c9530cc0395e2bb068dc78ce1bb72719de7eb6c8db94e65585978",
+      "body_sha256": "e8545b829368b2a5f938e22d26d5f9032cc41b8b33096393d856c6623a05d083",
+      "exit_code": 0,
+      "stdout_matches": true
+    },
+    {
+      "chapter": 20,
+      "exercises": 6,
+      "code_sha256": "9a422ead38af3449171cb463da290507e3cc3fe282c3788b298c2ee8d906fe04",
+      "body_sha256": "baa3c90709dc69ab98c247aa5540c5be5a19d60bfeb1101ee4a90774b94d84b4",
+      "exit_code": 0,
+      "stdout_matches": true
+    }
+  ],
+  "scope": "Structure, local links, source-duration bounds, exact embedded source/output and finite program execution; not a mathematical proof audit."
+}

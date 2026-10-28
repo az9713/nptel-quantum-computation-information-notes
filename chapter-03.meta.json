@@ -1,0 +1,107 @@
+{
+  "chapter": 3,
+  "title": "Information erasure and thermodynamic bookkeeping",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "XEZ7bH11Hds",
+      "course_label": "W1L4",
+      "course_order": 4,
+      "duration_seconds": 1845
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "XEZ7bH11Hds",
+      "start_seconds": 101,
+      "end_seconds": 280,
+      "lecture_material": "Logical gates and loss of input information",
+      "research_extension": "Specify symmetric degenerate physical memory and side-information boundary",
+      "teaching_construction": "Known-data and reversible-embedding comparisons"
+    },
+    {
+      "id": "bound",
+      "video_id": "XEZ7bH11Hds",
+      "start_seconds": 284,
+      "end_seconds": 386,
+      "lecture_material": "Erasure heat bound",
+      "research_extension": "Distinguish total entropy production from entropy exported; biased and imperfect reset",
+      "teaching_construction": "Explicit signed entropy balance"
+    },
+    {
+      "id": "compression",
+      "video_id": "XEZ7bH11Hds",
+      "start_seconds": 387,
+      "end_seconds": 1040,
+      "lecture_material": "Piston and ideal-gas compression example",
+      "research_extension": "Separate particle-count and mole normalizations and logical versus full physical entropy",
+      "teaching_construction": "Dimensionless quadrature"
+    },
+    {
+      "id": "demon",
+      "video_id": "XEZ7bH11Hds",
+      "start_seconds": 1114,
+      "end_seconds": 1840,
+      "lecture_material": "Maxwell demon and finite memory",
+      "research_extension": "Bennett controller-cycle clarification; finite-reservoir theorem cited from ReebWolf",
+      "teaching_construction": "One-particle expansion/reset balance"
+    }
+  ],
+  "references": [
+    {
+      "title": "Bennett, Notes on Landauer principle, reversible computation and Maxwell demon",
+      "url": "https://arxiv.org/pdf/physics/0210005",
+      "supports": "Logical/physical reversibility and cyclic controller accounting",
+      "locator_checked": "PDF pp1–3"
+    },
+    {
+      "title": "Reeb and Wolf, An improved Landauer Principle with finite-size corrections",
+      "url": "https://arxiv.org/pdf/1306.4352",
+      "supports": "Reservoir/correlation assumptions, finite-size corrections, equality limits",
+      "locator_checked": "sections2–3, mean heat definition PDFp5 Eq8, Theorem3 PDFp9; section6"
+    }
+  ],
+  "source_uncertainties": [
+    "Full available auto-caption text read; no full audiovisual review.",
+    "Entropy signs and particle/mole normalization clarified by derivation; no blanket claim that every gate or measurement dissipates the one-bit bound.",
+    "Ideal isothermal reservoir and reversible saturation are limiting models, not measurements.",
+    "Heat and work bounds explicitly concern ensemble means; individual reset trials may fluctuate."
+  ],
+  "symbols": [
+    "p_j",
+    "k_B",
+    "T",
+    "Q_bath",
+    "S_mem",
+    "h_e",
+    "N_gas",
+    "nu",
+    "W_on"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch03_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch03_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch03-r1.md",
+      "report_sha256": "091708501c68c565e00599d57b96eb1f903518310fe27b5d358d2cf2a7465284",
+      "verdict": "ACCEPT WITH FIXES",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch03-r2.md",
+      "report_sha256": "4ce28a197f2137ee05ef0397b5f1176df17e036d53016a2579b31de851cce28d",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "ca80d446bbaa262039b554fc6e3c2e3496e89f464752d4de1ae8aa881b738356",
+  "canonical_body_sha256": "ca80d446bbaa262039b554fc6e3c2e3496e89f464752d4de1ae8aa881b738356",
+  "body_sha256": "ca80d446bbaa262039b554fc6e3c2e3496e89f464752d4de1ae8aa881b738356"
+}

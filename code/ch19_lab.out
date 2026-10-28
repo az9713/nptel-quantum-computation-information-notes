@@ -1,0 +1,7 @@
+Equal local marginals for Bell and correlated mixture: True
+p=0.000000: minimum partial-transpose eigenvalue=0.250000
+p=0.333333: minimum partial-transpose eigenvalue=0.000000
+p=0.500000: minimum partial-transpose eigenvalue=-0.125000
+p=1.000000: minimum partial-transpose eigenvalue=-0.500000
+Sixty-one-point spectrum sweep passed: True
+Heisenberg thermal family and six-product boundary passed: True

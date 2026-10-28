@@ -1,0 +1,5 @@
+Input Bloch vector: [0.6, 0.0, 0.8]
+Amplitude damping: [0.48, 0.0, 0.872]
+Damped maximally mixed state: [0.0, 0.0, 0.36]
+Pure dephasing: [0.3, 0.0, 0.8]
+Twenty-one-point channel sweeps passed: True

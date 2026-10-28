@@ -1,0 +1,140 @@
+{
+  "chapter": 5,
+  "title": "Density operators, mixtures, and time evolution",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "GbsmGwAnbXM",
+      "course_label": "W2L4",
+      "course_order": 9,
+      "duration_seconds": 1730
+    },
+    {
+      "video_id": "Rb7HP05x0Vo",
+      "course_label": "W2L5",
+      "course_order": 10,
+      "duration_seconds": 1799
+    },
+    {
+      "video_id": "387YoH3R0zo",
+      "course_label": "W3L1",
+      "course_order": 11,
+      "duration_seconds": 1861
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "GbsmGwAnbXM",
+      "start_seconds": 37,
+      "end_seconds": 910,
+      "lecture_material": "Pure and mixed states, ensemble populations, and coherences",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    },
+    {
+      "id": "positivity",
+      "video_id": "GbsmGwAnbXM",
+      "start_seconds": 910,
+      "end_seconds": 1415,
+      "lecture_material": "State properties, purity and Hermiticity",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    },
+    {
+      "id": "expectations",
+      "video_id": "Rb7HP05x0Vo",
+      "start_seconds": 54,
+      "end_seconds": 398,
+      "lecture_material": "Mixed-state trace expectation",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    },
+    {
+      "id": "bloch",
+      "video_id": "Rb7HP05x0Vo",
+      "start_seconds": 441,
+      "end_seconds": 1787,
+      "lecture_material": "Qubit parameters and eigenvalues",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    },
+    {
+      "id": "bloch",
+      "video_id": "387YoH3R0zo",
+      "start_seconds": 610,
+      "end_seconds": 1255,
+      "lecture_material": "Pauli expectations and mixed-state Bloch ball",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    },
+    {
+      "id": "dynamics",
+      "video_id": "387YoH3R0zo",
+      "start_seconds": 1255,
+      "end_seconds": 1754,
+      "lecture_material": "Schrodinger versus Heisenberg conjugation and Liouville evolution",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    },
+    {
+      "id": "classical",
+      "video_id": "387YoH3R0zo",
+      "start_seconds": 1758,
+      "end_seconds": 1852,
+      "lecture_material": "Classical Poisson-bracket comparison",
+      "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+      "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+    }
+  ],
+  "references": [
+    {
+      "title": "Preskill Quantum Information Chapter2",
+      "url": "https://www.preskill.caltech.edu/ph219/chap2_15.pdf",
+      "supports": "Born rule, unitary dynamics, density operators, ensemble ambiguity",
+      "locator_checked": "PDFpp4–7 eq2.7–2.12;pp18–21 eq2.56–2.70;pp28–31 ensemble ambiguity"
+    }
+  ],
+  "source_uncertainties": [
+    "All three assigned caption texts read completely.",
+    "Captions contain uncertain off-diagonal entry ordering and confuse Pauli tracelessness with density trace; the chapter derives fixed conventions explicitly.",
+    "The isolated Schrodinger state equation has the full ordinary derivative; no undefined extra partial derivative is appended.",
+    "No selected source frames9–11 available; no complete audiovisual transcription claimed."
+  ],
+  "symbols": [
+    "rho",
+    "p_j",
+    "H_phys",
+    "hbar",
+    "t",
+    "U",
+    "r",
+    "A",
+    "lambda_k"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch05_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch05_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch05-r1.md",
+      "report_sha256": "f79b4443261c22302fbb268545415306fa013d6978f02b71591c9a9bffe3f886",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch05-r2.md",
+      "report_sha256": "197b7f2caf7ff9b31fa37f1d014d56bdf4f86c1bd1a54cf403e500bac8c5e932",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "94c3868023e5c6e29ed5b1cffdcf6daafe41e0a2097faaffd1ff37f8d5d7e117",
+  "canonical_body_sha256": "94c3868023e5c6e29ed5b1cffdcf6daafe41e0a2097faaffd1ff37f8d5d7e117",
+  "body_sha256": "94c3868023e5c6e29ed5b1cffdcf6daafe41e0a2097faaffd1ff37f8d5d7e117"
+}

@@ -1,0 +1,11 @@
+local CHSH values: [-2, 2]
+quantum correlators: 0.707107 0.707107 0.707107 -0.707107
+quantum CHSH=2.828427
+all chosen single-party expectations=0
+singlet angle=0 deg: E=-1.000000
+singlet angle=60 deg: E=-0.500000
+singlet angle=90 deg: E=-0.000000
+singlet angle=180 deg: E=1.000000
+three-setting test: left=0.375000, right=0.250000, violation=0.125000
+CHSH angle optimum=45.000000 deg, value=2.828427
+CNOT: |+0> becomes Bell; |0+> remains product

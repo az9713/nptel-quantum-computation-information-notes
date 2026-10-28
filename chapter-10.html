@@ -1,0 +1,223 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Dense coding and teleportation as resource protocols</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>10. Dense coding and teleportation as resource protocols</h1>
+<p class="lead">One shared Bell pair supports two different tasks. In dense coding, Alice chooses two classical bits, operates on her qubit, and physically sends that qubit to Bob. In teleportation, Alice receives an unknown qubit and transfers its state to Bob's existing qubit by sending two classical bits. Exact algebra shows where the information is available, why the classical message is indispensable, and why the unknown input is not cloned.</p>
+<p class="source-note"><strong>Lecture material:</strong> W6L2–W6L4 develop Bell preparation and measurement, dense coding, and teleportation, then introduce optical production of entangled pairs. <strong>Primary-reference clarification:</strong> <a href="https://www2.physik.uni-muenchen.de/lehre/vorlesungen/wise_20_21/qu-komm-computer/material/_auth/Bennett-Comm-via-One-and-Two-Particle-Operators-on-EPR-States-PRL-69-2881-92.pdf">Bennett and Wiesner's 1992 dense-coding paper</a> and <a href="https://people.disim.univaq.it/~serva/teaching/Bennet.1993.pdf">Bennett et al.'s 1993 teleportation paper</a> identify the protocols and their resource accounting. <strong>Original teaching constructions:</strong> one fixed Bell-label convention, the branch-map proof for arbitrary inputs, the finite complex-state laboratory, and the exercises. Ideal gates and measurements are assumed; optical efficiencies are treated separately in the following chapter.</p>
+
+<h2 id="model">10.1 Bell labels, wire order, and the inverse preparation circuit <a class="timestamp" href="https://www.youtube.com/watch?v=wn4MOUJ7HDI&amp;t=180s">W6L2 3:00</a></h2>
+<p>Use the ordered two-qubit basis \(00,01,10,11\), with the first qubit as controlled-NOT control. Let \(X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\), \(Z=\operatorname{diag}(1,-1)\), and \(H=(X+Z)/\sqrt2\). Define the Bell-preparation unitary
+\[
+U_{\rm prep}=U_{\rm CNOT}(H\otimes I_2).
+\tag{10.1}
+\]
+Matrix operators act from right to left, so Hadamard acts first. For bits \(x,y\in\{0,1\}\),
+\[
+U_{\rm prep}|x,y\rangle
+=|\beta_{xy}\rangle
+=\frac{|0,y\rangle+(-1)^x|1,y\oplus1\rangle}{\sqrt2}.
+\tag{10.2}
+\]
+Here \(x\) labels the relative sign and \(y\) labels whether the two computational bits agree. The symbol \(\oplus\) denotes addition modulo two.</p>
+<p>To derive (10.2), apply \(H|x\rangle=(|0\rangle+(-1)^x|1\rangle)/\sqrt2\), retain the second qubit \(y\), and flip that qubit only in the first-qubit-one term. Thus the four labels are \(\beta_{00}=\Phi^+\), \(\beta_{01}=\Psi^+\), \(\beta_{10}=\Phi^-\), and \(\beta_{11}=\Psi^-\). The four vectors are orthonormal because a unitary maps the orthonormal computational basis to another orthonormal basis.</p>
+<p>The inverse is
+\[
+U_{\rm decode}=U_{\rm prep}^\dagger
+=(H\otimes I_2)U_{\rm CNOT}.
+\tag{10.3}
+\]
+Controlled-NOT therefore acts first during decoding, followed by Hadamard on the first qubit. A computational-basis measurement after this inverse maps the Bell vector \(\beta_{xy}\) to the two-bit result \(xy\) with certainty. This is an ideal Bell-basis measurement. It is a fixed four-outcome measurement, not a choice by the receiver of a favorable outcome.</p>
+
+<h2 id="dense">10.2 Dense coding: a message becomes jointly distinguishable <a class="timestamp" href="https://www.youtube.com/watch?v=fSNcnitGGyk&amp;t=180s">W6L3 3:00</a></h2>
+<p>Alice holds qubit \(A\) and Bob holds qubit \(B\) of a pre-shared state \(\Phi^+\). To send the classical message \(xy\), Alice applies \(Z^xX^y\) to \(A\) and sends \(A\) through a quantum channel to Bob. The receiver now has access to both qubits. Direct application gives
+\[
+(Z^xX^y\otimes I_2)|\Phi^+\rangle=|\beta_{xy}\rangle.
+\tag{10.4}
+\]
+For \(xy=11\), the ordering matters as an operator: \(ZX=-XZ\). The two differ only by a global minus sign, but the explicit convention in (10.4) makes every displayed vector and decoded label agree exactly.</p>
+<table><thead><tr><th>Message \(xy\)</th><th>Alice's operator</th><th>Shared state after encoding</th><th>Decoded result</th></tr></thead><tbody><tr><td>00</td><td>\(I_2\)</td><td>\(\Phi^+\)</td><td>00</td></tr><tr><td>01</td><td>\(X\)</td><td>\(\Psi^+\)</td><td>01</td></tr><tr><td>10</td><td>\(Z\)</td><td>\(\Phi^-\)</td><td>10</td></tr><tr><td>11</td><td>\(ZX=iY\)</td><td>\(\Psi^-\)</td><td>11</td></tr></tbody></table>
+<p>For example, \(X\) exchanges Alice's computational states, so it sends \((|00\rangle+|11\rangle)/\sqrt2\) to \((|10\rangle+|01\rangle)/\sqrt2=\Psi^+\). The \(Z\) operation changes the sign of the term whose first qubit is one, producing \(\Phi^-\). Applying \(ZX\) instead gives \((|01\rangle-|10\rangle)/\sqrt2\). Bob applies (10.3) and reads the corresponding computational label. The laboratory verifies all four messages and their Gram matrix.</p>
+<p>Before the transmitted qubit arrives, Bob's original qubit remains \(I_2/2\) for every message. A local unitary on Alice's half cannot alter Bob's reduced state. After it arrives, Bob can distinguish four orthogonal joint states in a four-dimensional space. The protocol has not placed four perfectly distinguishable states into an isolated two-dimensional qubit. The pre-shared half held by Bob is part of the decoding resource.</p>
+<p>The resource statement is therefore: one Bell pair prepared in advance plus one transmitted qubit carries one of four classical messages. If distributing the initial pair is charged to the same communication budget, its physical transmission and storage costs also count. <a href="https://www2.physik.uni-muenchen.de/lehre/vorlesungen/wise_20_21/qu-komm-computer/material/_auth/Bennett-Comm-via-One-and-Two-Particle-Operators-on-EPR-States-PRL-69-2881-92.pdf">Bennett and Wiesner, PDF page 3, printed page 2883</a>, explicitly discuss the role of distributing the resource before the message is selected.</p>
+
+<h2 id="teleport">10.3 Teleportation: the unknown state and the Bell outcome <a class="timestamp" href="https://www.youtube.com/watch?v=qaYIdWeBitA&amp;t=60s">W6L4 1:00</a></h2>
+<p>Introduce a third qubit \(Q\), initially in the unknown normalized state
+\(|\psi\rangle_Q=\alpha|0\rangle+\beta|1\rangle\), where \(\alpha,\beta\in\mathbb C\) and \(|\alpha|^2+|\beta|^2=1\). Alice controls \(Q,A\); Bob controls \(B\). The shared pair \(AB\) is again \(\Phi^+\). The fixed three-wire order is \(Q,A,B\). Before any operation,
+\[
+|\Omega\rangle_{QAB}
+=|\psi\rangle_Q|\Phi^+\rangle_{AB}
+=\frac{\alpha|000\rangle+\alpha|011\rangle
++\beta|100\rangle+\beta|111\rangle}{\sqrt2}.
+\tag{10.5}
+\]
+The input is not initially correlated with the resource pair. “Unknown” means that the operations cannot depend on \(\alpha,\beta\); it does not prevent writing symbolic amplitudes to prove the protocol.</p>
+<div class="prop"><strong>Proposition 10.1 — Bell-branch identity.</strong> With the Bell convention in (10.2),
+\[
+|\Omega\rangle_{QAB}
+=\frac12\sum_{x,y=0}^{1}|\beta_{xy}\rangle_{QA}
+\otimes X^yZ^x|\psi\rangle_B.
+\tag{10.6}
+\]</div>
+<div class="proof"><p>Resolve the first two computational wires into Bell vectors:
+\[
+|00\rangle=(|\Phi^+\rangle+|\Phi^-\rangle)/\sqrt2,\quad
+|11\rangle=(|\Phi^+\rangle-|\Phi^-\rangle)/\sqrt2,
+\]
+\[
+|01\rangle=(|\Psi^+\rangle+|\Psi^-\rangle)/\sqrt2,\quad
+|10\rangle=(|\Psi^+\rangle-|\Psi^-\rangle)/\sqrt2.
+\]
+Insert those four identities into (10.5). The coefficients of \(\Phi^+,\Phi^-,\Psi^+,\Psi^-\), respectively, are
+\[
+\frac12(\alpha|0\rangle+\beta|1\rangle),\quad
+\frac12(\alpha|0\rangle-\beta|1\rangle),\quad
+\frac12(\alpha|1\rangle+\beta|0\rangle),\quad
+\frac12(\alpha|1\rangle-\beta|0\rangle).
+\]
+These are \(\frac12I|\psi\rangle,\frac12Z|\psi\rangle,\frac12X|\psi\rangle,\frac12XZ|\psi\rangle\), in the order of (10.6). <span class="qed">∎</span></p></div>
+<p>Alice measures the two qubits \(QA\) in that fixed Bell basis, using the inverse preparation circuit followed by two computational readouts. The norm squared of each branch coefficient in (10.6) is \(1/4\), since Pauli operators preserve the norm. Thus the outcomes are uniformly distributed and contain no information about the unknown amplitudes. They identify which known unitary has been applied to the state now held by Bob.</p>
+
+<h3 id="correction">The correction is a unitary operation</h3>
+<p>Alice sends the two-bit outcome \(xy\) through an ordinary classical channel. Bob applies the inverse operator \(Z^xX^y\). The action on his branch is
+\[
+Z^xX^y\,X^yZ^x|\psi\rangle=|\psi\rangle.
+\tag{10.7}
+\]
+For outcome 11, this requires \(ZX\) on the state \(XZ|\psi\rangle\). Calling the correction a measurement would obscure the mechanism: it is a known unitary gate, selected by the classical outcome. An additional measurement of the recovered unknown qubit would generally disturb it and is not required for successful transfer.</p>
+<table><thead><tr><th>Alice's Bell result</th><th>Bob's normalized conditional state</th><th>Bob's correction</th></tr></thead><tbody><tr><td>\(\Phi^+\), 00</td><td>\(|\psi\rangle\)</td><td>\(I_2\)</td></tr><tr><td>\(\Psi^+\), 01</td><td>\(X|\psi\rangle\)</td><td>\(X\)</td></tr><tr><td>\(\Phi^-\), 10</td><td>\(Z|\psi\rangle\)</td><td>\(Z\)</td></tr><tr><td>\(\Psi^-\), 11</td><td>\(XZ|\psi\rangle\)</td><td>\(ZX\)</td></tr></tbody></table>
+<p>The original 1993 paper uses a singlet resource and a corresponding correction convention. Local changes of basis convert that convention to the \(\Phi^+\) resource used here; copying a correction table without its initial resource and Bell labels can produce an incorrect implementation. <a href="https://people.disim.univaq.it/~serva/teaching/Bennet.1993.pdf">Bennett et al., PDF pages 2–3, equations (5)–(6)</a>, state the conditional branches and the classical communication requirement.</p>
+
+<h2 id="channel">10.4 Why the two classical bits are necessary to this protocol</h2>
+<p>Before the outcome is available, Bob averages the four conditional states. For an arbitrary one-qubit density operator \(\rho\), that average is
+\[
+\frac14\sum_{x,y}X^yZ^x\rho Z^xX^y=\frac{I_2}{2}.
+\tag{10.8}
+\]
+To verify it directly, write \(\rho=\begin{pmatrix}a&amp;c\\c^*&amp;1-a\end{pmatrix}\). Averaging \(\rho\) with \(Z\rho Z\) cancels the off-diagonal entries. Averaging that result with its \(X\)-conjugate replaces both diagonal entries by \(1/2\). No input dependence survives. A receiver who guesses a correction without the message therefore sees a maximally mixed output rather than the unknown state.</p>
+<p>Conditioned on an outcome, the unnormalized input-to-output map is \(\frac12X^yZ^x\). With correction it is \(\frac12I_2\). For a density operator the four corrected branches consequently sum to
+\[
+\sum_{x,y}\left(\frac12I_2\right)\rho
+\left(\frac12I_2\right)^\dagger=\rho.
+\tag{10.9}
+\]
+This proves the identity action for mixed inputs as well as pure inputs. If the input is entangled with a reference system, each corrected branch acts as the identity on the reference and \(\frac12I_2\) on the teleported factor. Summing again preserves the entire joint density operator. The protocol transports quantum correlations, not merely the measurement distribution of a few test states.</p>
+<p>If Alice's Bell measurement is implemented directly by projectors
+\(|\beta_{xy}\rangle\langle\beta_{xy}|\), her conditional two-qubit state is
+\(|\beta_{xy}\rangle\). In the inverse-decoder implementation described above,
+the decoder first maps that Bell vector to \(|xy\rangle\), so computational
+readout leaves \(|xy\rangle\) instead. Bob's conditional branch is the same in
+either implementation. Both remaining Alice states depend on the outcome but
+not on \(\alpha,\beta\); neither retains an intact copy of the input.
+The uniform outcome bits do not describe its amplitudes. Without those bits,
+Bob's operational output is the averaged state in equation (10.8).</p>
+
+<h2 id="lab">10.5 Executable branch verification</h2>
+<p>The laboratory constructs the preparation and decoding matrices, verifies every dense-coding message, and performs the Bell-basis contraction on the first two axes of a three-qubit vector. It tests a computational input, a real superposition, and a genuinely complex superposition. For each it records all four branch probabilities and corrected fidelities. Here the pure-state fidelity is \(|\langle\psi|\phi\rangle|^2\) between normalized target and output vectors, so global phase does not affect the test.</p>
+<pre><code class="language-python" data-file="ch10_lab.py">"""Dense-code decoding and every teleportation branch for complex inputs."""
+import itertools
+import numpy as np
+
+identity = np.eye(2, dtype=complex)
+x_gate = np.array([[0, 1], [1, 0]], dtype=complex)
+z_gate = np.diag([1, -1]).astype(complex)
+hadamard = np.array([[1, 1], [1, -1]], dtype=complex)/np.sqrt(2)
+cnot = np.array([[1, 0, 0, 0], [0, 1, 0, 0],
+                 [0, 0, 0, 1], [0, 0, 1, 0]], dtype=complex)
+prepare = cnot @ np.kron(hadamard, identity)
+decode = prepare.conj().T
+bell = prepare[:, 0]
+labels = list(itertools.product(range(2), repeat=2))
+bell_basis = {}
+for phase, flip in labels:
+    index = 2*phase + flip
+    vector = prepare[:, index]
+    operation = np.linalg.matrix_power(z_gate, phase)
+    operation = operation @ np.linalg.matrix_power(x_gate, flip)
+    assert np.allclose(np.kron(operation, identity) @ bell, vector)
+    assert np.allclose(decode @ vector, np.eye(4)[:, index])
+    bell_basis[(phase, flip)] = vector
+print("dense coding: 00-&gt;00, 01-&gt;01, 10-&gt;10, 11-&gt;11")
+print("Bell codeword Gram matrix equals I_4")
+assert np.allclose(prepare.conj().T @ prepare, np.eye(4))
+
+inputs = [
+    np.array([1, 0], dtype=complex),
+    np.array([1, 1], dtype=complex)/np.sqrt(2),
+    np.array([np.sqrt(0.3), 1j*np.sqrt(0.7)], dtype=complex),
+]
+for case, state in enumerate(inputs, 1):
+    joint = np.kron(state, bell).reshape(4, 2)
+    averaged = np.zeros((2, 2), dtype=complex)
+    probabilities, fidelities = [], []
+    for phase, flip in labels:
+        branch = bell_basis[(phase, flip)].conj() @ joint
+        probability = float(np.vdot(branch, branch).real)
+        assert np.isclose(probability, 0.25)
+        averaged += np.outer(branch, branch.conj())
+        correction = np.linalg.matrix_power(z_gate, phase)
+        correction = correction @ np.linalg.matrix_power(x_gate, flip)
+        restored = correction @ branch/np.sqrt(probability)
+        fidelity = float(abs(np.vdot(state, restored))**2)
+        assert np.isclose(fidelity, 1)
+        probabilities.append(probability)
+        fidelities.append(fidelity)
+    assert np.allclose(averaged, identity/2)
+    print(f"input {case}: branch probabilities="
+          + ",".join(f"{p:.2f}" for p in probabilities))
+    print("  corrected fidelities="
+          + ",".join(f"{f:.6f}" for f in fidelities))
+    print("  unread receiver state=I/2")
+
+for phase, flip in labels:
+    columns = []
+    for basis_state in np.eye(2, dtype=complex):
+        joint = np.kron(basis_state, bell).reshape(4, 2)
+        columns.append(bell_basis[(phase, flip)].conj() @ joint)
+    branch_map = np.column_stack(columns)
+    correction = (np.linalg.matrix_power(z_gate, phase)
+                  @ np.linalg.matrix_power(x_gate, flip))
+    assert np.allclose(correction @ branch_map, identity/2)
+print("corrected branch operators K=I/2; sum K rho K^dagger=rho")
+</code></pre>
+<pre><code class="output">dense coding: 00-&gt;00, 01-&gt;01, 10-&gt;10, 11-&gt;11
+Bell codeword Gram matrix equals I_4
+input 1: branch probabilities=0.25,0.25,0.25,0.25
+  corrected fidelities=1.000000,1.000000,1.000000,1.000000
+  unread receiver state=I/2
+input 2: branch probabilities=0.25,0.25,0.25,0.25
+  corrected fidelities=1.000000,1.000000,1.000000,1.000000
+  unread receiver state=I/2
+input 3: branch probabilities=0.25,0.25,0.25,0.25
+  corrected fidelities=1.000000,1.000000,1.000000,1.000000
+  unread receiver state=I/2
+corrected branch operators K=I/2; sum K rho K^dagger=rho
+</code></pre>
+<p>The final check reconstructs each branch as a linear map by evaluating its action on a complete input basis. After correction, every map equals \(I_2/2\). This finite operator check is stronger than testing only basis-state output probabilities: a channel that dephases all superpositions would pass those probabilities while failing the operator identity. Numerical agreement supports the stated finite matrices and wire ordering; the symbolic derivation supplies the general result.</p>
+
+<h2 id="photons">10.6 From ideal shared pairs to optical resources <a class="timestamp" href="https://www.youtube.com/watch?v=qaYIdWeBitA&amp;t=1200s">W6L4 20:00</a></h2>
+<p>The closing part of the teleportation recording introduces photon-pair production as the physical resource question. In a nonlinear dielectric, the induced material polarization can contain a term quadratic in the applied electric field, conventionally described by a second-order susceptibility. With a suitable pump and phase-matching arrangement, this interaction supports parametric down-conversion, in which pump energy is converted into two lower-frequency photons. The source's degenerate example associates a 400-nanometer pump with two 800-nanometer photons; the doubled wavelength halves each photon's energy when the frequencies satisfy the energy-balance relation.</p>
+<p>Producing a pair is not by itself enough to produce the desired polarization-entangled state. Distinguishable paths, polarizations, frequencies, or emission times can retain information that destroys coherence between the intended alternatives. Nor does pair creation alone implement a complete Bell measurement. The next chapter develops the apparatus model and keeps generation probability, conditional fidelity, and detection success separate. No physical source brightness or experimental teleportation efficiency is inferred from the ideal algebra here.</p>
+
+<h2 id="limits">10.7 Resource accounting and failure conditions</h2>
+<p>Dense coding uses a pre-shared pair, one transmitted qubit, local encoding, and a joint decoder. Teleportation uses a pre-shared pair, a local Bell measurement, a two-bit classical message, and an outcome-dependent correction on a qubit already at the destination. The shared entanglement is consumed by a completed use of either ideal protocol; repeating the task requires a renewed resource. Delays, memory errors, imperfect entanglement, restricted measurements, and channel losses are absent from the finite model and must be included before claiming hardware performance.</p>
+<p>The ideal recovery statements assume the parties agree on their basis phases, wire labels, Bell labels, and correction order. Classical information arriving with errors chooses a wrong Pauli correction. A missing quantum transmission prevents dense-code decoding, while a missing classical message prevents unconditioned teleportation recovery. These are different failure modes even though the same four Bell vectors appear in both protocols.</p>
+
+<h2 id="exercises">10.8 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex10-1">Exercise 10.1 — Reverse the circuit correctly</h3><p>Why is the inverse of \(U_{\rm CNOT}(H\otimes I)\) equal to \((H\otimes I)U_{\rm CNOT}\), even though both individual gates are self-inverse?</p><details><summary>Solution</summary><p>For any unitaries \(R,S\), \((RS)^\dagger=S^\dagger R^\dagger\). Here both daggers equal the original gates, but their order is reversed. Their product need not be self-inverse. Applying decoding to a prepared Bell vector gives \((H\otimes I)U_{\rm CNOT}U_{\rm CNOT}(H\otimes I)|xy\rangle=|xy\rangle\). Using the preparation order again would not perform these adjacent cancellations.</p></details></article>
+<article class="exercise"><h3 id="ex10-2">Exercise 10.2 — Locate the dense-coded information</h3><p>Compute Bob's original one-qubit density operator after each of Alice's four encodings. Explain how four perfectly distinguishable messages become available later.</p><details><summary>Solution</summary><p>Each encoded state is a Bell vector and reduces on Bob's original half to \(I_2/2\). Thus every local measurement has the same probabilities before the other qubit arrives. After receiving it, Bob controls a four-dimensional joint system in one of four orthogonal Bell states. The inverse Bell preparation maps them to distinct computational labels. The distinction is between local and joint access, not a change in the original qubit's dimension.</p></details></article>
+<article class="exercise"><h3 id="ex10-3">Exercise 10.3 — Correct a complex branch</h3><p>Let \(\alpha=\sqrt{0.3}\), \(\beta=i\sqrt{0.7}\). For Bell outcome 11, give Bob's normalized state and apply the stipulated correction explicitly.</p><details><summary>Solution</summary><p>The branch is \(XZ|\psi\rangle=\alpha|1\rangle-\beta|0\rangle\), a column \((-\beta,\alpha)^T\). Apply \(X\) first to obtain \((\alpha,-\beta)^T\), then \(Z\) to obtain \((\alpha,\beta)^T\). The operator is \(ZX\), not a measurement and not an unknown-amplitude-dependent gate. Its branch probability is \(1/4\), and the laboratory's third input verifies unit corrected fidelity on this branch.</p></details></article>
+<article class="exercise"><h3 id="ex10-4">Exercise 10.4 — One omitted correction bit</h3><p>Suppose the flip bit \(y\) arrives but the phase bit \(x\) is lost. Bob applies \(X^y\) and averages over the unknown \(x\). Derive the resulting map.</p><details><summary>Solution</summary><p>The conditional residual was \(X^yZ^x|\psi\rangle\), so applying \(X^y\) leaves \(Z^x|\psi\rangle\). Averaging gives \((\rho+Z\rho Z)/2\), which removes off-diagonal entries in the computational basis while retaining populations. Thus computational basis states can still be transmitted correctly, but an arbitrary superposition is dephased. This shows why testing only zero and one would miss the missing-bit failure.</p></details></article>
+<article class="exercise"><h3 id="ex10-5">Exercise 10.5 — Does teleportation copy the input?</h3>
+<p>Using (10.6), give Alice's conditional state for a direct projective Bell
+measurement and for inverse decoding followed by computational readout.
+Why have two intact specimens of an arbitrary unknown input not been produced?</p>
+<details><summary>Solution</summary><p>Direct projection onto result \(xy\)
+gives Alice \(|\beta_{xy}\rangle_{QA}\). Inverse decoding instead maps this to
+\(|xy\rangle_{QA}\), the state left by computational readout.
+In both implementations Bob's normalized branch is \(X^yZ^x|\psi\rangle\),
+and his correction produces \(|\psi\rangle\). Alice's remaining state depends
+on \(xy\), not on the unknown amplitudes. The original Q qubit is no longer an
+independent specimen of \(\psi\), and the random message cannot specify a
+second specimen.</p></details></article>
+<article class="exercise"><h3 id="ex10-6">Exercise 10.6 — Compare a correct channel with a misleading test</h3><p>Modify the laboratory to omit every \(Z^x\) correction. Sweep real input states \(\cos(\theta/2)|0\rangle+\sin(\theta/2)|1\rangle\). Derive the fidelity of the averaged output, and identify inputs that hide the error.</p><details><summary>Solution</summary><p>The averaged output is computational-basis dephasing. For the given pure vector its fidelity with the target is \(\cos^4(\theta/2)+\sin^4(\theta/2)=1-\tfrac12\sin^2\theta\). It equals one for \(\theta=0,\pi\), so testing only basis states hides the error. It reaches \(1/2\) for the equal superposition at \(\theta=\pi/2\). A sweep or the complete branch-map check distinguishes the faulty operation from the identity channel.</p></details></article>
+
+<h2 id="primary-sources">10.9 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=wn4MOUJ7HDI">W6L2 — Quantum protocols: Dense coding and Teleportation</a>: Bell preparation, inverse measurement circuit, and protocol introduction. The recording ends during the introduction; its continuation is W6L3.</li><li><a href="https://www.youtube.com/watch?v=fSNcnitGGyk">W6L3 — Quantum Dense coding</a>: local encoding, physical transmission, and joint Bell decoding.</li><li><a href="https://www.youtube.com/watch?v=qaYIdWeBitA">W6L4 — Quantum Teleportation</a>: three-qubit expansion, classical outcome communication, correction, and an introduction to nonlinear optical pair production.</li><li>C. H. Bennett and S. J. Wiesner, <a href="https://www2.physik.uni-muenchen.de/lehre/vorlesungen/wise_20_21/qu-komm-computer/material/_auth/Bennett-Comm-via-One-and-Two-Particle-Operators-on-EPR-States-PRL-69-2881-92.pdf">Communication via One- and Two-Particle Operators on Einstein-Podolsky-Rosen States</a>, <em>Physical Review Letters</em> 69, 2881–2884 (1992). PDF pages 1–3 identify four jointly distinguishable encodings and the distribution/transmission resources.</li><li>C. H. Bennett, G. Brassard, C. Crépeau, R. Jozsa, A. Peres, W. K. Wootters, <a href="https://people.disim.univaq.it/~serva/teaching/Bennet.1993.pdf">Teleporting an Unknown Quantum State via Dual Classical and Einstein-Podolsky-Rosen Channels</a>, <em>Physical Review Letters</em> 70, 1895–1899 (1993). PDF pages 2–3, equations (5)–(6), give the measurement branches, corrections, classical-message requirement, and extension to mixed and entangled inputs. This chapter derives the equivalent protocol with a different specified Bell resource.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-09.html">Previous chapter</a> <a href="chapter-11.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

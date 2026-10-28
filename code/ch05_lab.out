@@ -1,0 +1,7 @@
+Hidden Z and X ensembles have identical density operators: True
+X-positive probabilities: pure=1.000000, mixed=0.500000
+Six-up/four-down purity = 0.520000
+Initial complex-state Bloch vector: [0.0, 0.606218, 0.65]
+Unitary-invariant purity = 0.895000
+Forty-one-point spectrum, trace, energy, and purity checks passed: True
+Central-difference commutator residual below 1e-9: True

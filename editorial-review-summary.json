@@ -1,0 +1,205 @@
+{
+  "reviews": [
+    {
+      "report": "ch01-r1.md",
+      "sha256": "97b157d907bdcc146c52e5414129dd2571cd9014b4c151ae56b704b4573321d8",
+      "verdict_excerpt": "# Chapter 1 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter develops the finite quantum-state model without conflating a postulate, its algebraic consequences, and an algorithmic advantage. A quantitative graduate reader can reconstruct the basis count, norm-preservation argument, complex product probabilities, interference and sampling variance. The dense-memory calculation is correctly restricted to that representation. The domain brief is the approved plan/R1, shared notation, authoring contract and actual canonical source files.\n\n## Blocking defects\n\nNone found. The treatment does not infer a universal classical lower bound from Hilbert-space dimension, equa"
+    },
+    {
+      "report": "ch01-r2.md",
+      "sha256": "313d44c9df6c6fea11dd2bc40d3e0bbb8143d055934c77145f0c874ab6512bfc",
+      "verdict_excerpt": "# Chapter 01 — second independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. This second review is independent of the chapter author and of the first reviewer. The finite state model and resource distinctions are correct; no blocker remains.\n\n## Blocking defects\n\nNone outstanding. Round1 had no blockers.\n\nRe-derived the binary-length inequalities, dense16-byte amplitude count, tensor-product basis argument, norm-preserving converse and complex product probabilities. The two phase states, Bell nonproduct contradiction and independent Bernoulli variance all check, including0.015129 at1024shots. All six exercises are correct. Physical composition, dynamics and measurement are identifie"
+    },
+    {
+      "report": "ch02-r1.md",
+      "sha256": "775ecb3fd60fd2c96964336894e970b2f429d875ce8c6ba33553901881fd3957",
+      "verdict_excerpt": "# Chapter 2 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter specifies the actual coherent Boolean oracle, proves both the classical deterministic query requirement and exact quantum classification, and uses a preparation error to expose the mechanism. Every substantive central claim has a finite derivation and a concrete check. All six solutions are correct. The domain brief is the project contract, R2, shared notation and actual canonical files.\n\n## Blocking defects\n\nNone found. The randomized classical comparison uses a declared uniform prior and correctly infers that no one-query randomized method can improve worst-case success beyond one half. The quantum th"
+    },
+    {
+      "report": "ch02-r2.md",
+      "sha256": "27329d2536d8b12319fe4dc56802ea32a08c10aa6eed55548cd38962bb1900bd",
+      "verdict_excerpt": "# Chapter 02 — second independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. The exact one-query oracle result and its classical comparison are correct, including the declared uniform-prior randomized comparison. No blocker remains.\n\n## Blocking defects\n\nNone outstanding. Round1 had no blockers.\n\nRe-derived the classical adversary and prior argument, all four permutation oracles, phase-kickback sign and final interference coefficients. The final common phase does not encode an extra readable truth-table bit. The imperfect-target formula gives constant success1 and balanced successcos²theta, including0.912668 attheta0.3. All six solutions are correct, and the text correctly restricts"
+    },
+    {
+      "report": "ch03-r1.md",
+      "sha256": "091708501c68c565e00599d57b96eb1f903518310fe27b5d358d2cf2a7465284",
+      "verdict_excerpt": "# Chapter 3 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT WITH FIXES. The entropy sign ledger, symmetric-memory model, biased/imperfect reset bounds, reversible compression and controller bookkeeping are mathematically and physically consistent. All six solutions check out. One interpretation essential for a one-particle model remains implicit: the heat/work bounds concern ensemble means, not a deterministic lower bound on every individual stochastic reset. The domain brief is the project contract, R3, shared notation and actual canonical source files.\n\n## Blocking defects\n\nP2 — state the statistical meaning of heat and work. `book/chapters/ch03.html:2` and `:9`: “the rese"
+    },
+    {
+      "report": "ch03-r2.md",
+      "sha256": "4ce28a197f2137ee05ef0397b5f1176df17e036d53016a2579b31de851cce28d",
+      "verdict_excerpt": "# Chapter 03 — second independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. The first reviewer’s ensemble-mean clarification is correctly applied. This distinct second review finds the stated thermodynamic model, signs, reset bounds and controller accounting consistent.\n\n## Blocking defects\n\nNone outstanding. The two round1 replacements close the mean-heat/work definition issue.\n\nRead both returned replacement paragraphs and their neighboring arguments. The lead now explicitly bounds mean heat; the model defines heat and work throughout as ensemble averages and allows fluctuations below the mean bound in individual trials. The equations are unchanged and retain their correct signed"
+    },
+    {
+      "report": "ch04-r1.md",
+      "sha256": "0bb8c0a828fba019a18f7c87220f5b2a5cc07b611faf925b0a0162b07d797fcd",
+      "verdict_excerpt": "# Chapter 4 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. A quantitative graduate reader can derive the Bloch coordinates, rotation exponential, Rodrigues action, exact gate identities, axis alignment and general Euler extraction. Convention choices are local and consistent, and both singular Euler branches are handled explicitly. All six solutions are correct. The review uses the project authoring contract, R4, shared notation, actual canonical files and sources as its domain brief.\n\n## Blocking defects\n\nNone found. In particular, the five-factor axis-alignment identity is not confused with the three-factor U(2) decomposition. Global state phase is not discarded blindly "
+    },
+    {
+      "report": "ch04-r2.md",
+      "sha256": "2d010fb1bafc8ae94d5eadff7d04500f58a17bae5bbd5ed2e19583e7075a7c60",
+      "verdict_excerpt": "# Chapter4 — independent science-editor review, round2\n\n## Verdict\n\nACCEPT. No outstanding scientific blockers. Canonical SHA256: 6f7ec588a487631d4fdb1a284acdd7f5cb0cf0dae3afcef42168f76e41096aa9\n\n## Blocking defects and closure\n\nRead the complete canonical chapter, all propositions and proofs, all6worked solutions, and the executed laboratory evidence. The active/passive convention, Pauli commutator signs, Rodrigues cross product, full Hadamard identity, controlled-global-phase example, five-factor axis alignment and three-factor ZYZ formulas agree. Both singular Euler branches reconstruct the determinant-one matrix.\n\nOne precision finding was repaired: the universal assertion about impossib"
+    },
+    {
+      "report": "ch05-r1.md",
+      "sha256": "f79b4443261c22302fbb268545415306fa013d6978f02b71591c9a9bffe3f886",
+      "verdict_excerpt": "# Chapter 5 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter derives the density operator from a declared preparation model and total probability, then develops measurement equivalence, state characterization, purity, Bloch geometry and isolated dynamics. Its complex conjugation and commutator signs are correct, and the classical Liouville comparison remains an explicitly limited analogy. All six exercise solutions check out. The domain brief is the authoring contract, R5, shared notation and actual manuscript/source files.\n\n## Blocking defects\n\nNone found after checking all central proofs. In particular, the ensemble vectors are not silently assumed orthogonal, "
+    },
+    {
+      "report": "ch05-r2.md",
+      "sha256": "197b7f2caf7ff9b31fa37f1d014d56bdf4f86c1bd1a54cf403e500bac8c5e932",
+      "verdict_excerpt": "# Chapter5 — independent science-editor review, round2\n\n## Verdict\n\nACCEPT. No outstanding scientific blockers. Canonical SHA256: 94c3868023e5c6e29ed5b1cffdcf6daafe41e0a2097faaffd1ff37f8d5d7e117\n\n## Blocking defects\n\nNone found after full reading of the canonical chapter and all6solutions.\n\n## Mathematical checks\n\nRe-derived the complex projector signs and positive-Y example, trace identity, operational-equivalence converse from real/imaginary off-diagonal projectors, spectral positivity characterization, purity bounds and equality cases, Bloch-ball eigenvalues, unitary spectral invariance, Liouville–von Neumann sign, Heisenberg-picture sign and time-dependent-observable term. The explicit e"
+    },
+    {
+      "report": "ch06-r1.md",
+      "sha256": "9c93489c49a5fa75d9b239da56466bfcd6778bbdc0dd9ab99ea74f5d52d4ebc0",
+      "verdict_excerpt": "# Chapter 06 — independent science-editor review, round 1\n\n## Verdict\n\nYES AFTER REVISION. The finite prefix-code theorem, Kraft construction, redundancy bound, and distinction between individual files and source averages are correct. Typicality needs its short concentration argument; the Huffman helper also has a reproducible zero-probability edge bug.\n\nBrief: authoring contract, book specification/notation, R06. Complete HTML/lab/sidecar read; cited Shannon PDF pages 10–11 and 16–18 opened; timestamp-neighbor cues checked for all six sidecar spans. No complete audiovisual audit is claimed.\n\n## Blocking defects\n\n### P2 — derive the probability bound behind typicality\n\nLocation: book/chapter"
+    },
+    {
+      "report": "ch06-r2.md",
+      "sha256": "7188d44e1f65a7c479906aed0be8e24a30aedbc1c12119b001e496a43420c0ba",
+      "verdict_excerpt": "# Chapter 06 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. This is an independent review of another author's chapter. No blocking defect remains in the reviewed scientific content.\n\n## Blocking defects and closure\n\nAll round1 findings are closed. The revised typicality argument defines independent surprisal variables, computes their finite variance and the variance of their average, then bounds the exceptional probability by V/(m epsilon^2). The preceding definition of w and P(w) is retained. The repaired heap counter begins strictly above all retained symbol indices, including gaps caused by impossible symbols. The die entropy has proper math delimiters.\n\n## Style and cl"
+    },
+    {
+      "report": "ch07-r1.md",
+      "sha256": "f611a4fecd1a7b1c5a01ace5cf9c6edd17416af2f369ccbc6cb4c962814afce0",
+      "verdict_excerpt": "# Chapter 07 — independent science-editor review, round 1\n\n## Verdict\n\nYES AFTER A LOCAL DEFINITION. The entropy, partial-trace, positivity, uniqueness, and unread-projective-measurement proofs are correct. Mixed-state separability needs its definition at first use.\n\nBrief: authoring contract, specification/notation, R07. Complete HTML/lab/sidecar read; Preskill PDF pages 19–20 and 30–31 opened; timestamp-neighbor cues checked for all four sidecar spans. No complete audiovisual audit is claimed.\n\n## Blocking defects\n\n### P2 — define mixed-state separability\n\nLocation: book/chapters/ch07.html:87–93.\n\n> “The two displayed product terms explicitly show that (7.8) is separable as a mixed state.”"
+    },
+    {
+      "report": "ch07-r2.md",
+      "sha256": "559740e7adccc3070d30cb57180af19dc51289ba6c0db85207c62440f858af0d",
+      "verdict_excerpt": "# Chapter 07 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. This is an independent review of another author's chapter. No blocking defect remains in the reviewed scientific content.\n\n## Blocking defects and closure\n\nThe new local definition specifies a convex combination of product density operators, nonnegative weights and normalization before calling the correlated mixture separable. It preserves the neighboring Bell/product comparison and the later pure-state family. No further mathematical defect found.\n\n## Style and clarity edits\n\nNone required beyond the applied round1 edits.\n\n## Structural notes\n\nThe returned passages were read with their neighboring arguments; they"
+    },
+    {
+      "report": "ch08-r1.md",
+      "sha256": "a7dd4bc57fafc5813f0c254bfaf56905bb55bb47c50937b645dcf830d7d37ac0",
+      "verdict_excerpt": "# Chapter 08 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT for scientific content. The reader can derive Schmidt decomposition, distinguish amplitudes from density operators, reconstruct complex Schmidt vectors from SVD, and diagnose conjugation errors. No blocking defect found.\n\nBrief: authoring contract, specification/notation, R08. Complete HTML/lab/sidecar read; Preskill PDF pages 23–26 opened; timestamp-neighbor cues checked for all four sidecar spans; lab independently executed. No complete audiovisual audit is claimed.\n\n## Blocking defects\n\nNone found.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nThe reduction-based proof correctly precedes the "
+    },
+    {
+      "report": "ch08-r2.md",
+      "sha256": "096f4f1e8f55e6244e058849582e1beb513f064059efd520c387a3761959aea3",
+      "verdict_excerpt": "# Chapter 08 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. This is an independent review of another author's chapter. No blocking defect remains in the reviewed scientific content.\n\n## Blocking defects and closure\n\nRound1 requested no repairs. Its complete Schmidt/SVD proof audit and checked primary-source locators stand. The current canonical chapter retains the correct complex-conjugation convention, support restriction, paired phases and unequal-dimension spectra. No new defect found.\n\n## Style and clarity edits\n\nNone required beyond the applied round1 edits.\n\n## Structural notes\n\nThe returned passages were read with their neighboring arguments; they preserve the estab"
+    },
+    {
+      "report": "ch09-r1.md",
+      "sha256": "1dc2a41cc2031f0ff91b873d2aaa43f4c36fb4025731ee805ab5581581a3bbc8",
+      "verdict_excerpt": "# Chapter 09 — independent science-editor review, round 1\n\n## Verdict\n\nYES AFTER REVISION. The deterministic CHSH proof, three-setting event inclusion, spin-angle probabilities, quantum operator bound, and CNOT convention are correct. The stochastic extension must explicitly require conditional factorization.\n\nBrief: authoring contract, specification/notation, R09. Complete HTML/lab/sidecar read; Bell PDF pages 1–4 and CHSH PDF page 2 opened; timestamp-neighbor captions checked for every sidecar span; lab rerun. No complete audiovisual audit is claimed.\n\n## Blocking defects\n\n### P1 — stochastic Bell locality requires a joint factorization\n\nLocation: book/chapters/ch09.html:30.\n\n> “Its local "
+    },
+    {
+      "report": "ch09-r2.md",
+      "sha256": "d403d13b286c6362b68d1fce16be9ea2c7903144460e2ced37331c31237cc1ae",
+      "verdict_excerpt": "# Chapter 09 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. This is an independent review of another author's chapter. No blocking defect remains in the reviewed scientific content.\n\n## Blocking defects and closure\n\nThe returned stochastic-model paragraph now explicitly factorizes the joint conditional distribution, keeps setting independence separate, and explains why independent uniform seeds reproduce that joint law. It also states why local conditional marginals alone are insufficient. The deterministic theorem and its proof retain the original valid hypotheses. No further defect found.\n\n## Style and clarity edits\n\nNone required beyond the applied round1 edits.\n\n## Str"
+    },
+    {
+      "report": "ch10-r1.md",
+      "sha256": "c3bf1e60fb39f01029d885ac63407c2f40f1bfc1a26701818bcbb87d345a2f11",
+      "verdict_excerpt": "# Chapter 10 — independent science-editor review, round 1\n\n## Verdict\n\nYES AFTER REVISION. Dense-code labels, branch identities, correction order, the arbitrary-input identity map, and resources are correct. The remaining Alice state must distinguish a direct Bell projector from inverse decoding followed by computational readout.\n\nBrief: authoring contract, specification/notation, R10. Complete HTML/lab/sidecar read; dense-coding PDF pages 1–3 and teleportation PDF pages 2–3 opened; timestamp-neighbor cues checked for every span; lab rerun. No complete audiovisual audit is claimed.\n\n## Blocking defects\n\n### P2 — identify the measurement implementation before stating Alice's state\n\nLocations:"
+    },
+    {
+      "report": "ch10-r2.md",
+      "sha256": "67432938f7680738f1eab83553139c9b6e95a67b6cc4c089910be181ed56b41e",
+      "verdict_excerpt": "# Chapter 10 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. This is an independent review of another author's chapter. No blocking defect remains in the reviewed scientific content.\n\n## Blocking defects and closure\n\nThe returned paragraph and Exercise10.5 distinguish direct Bell projectors, leaving a Bell vector on Alice, from inverse decoding/readout, leaving a computational vector. Both correctly give the same Bob branch and destroy the original unknown specimen. The diagnostic output now distinguishes ket-level branch operators from their density-map sum. No further defect found.\n\n## Style and clarity edits\n\nNone required beyond the applied round1 edits.\n\n## Structural "
+    },
+    {
+      "report": "ch11-r1.md",
+      "sha256": "b0a08d86b11a508bee5946864e1592e4ce37abb70e4d33fd973185b0092ff014",
+      "verdict_excerpt": "# Chapter 11 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT WITH FIXES. The chapter teaches polarization preparation, bosonic interference, partial Bell analysis, and conditional-event accounting through explicit calculations. Its central proofs and all six solutions are correct. One universal claim about the required verification inputs overstates what the mathematics establishes; the replacement below preserves the useful experimental lesson without prescribing a uniquely necessary test set. The domain brief is the project authoring contract, chapter plan, shared notation, source manifest and actual canonical files.\n\n## Blocking defects\n\nP2 — unnecessary universal measure"
+    },
+    {
+      "report": "ch11-r2.md",
+      "sha256": "71685055ec3336e2e328ed4e13059ff4674544f98374c848cf1702531f10e8c2",
+      "verdict_excerpt": "# Chapter 11 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. The revised verification paragraph gives an explicit identity-versus-dephasing counterexample and describes diagonal/circular probes as one convenient design. It no longer claims that those named input classes are uniquely necessary. The author-deposited primary abstract supports the limited historical statement.\n\n## Blocking defects\n\nNone outstanding. The first-round mathematical, primary-source and six-exercise checks remain applicable; acceptance is not inferred merely from lab execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nThe replacement fits the preceding conditional-rate discus"
+    },
+    {
+      "report": "ch12-r1.md",
+      "sha256": "006ea02899859121d179bbcc5cc2a93ba13b7007e9826c2ff67c22de5b762c62",
+      "verdict_excerpt": "# Chapter 12 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. A graduate reader can follow the complete arithmetic reduction from public modular powers to a verified nontrivial divisor. The RSA correctness proof includes nonunit message representatives, the order proof separates least periods from arbitrary returns, and the XOR extension supplies an actual reversible map. All six exercises are correct. The review uses the project authoring contract, approved plan, notation, manifest and actual source files as its domain brief.\n\n## Blocking defects\n\nNone found after checking the central proofs and examples. In particular, the gcd proof applies to odd composite moduli with rep"
+    },
+    {
+      "report": "ch12-r2.md",
+      "sha256": "3dac63a73f54cfe6631d45777d6d5d35668fd0718cedbff52ad24442574ed39e",
+      "verdict_excerpt": "# Chapter 12 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Verified the optional change choosing positive integer exponents e and d. This makes raw exponentiation defined on every message representative, including nonunits. The surrounding inverse-congruence and correctness proof remain consistent.\n\n## Blocking defects\n\nNone outstanding. Round 1 accepted the mathematics and all six solutions; this round verifies the returned clarification.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo dependency or model change introduced. The exact-integer lab and displayed output are unchanged.\n\n## What works and verification limits\n\nThe factoring theorem, failure"
+    },
+    {
+      "report": "ch13-r1.md",
+      "sha256": "6438f43c4995ee021b9923bd6dc56ba93a17061050fad8b81355fbff43299ae3",
+      "verdict_excerpt": "# Chapter 13 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT WITH FIXES. The Fourier unitarity, binary factorization, gate construction, exact support theorem, finite-window kernel and truncation bound are correct and developed at the required level. All six solutions check out, including the nonmonotonic cutoff-error example. One input-domain omission permits an undefined “normalized state” and should be repaired. The domain brief is the project contract, approved result R13, shared notation and actual manuscript/source files.\n\n## Blocking defects\n\nP2 — progression normalization lacks a nonempty-support hypothesis. `book/chapters/ch13.html:103`: “s is a nonnegative offset, "
+    },
+    {
+      "report": "ch13-r2.md",
+      "sha256": "1d02b533fa8d54269254b32bf924f14f2e9b10a91979239ff0dac5bc51c3e2cb",
+      "verdict_excerpt": "# Chapter 13 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. The progression now explicitly has positive integer step, integer offset 0 <= s < M, and exact positive length L=1+floor((M-1-s)/r). Orthogonality explains its normalization. This removes the allowed empty-support case without changing the valid Fourier derivations.\n\n## Blocking defects\n\nNone outstanding. The Fourier, circuit, geometric-sum and truncation proofs and all six solutions passed the r1 review.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nThe new paragraph supplies the general progression domain before the stronger full-coset proposition. Existing examples satisfy it. No equation, p"
+    },
+    {
+      "report": "ch14-r1.md",
+      "sha256": "05509dd94d6f82a39e83bf712471090d1b1bf995efdc6102f4fb6072990106d2",
+      "verdict_excerpt": "# Chapter 14 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter provides a self-contained account of finite Fourier sampling and checked classical reconstruction. It correctly separates a conditional branch from a marginal, a reduced denominator from an order, and an arbitrary return exponent from a useful factoring exponent. The continued-fraction lemma's unimodular-basis proof is valid, including the finite rational endpoint case. All six solutions and every reported success mass checked. The review's domain brief is the project contract, R14, notation and actual source files.\n\n## Blocking defects\n\nNone found. In particular, the best-approximation step handles in"
+    },
+    {
+      "report": "ch14-r2.md",
+      "sha256": "f91ff1826454b1ff8ff9276b39e1c197b81d86bc8dcdd5a4bf8aa6ea373b852c",
+      "verdict_excerpt": "# Chapter 14 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Verified the added local proof r_ord <= N-1 < N using distinct nonzero residues. The positive-register-precision inequality consequently has an explicit bound available where used. Also checked the revised source sidecar against the personally viewed recording45 frames: it now distinguishes verified board errors from the later uncertain machine rendering.\n\n## Blocking defects\n\nNone outstanding. The first-round self-contained continued-fraction, probability and factor-check proofs and all six solutions remain accepted.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nThe clarification is local to t"
+    },
+    {
+      "report": "ch15-r1.md",
+      "sha256": "d43ecabdbf9147ceafc3143841400a51d83def5ef6558cef32b9b1accf5582b7",
+      "verdict_excerpt": "# Chapter 15 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. A quantitative graduate reader new to channels can learn the reduced-dynamics mechanism from this chapter. The initialized product state, fixed environment and fixed joint unitary are explicit. Partial trace, Kraus extraction, completeness, complete positivity and finite dilation are derived rather than inferred from software output. The correlated-input counterexample correctly identifies the preparation assumption. Acceptance concerns mathematical exposition, not complete audiovisual transcription.\n\n## Blocking defects\n\nNone found after checking the unitary's columns, its extracted Kraus matrices, the complex ru"
+    },
+    {
+      "report": "ch15-r2.md",
+      "sha256": "91b55aa4dcb8aa2a7b56c8bd5f2034b0ab08ab0662ceb1142c8d47f868cecb99",
+      "verdict_excerpt": "# Chapter 15 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Verified the added local definition of a quantum channel in the Kraus paragraph. It matches the normalized operator-sum model and does not change any mathematical assertion. Neighboring completeness and representation-freedom arguments remain coherent.\n\n## Blocking defects\n\nNone outstanding. This verdict incorporates the mathematics, source checks and all six worked solutions documented in ch15-r1.md; it is not inferred from code execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo new dependency or ordering defect introduced by the revision. The first-round limitations remain applicable"
+    },
+    {
+      "report": "ch16-r1.md",
+      "sha256": "1ab4fa857f5b4537cfde4aa9dda57c70ee891a06006bb6460dfea4accf8e6375",
+      "verdict_excerpt": "# Chapter 16 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter derives noise maps on a common finite input, distinguishes probability conventions, and shows which coordinates and fixed points change. Complete positivity follows from explicitly normalized Kraus operators. Extension to \\(p=4/3\\) is correctly separated from the convex replacement interpretation. All six solutions are consistent.\n\n## Blocking defects\n\nNone found. Checked the coefficient Gram-matrix Kraus bound, Pauli conjugations, depolarizing parameter translation, dephasing environment overlap, amplitude-damping affine map, and purity/composition formulas.\n\n## Style and clarity edits\n\nThe lab introd"
+    },
+    {
+      "report": "ch16-r2.md",
+      "sha256": "4fd6e603dac1ed632a69bf83538b4eb062297854d66c925ef0dc9f1c29e12d24",
+      "verdict_excerpt": "# Chapter 16 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Verified the revised laboratory introduction against the actual loops: depolarization and amplitude damping receive21-value sweeps; dephasing is evaluated at one value. No formula or output changed.\n\n## Blocking defects\n\nNone outstanding. This verdict incorporates the mathematics, source checks and all six worked solutions documented in ch16-r1.md; it is not inferred from code execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo new dependency or ordering defect introduced by the revision. The first-round limitations remain applicable.\n\n## What already works and verification limits\n\nThe "
+    },
+    {
+      "report": "ch17-r1.md",
+      "sha256": "6d6a3679fc194e7259c02e64da35f6531a4ce95c63263121867633197bdab0df",
+      "verdict_excerpt": "# Chapter 17 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT WITH FIXES to the source sidecar; the mathematics is acceptable. The chapter derives the dissipator and population/coherence equations, declares rate units and phase conventions, and limits the relaxation inequality to its model. The thermal extension has correct fixed points and factors of two. Six solutions were checked. The sidecar currently contradicts two verified heading timestamps, so its evidence record needs repair before acceptance of the chapter package.\n\n## Blocking defects\n\nP2 — evidence mapping. book/chapters/ch17.meta.json:37 and book/chapters/ch17.meta.json:47, section entries whose ids are pure-dep"
+    },
+    {
+      "report": "ch17-r2.md",
+      "sha256": "ce41c11d5fac1c0da2774d618b26cda35e95778b1db0ee2786a9b51d0f0c61e5",
+      "verdict_excerpt": "# Chapter 17 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Verified corrected sidecar spans95–823 for pure-dephasing and33–1096 for thermal. They now include their respective777-second and33-second heading links and match the actual cues checked in round1. The chapter mathematics is unchanged.\n\n## Blocking defects\n\nNone outstanding. This verdict incorporates the mathematics, source checks and all six worked solutions documented in ch17-r1.md; it is not inferred from code execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo new dependency or ordering defect introduced by the revision. The first-round limitations remain applicable.\n\n## What alread"
+    },
+    {
+      "report": "ch18-r1.md",
+      "sha256": "ad37d6721656fa273fa1b4fe7c9fd8d942fefa59aaca4be511794e84b7c079f0",
+      "verdict_excerpt": "# Chapter 18 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter distinguishes effects from instruments and unnormalized operations from conditioning, then demonstrates the distinction on a nonorthogonal three-outcome example. The realization proof uses the pointer measurement postulate honestly. The discrimination argument proves the actual impossibility statement and explains what an inconclusive outcome changes. All six solutions are valid.\n\n## Blocking defects\n\nNone found after checking trine completeness and probabilities, paired instruments, isometry normalization, the nonorthogonality proof, the eigenvalue scale bound for unambiguous discrimination, and all e"
+    },
+    {
+      "report": "ch18-r2.md",
+      "sha256": "01a122925905c893af7aa8c4337f090c11dcd0431b5740c3ca9c3c3a3037da81",
+      "verdict_excerpt": "# Chapter 18 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Canonical HTML SHA256 is unchanged from round1. Rechecked the effects/instruments distinction, trine branch normalizations, discrimination scale and complete solutions against the recorded first-round evidence.\n\n## Blocking defects\n\nNone outstanding. This verdict incorporates the mathematics, source checks and all six worked solutions documented in ch18-r1.md; it is not inferred from code execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo new dependency or ordering defect introduced by the revision. The first-round limitations remain applicable.\n\n## What already works and verification "
+    },
+    {
+      "report": "ch19-r1.md",
+      "sha256": "67c802c5452d07dc8c20de5c536caa0e7f705f0653ff291b622ac7ad20dc80ee",
+      "verdict_excerpt": "# Chapter 19 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The chapter develops a thermally motivated two-spin density operator, defines mixed-state separability, proves PPT necessity and cites the exact dimension-restricted sufficiency theorem. Its explicit six-product-state decomposition independently establishes the worked family's separable interval. Witness and fixed-CHSH conclusions are correctly distinguished. All six exercises are solvable and their solutions are correct.\n\n## Blocking defects\n\nNone found. Checked Hamiltonian eigenvalues and Gibbs weights, field restrictions, thermal parameter conversion, convexity, partial-transpose indexing and local-basis transf"
+    },
+    {
+      "report": "ch19-r2.md",
+      "sha256": "964c87a0d56b51584ef583f207c2ca16ba29cc03cdff09db6a02112e57baf039",
+      "verdict_excerpt": "# Chapter 19 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Canonical HTML SHA256 is unchanged from round1. Rechecked the necessity/converse boundary, thermal threshold, explicit six-product decomposition and witness-versus-CHSH interpretation.\n\n## Blocking defects\n\nNone outstanding. This verdict incorporates the mathematics, source checks and all six worked solutions documented in ch19-r1.md; it is not inferred from code execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo new dependency or ordering defect introduced by the revision. The first-round limitations remain applicable.\n\n## What already works and verification limits\n\nThe chapter keeps "
+    },
+    {
+      "report": "ch20-r1.md",
+      "sha256": "177caa40ad9b97cdde72d37596cf1027376a038bd93f2c49a50282e241206036",
+      "verdict_excerpt": "# Chapter 20 — independent science-editor review, round 1\n\n## Verdict\n\nACCEPT. The pure-state determinant and entropy relations are genuinely derived, while the mixed-state convex-roof result is explicitly cited. The spin flip includes conjugation, the required spectrum is distinguished from density and partial-transpose spectra, and the numerical routine uses a positive Hermitian construction with declared tolerances. All six solutions are correct.\n\n## Blocking defects\n\nNone found after checking the spin-flip basis action and overlap, local-unitary invariance, reduced characteristic equation, pure-state reduction of the mixed formula, singlet–white-noise calculation, and all exercises.\n\n## "
+    },
+    {
+      "report": "ch20-r2.md",
+      "sha256": "44d316455aa99bde40291b067e22cd2b7d494f749d4aa1b939e89b56ddf507ba",
+      "verdict_excerpt": "# Chapter 20 — independent science-editor review, round 2\n\n## Verdict\n\nACCEPT. Canonical HTML SHA256 is unchanged from round1. Rechecked the pure determinant relation, precise Wootters spectrum, convex-roof attribution and numerical tolerance contract.\n\n## Blocking defects\n\nNone outstanding. This verdict incorporates the mathematics, source checks and all six worked solutions documented in ch20-r1.md; it is not inferred from code execution.\n\n## Style and clarity edits\n\nNone required.\n\n## Structural notes\n\nNo new dependency or ordering defect introduced by the revision. The first-round limitations remain applicable.\n\n## What already works and verification limits\n\nThe chapter keeps derived res"
+    }
+  ],
+  "scope": "Independent chapter reports, distinct from code and browser checks"
+}

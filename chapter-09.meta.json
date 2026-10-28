@@ -1,0 +1,136 @@
+{
+  "chapter": 9,
+  "title": "EPR correlations and Bell inequalities",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "LrYMvbuA20Q",
+      "course_label": "W5L3",
+      "course_order": 23,
+      "duration_seconds": 1985
+    },
+    {
+      "video_id": "77esgRSwPps",
+      "course_label": "W5L4",
+      "course_order": 24,
+      "duration_seconds": 1812
+    },
+    {
+      "video_id": "2k_gYqzZueI",
+      "course_label": "W5L5",
+      "course_order": 25,
+      "duration_seconds": 1845
+    },
+    {
+      "video_id": "NpCk9p3BqRM",
+      "course_label": "W6L1",
+      "course_order": 26,
+      "duration_seconds": 1770
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "LrYMvbuA20Q",
+      "start_seconds": 60,
+      "end_seconds": 1970,
+      "lecture_material": "Singlet, alternate spin measurements, and EPR premises",
+      "research_extension": "Distinguish cross-party commutation from local incompatible alternatives",
+      "teaching_construction": "Pauli correlator derivation"
+    },
+    {
+      "id": "local-model",
+      "video_id": "77esgRSwPps",
+      "start_seconds": 720,
+      "end_seconds": 1790,
+      "lecture_material": "Local-realist model and three-axis assignment",
+      "research_extension": "Separate local responses from setting-independent distribution",
+      "teaching_construction": "Precise deterministic/stochastic model"
+    },
+    {
+      "id": "three-setting",
+      "video_id": "2k_gYqzZueI",
+      "start_seconds": 720,
+      "end_seconds": 1830,
+      "lecture_material": "Event counting and joint plus-plus probability",
+      "research_extension": "Explicit event-inclusion proof",
+      "teaching_construction": "Conditional versus joint normalization"
+    },
+    {
+      "id": "chsh",
+      "video_id": "NpCk9p3BqRM",
+      "start_seconds": 18,
+      "end_seconds": 1130,
+      "lecture_material": "Half-angle overlaps and quantum violation",
+      "research_extension": "CHSH inequality and quantum operator bound",
+      "teaching_construction": "Spin-angle numerical comparison"
+    },
+    {
+      "id": "cnot",
+      "video_id": "NpCk9p3BqRM",
+      "start_seconds": 1440,
+      "end_seconds": 1770,
+      "lecture_material": "Controlled-NOT truth table and entangling capability",
+      "research_extension": "Correct norm and input-order qualification",
+      "teaching_construction": "Contrast |+0> with |0+>"
+    }
+  ],
+  "references": [
+    {
+      "title": "J. S. Bell, On the Einstein Podolsky Rosen paradox",
+      "url": "https://csiflabs.cs.ucdavis.edu/~gusfield/Bell-paper.pdf",
+      "supports": "Local hidden-variable formulation and Bell contradiction",
+      "locator_checked": "§II PDF pages1–2; §IV pages3–4"
+    },
+    {
+      "title": "Clauser, Horne, Shimony, Holt, Proposed Experiment to Test Local Hidden-Variable Theories",
+      "url": "https://www.informationphilosopher.com/solutions/scientists/bell/CHSH.pdf",
+      "supports": "Local response functions, setting-independent source distribution, experimental sampling assumptions",
+      "locator_checked": "PDF page2, printed881"
+    }
+  ],
+  "source_uncertainties": [
+    "No experimental Bell measurement is performed; all listed correlations are model expectations.",
+    "Machine captions garble some signs, half-angle factors, and the CNOT normalization; these are explicitly derived and checked.",
+    "No full slide/audio review is claimed."
+  ],
+  "symbols": [
+    "lambda hidden data",
+    "mu probability measure",
+    "sigma_u",
+    "E(u,v)",
+    "A_0,A_1,B_0,B_1",
+    "B_CHSH",
+    "P++",
+    "theta_uv",
+    "Bell operator",
+    "operator norm",
+    "U_CNOT",
+    "visibility v"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch09_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch09_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch09-r1.md",
+      "report_sha256": "1dc2a41cc2031f0ff91b873d2aaa43f4c36fb4025731ee805ab5581581a3bbc8",
+      "verdict": "YES AFTER REVISION",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch09-r2.md",
+      "report_sha256": "d403d13b286c6362b68d1fce16be9ea2c7903144460e2ced37331c31237cc1ae",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "485e8a8ce27c3789c5bfddaa7f736953ee3dff3173573714b15a231ece4765c0",
+  "canonical_body_sha256": "485e8a8ce27c3789c5bfddaa7f736953ee3dff3173573714b15a231ece4765c0",
+  "body_sha256": "485e8a8ce27c3789c5bfddaa7f736953ee3dff3173573714b15a231ece4765c0"
+}

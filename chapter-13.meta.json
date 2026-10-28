@@ -1,0 +1,161 @@
+{
+  "chapter": 13,
+  "title": "Quantum Fourier transform and periodic interference",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "8gNF9Gdf3-0",
+      "course_label": "W8L1",
+      "course_order": 36,
+      "duration_seconds": 1897,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "Y3V1X-qTxgg",
+      "course_label": "W8L2",
+      "course_order": 37,
+      "duration_seconds": 1957,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "Lcgalmdt4KI",
+      "course_label": "W8L3",
+      "course_order": 38,
+      "duration_seconds": 1906,
+      "transcript_read": "complete; sequential caption reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "Mb9cCQmMjUU",
+      "course_label": "W8L4",
+      "course_order": 39,
+      "duration_seconds": 2085,
+      "transcript_read": "complete; sequential local faster-whisper small.en transcript reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "TWuU4nFGzmk",
+      "course_label": "W8L5",
+      "course_order": 40,
+      "duration_seconds": 1976,
+      "transcript_read": "complete; sequential local faster-whisper small.en transcript reading",
+      "visual_review": "not-performed"
+    },
+    {
+      "video_id": "G3joYDuEhf4",
+      "course_label": "W9L1",
+      "course_order": 41,
+      "duration_seconds": 1850,
+      "transcript_read": "complete; sequential local faster-whisper small.en transcript reading",
+      "visual_review": "not-performed"
+    }
+  ],
+  "sections": [
+    {
+      "id": "fourier-model",
+      "video_id": "8gNF9Gdf3-0",
+      "start_seconds": 183,
+      "end_seconds": 1124,
+      "lecture_material": "normalized coefficient transform and single-qubit limit",
+      "research_extension": "unitarity and normalization checked against Shor Section4",
+      "teaching_construction": "complete geometric-sum unitarity proof"
+    },
+    {
+      "id": "binary-labels",
+      "video_id": "Y3V1X-qTxgg",
+      "start_seconds": 730,
+      "end_seconds": 988,
+      "lecture_material": "integer labels and binary fractions",
+      "research_extension": "explicit most-significant-bit-first convention",
+      "teaching_construction": "finite input-label examples"
+    },
+    {
+      "id": "tensor-factorization",
+      "video_id": "Y3V1X-qTxgg",
+      "start_seconds": 988,
+      "end_seconds": 1750,
+      "lecture_material": "factorization into phase-bearing qubits",
+      "research_extension": "explicit binary-index derivation",
+      "teaching_construction": "complete x=5 example"
+    },
+    {
+      "id": "phase-gates",
+      "video_id": "Mb9cCQmMjUU",
+      "start_seconds": 198,
+      "end_seconds": 2073,
+      "lecture_material": "phase gates, controlled phases, circuit sequence, swaps",
+      "research_extension": "correct R1=Z rather than Hadamard",
+      "teaching_construction": "complex circuit-matrix equality lab"
+    },
+    {
+      "id": "periodic-interference",
+      "video_id": "G3joYDuEhf4",
+      "start_seconds": 151,
+      "end_seconds": 1839,
+      "lecture_material": "binary-suffix factorization and general circuit recap",
+      "research_extension": "Shor Section5 finite-register interference",
+      "teaching_construction": "dividing/nondividing period proofs and spectrum"
+    },
+    {
+      "id": "precision-cost",
+      "video_id": "TWuU4nFGzmk",
+      "start_seconds": 751,
+      "end_seconds": 1965,
+      "lecture_material": "general phase circuit and bit order",
+      "research_extension": "Shor Section4 approximate-phase discussion",
+      "teaching_construction": "telescoping operator-norm omission bound"
+    }
+  ],
+  "references": [
+    {
+      "title": "Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer",
+      "url": "https://arxiv.org/pdf/quant-ph/9508027",
+      "supports": "Fourier circuit, output reversal, approximate controlled phases and order-finding distribution",
+      "locator_checked": "PDF pages12-15 Section4; pages16-19 Section5; equations4.9 and5.1-5.10"
+    }
+  ],
+  "source_uncertainties": [
+    "All six assigned transcript texts read completely; no source whiteboard frame review performed.",
+    "Lectures39-41 use local faster-whisper small.en transcripts rather than publisher captions; mathematical expressions reconstructed and independently checked.",
+    "The spoken/caption identification of diagonal R1 as a Hadamard is mathematically incorrect; the chapter explicitly distinguishes R1=Z from H.",
+    "Exact-support statements require the period to divide register dimension; finite-window leakage is derived separately."
+  ],
+  "symbols": [
+    "M,n",
+    "x,y",
+    "x_k,y_k",
+    "F_M",
+    "H,R_k",
+    "r (local scalar period)",
+    "s,L",
+    "b (phase cutoff)"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch13_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch13_lab.out",
+    "additional_check": "Executed Exercise6 sweeps: period3 offset1 M8,16,32,64 normalization and grid errors; n5 cutoff1..5 complex operator errors."
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch13-r1.md",
+      "report_sha256": "6438f43c4995ee021b9923bd6dc56ba93a17061050fad8b81355fbff43299ae3",
+      "verdict": "ACCEPT WITH FIXES",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch13-r2.md",
+      "report_sha256": "1d02b533fa8d54269254b32bf924f14f2e9b10a91979239ff0dac5bc51c3e2cb",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "477d87d585e9debe16e7944d3b9816bda371d001f99964c770bdf999017b8eb1",
+  "canonical_body_sha256": "477d87d585e9debe16e7944d3b9816bda371d001f99964c770bdf999017b8eb1",
+  "body_sha256": "d3cc004ff4a9259633c3f2467e4e9d4a0b239ff7dad5d05df7bf2da20b9f6373"
+}

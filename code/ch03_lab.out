@@ -1,0 +1,9 @@
+P(bit=1)=0.00: reset bound Q/(k_B*T)>=-0.000000
+P(bit=1)=0.10: reset bound Q/(k_B*T)>=0.325083
+P(bit=1)=0.25: reset bound Q/(k_B*T)>=0.562335
+P(bit=1)=0.50: reset bound Q/(k_B*T)>=0.693147
+P(bit=1)=1.00: reset bound Q/(k_B*T)>=-0.000000
+one-particle reversible compression W/(k_B*T)=0.693147
+1-percent residual error: entropy bound=0.637146
+example total entropy production / k_B=0.200000
+all dimensionless entropy and work checks passed

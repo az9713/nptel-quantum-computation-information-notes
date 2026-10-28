@@ -1,0 +1,146 @@
+{
+  "chapter": 17,
+  "title": "Master equations and relaxation times",
+  "status": "complete; independent round2 ACCEPT",
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "tvlLNS8i-yY",
+      "course_order": 54,
+      "start_seconds": 351,
+      "end_seconds": 569,
+      "lecture_material": "Markov approximation",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "weak-step",
+      "video_id": "tvlLNS8i-yY",
+      "course_order": 54,
+      "start_seconds": 569,
+      "end_seconds": 1943,
+      "lecture_material": "Weak Kraus step and Lindblad generator",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "population-coherence",
+      "video_id": "_8RDDMOq6Is",
+      "course_order": 55,
+      "start_seconds": 205,
+      "end_seconds": 1192,
+      "lecture_material": "Spontaneous emission and scalar solutions",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "pure-dephasing",
+      "video_id": "3KF16kkbdbs",
+      "course_order": 56,
+      "start_seconds": 95,
+      "end_seconds": 823,
+      "lecture_material": "Additional spin-dephasing jump and its contribution to the T2 rate",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "thermal",
+      "video_id": "3KF16kkbdbs",
+      "course_order": 56,
+      "start_seconds": 33,
+      "end_seconds": 1096,
+      "lecture_material": "Thermal Bloch equations, detailed balance, and relaxation times",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    }
+  ],
+  "references": [
+    {
+      "title": "John Preskill, Quantum Information Chapter 3, October 2018",
+      "url": "https://www.preskill.caltech.edu/ph219/chap3_15.pdf",
+      "locator_checked": "PDF pp32,34–38; damping and master equations"
+    },
+    {
+      "title": "Gorini, Kossakowski, Sudarshan, finite-dimensional semigroup classification (1976)",
+      "url": "https://doi.org/10.1063/1.522979",
+      "locator_checked": "Publisher abstract only; full classification proof not reproduced"
+    }
+  ],
+  "symbols": [
+    "Gamma_1",
+    "Gamma_phi",
+    "T_1,T_2",
+    "rho"
+  ],
+  "exercises": 6,
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch17-r1.md",
+      "report_sha256": "6d6a3679fc194e7259c02e64da35f6531a4ce95c63263121867633197bdab0df",
+      "verdict": "ACCEPT WITH FIXES",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch17-r2.md",
+      "report_sha256": "ce41c11d5fac1c0da2774d618b26cda35e95778b1db0ee2786a9b51d0f0c61e5",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "source_uncertainties": [
+    "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+    "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+    "Born approximation and Markov approximation are distinguished.",
+    "Frames56 at950/1010 seconds confirm a wrong-sign Bose denominator and an extra exponential in T1 inverse; the chapter derives the corrected nonnegative occupation and rate sum.",
+    "The ending generalized-measurement part of recording56 is covered in Chapter18 as a supporting span."
+  ],
+  "recordings": [
+    {
+      "video_id": "tvlLNS8i-yY",
+      "course_label": "W11L4",
+      "course_order": 54,
+      "duration_seconds": 1954
+    },
+    {
+      "video_id": "_8RDDMOq6Is",
+      "course_label": "W11L5",
+      "course_order": 55,
+      "duration_seconds": 1720
+    },
+    {
+      "video_id": "3KF16kkbdbs",
+      "course_label": "W12L1",
+      "course_order": 56,
+      "duration_seconds": 2131
+    }
+  ],
+  "visual_evidence": [
+    {
+      "course_order": 54,
+      "frame_paths": [
+        "sources/frames/54_tvlLNS8i-yY/t1024.jpg",
+        "sources/frames/54_tvlLNS8i-yY/t1700.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    },
+    {
+      "course_order": 56,
+      "frame_paths": [
+        "sources/frames/56_3KF16kkbdbs/t0950.jpg",
+        "sources/frames/56_3KF16kkbdbs/t1010.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    }
+  ],
+  "code_check": {
+    "command": "python code/ch17_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch17_lab.out"
+  },
+  "accepted_html_sha256": "92e20b59a61b3b07966a9dc08e4dff61d7a4211b9e12bafd8f6507076c1197ff",
+  "accepted_body_sha256": "92e20b59a61b3b07966a9dc08e4dff61d7a4211b9e12bafd8f6507076c1197ff",
+  "canonical_body_sha256": "92e20b59a61b3b07966a9dc08e4dff61d7a4211b9e12bafd8f6507076c1197ff",
+  "body_sha256": "bdb7d01ac7af3ac2c839ac2eb687d2566ddb5687b5a16d0175f9f90401dbf232"
+}

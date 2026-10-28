@@ -1,0 +1,10 @@
+{
+  "chapters_checked": 20,
+  "pages_checked": 26,
+  "labs_executed": 20,
+  "failures": [],
+  "source_free_builder": "26 pages rebuilt; all 20 accepted exported chapter body digests verified",
+  "private_sources_present": false,
+  "source_free_check": "Copied portable package rebuilt and validated using its own tools; no authoring tree or raw sources copied.",
+  "scope": "Local export and exact finite laboratory reproduction; scientific review recorded separately."
+}

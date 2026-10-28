@@ -1,0 +1,111 @@
+{
+  "chapter": 20,
+  "title": "Concurrence, spin flip, and entanglement of formation",
+  "status": "complete; independent round2 ACCEPT",
+  "sections": [
+    {
+      "id": "spin-flip",
+      "video_id": "7RMSjNKvAdw",
+      "course_order": 60,
+      "start_seconds": 66,
+      "end_seconds": 700,
+      "lecture_material": "Bell correlations and antipodal spin flip",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "spin-flip",
+      "video_id": "7RMSjNKvAdw",
+      "course_order": 60,
+      "start_seconds": 700,
+      "end_seconds": 1276,
+      "lecture_material": "Pure-state overlap and coefficient matrix",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "mixed-formula",
+      "video_id": "7RMSjNKvAdw",
+      "course_order": 60,
+      "start_seconds": 1276,
+      "end_seconds": 1499,
+      "lecture_material": "Mixed-state spin-flip spectrum",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "worked-family",
+      "video_id": "7RMSjNKvAdw",
+      "course_order": 60,
+      "start_seconds": 1506,
+      "end_seconds": 1777,
+      "lecture_material": "Singlet/white-noise concurrence",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    }
+  ],
+  "references": [
+    {
+      "title": "Wootters, Entanglement of Formation of an Arbitrary State of Two Qubits",
+      "url": "https://arxiv.org/pdf/quant-ph/9709029",
+      "locator_checked": "PDF pp2–4, equations5,8–10"
+    }
+  ],
+  "symbols": [
+    "C",
+    "rho",
+    "Y",
+    "H_Sh"
+  ],
+  "exercises": 6,
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch20-r1.md",
+      "report_sha256": "177caa40ad9b97cdde72d37596cf1027376a038bd93f2c49a50282e241206036",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch20-r2.md",
+      "report_sha256": "44d316455aa99bde40291b067e22cd2b7d494f749d4aa1b939e89b56ddf507ba",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "source_uncertainties": [
+    "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+    "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+    "Complex conjugation is part of the spin flip; Y alone is not an antipodal map for arbitrary complex spinors.",
+    "Bell-state names are fixed by their explicit vectors and verified correlation signs.",
+    "Eigenvalues are sorted before subtracting smaller spin-flip spectral values.",
+    "Entanglement of formation and the Hermitian square-root implementation extend the lecture through the checked Wootters paper."
+  ],
+  "recordings": [
+    {
+      "video_id": "7RMSjNKvAdw",
+      "course_label": "W12L5",
+      "course_order": 60,
+      "duration_seconds": 1838
+    }
+  ],
+  "visual_evidence": [
+    {
+      "course_order": 60,
+      "frame_paths": [
+        "sources/frames/60_7RMSjNKvAdw/t1500.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    }
+  ],
+  "code_check": {
+    "command": "python code/ch20_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch20_lab.out"
+  },
+  "accepted_html_sha256": "4b8970738cf917b93e3f2290613d673bc3cbc47a7692eccd7a2143986386a803",
+  "accepted_body_sha256": "4b8970738cf917b93e3f2290613d673bc3cbc47a7692eccd7a2143986386a803",
+  "canonical_body_sha256": "4b8970738cf917b93e3f2290613d673bc3cbc47a7692eccd7a2143986386a803",
+  "body_sha256": "bde48175f5503dc2e2ff1bf308b021963a27f3aaec5052b20c6591c33cf78568"
+}

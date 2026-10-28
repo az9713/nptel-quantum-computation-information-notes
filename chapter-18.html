@@ -1,0 +1,136 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Generalized measurements and POVMs</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>18. Generalized measurements and POVMs</h1>
+<p class="lead">A qubit measurement can have three outcomes even though the state vector has two components. The three outcomes need not correspond to three orthogonal qubit states. Moreover, two apparatuses can assign exactly the same probabilities to every input and still leave different conditional output states. Predicting the record and predicting the disturbance require different mathematical data.</p>
+<p class="source-note"><strong>Lecture material:</strong> Positive Operator Valued Measurements, official W12L2. <strong>Reference extension:</strong> Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Chapter 3, section 3.1.2, PDF pages 8–11</a>, for effects, outcome probabilities, and freedom in the state update. <strong>Original teaching constructions:</strong> the trine measurement, paired instruments, elementary distinguishability proof, executable comparison, and exercises.</p>
+
+<h2 id="model">18.1 Effects specify probabilities <a class="timestamp" href="https://www.youtube.com/watch?v=At_pi7kjSC0&amp;t=1383s">[23:03]</a></h2>
+<p>Let \(\rho\) be a density operator on a finite-dimensional Hilbert space \(\mathcal H\). A finite <dfn>positive operator-valued measure</dfn>, abbreviated POVM, is a list of matrices \(E_j\) indexed by the possible classical outcomes \(j\), satisfying \(E_j\geq0\) and \(\sum_jE_j=I\). The matrices are called <dfn>effects</dfn>. They are Hermitian because positivity includes Hermiticity. For the input \(\rho\), the outcome probabilities are</p>
+\[
+p_j=\operatorname{Tr}(\rho E_j).
+\tag{18.1}
+\]
+<p>An effect measures how strongly one outcome responds to each input direction. It does not have to be a projector. Because \(I-E_j=\sum_{k\ne j}E_k\geq0\), every eigenvalue of an effect lies in \([0,1]\). Orthogonal projective measurements are the special case \(E_jE_k=\delta_{jk}E_j\), with \(\delta_{jk}\) equal to one when the labels agree and zero otherwise.</p>
+<div class="prop"><strong>Proposition 18.1 — valid outcome probabilities.</strong> For a positive trace-one \(\rho\) and effects summing to identity, every \(p_j\) in (18.1) is real and nonnegative and \(\sum_jp_j=1\).</div>
+<div class="proof"><p>The positive matrix \(\rho\) has a positive square root \(\sqrt\rho\), obtained by taking the nonnegative square root of each eigenvalue. Trace cyclicity gives \(\operatorname{Tr}(\rho E_j)=\operatorname{Tr}(\sqrt\rho E_j\sqrt\rho)\). The matrix inside this last trace is positive: its quadratic form on \(|v\rangle\) is \(\langle\sqrt\rho v|E_j|\sqrt\rho v\rangle\geq0\). Its trace is therefore a nonnegative real number. Summing and using completeness gives \(\sum_jp_j=\operatorname{Tr}(\rho I)=1\). <span class="qed">∎</span></p></div>
+<p>There is no contradiction between a two-dimensional state space and three recorded labels. Dimension constrains the number of orthogonal quantum directions, while a POVM describes response probabilities of a more general apparatus. In a physical realization, extra pointer degrees of freedom can hold the classical outcome. Their dimension need not equal the system dimension.</p>
+
+<h2 id="trine">18.2 A three-outcome qubit measurement</h2>
+<p>Choose the computational qubit basis \(|0\rangle,|1\rangle\). Define three normalized vectors around the equator of its Bloch sphere,</p>
+\[
+|v_j\rangle=\frac{|0\rangle+e^{i\theta_j}|1\rangle}{\sqrt2},
+\quad\theta_j=\frac{2\pi j}{3},\quad j=0,1,2,
+\qquad E_j=\frac23|v_j\rangle\langle v_j|.
+\tag{18.2}
+\]
+<p>Each effect is positive because \(\langle w|E_j|w\rangle=(2/3)|\langle v_j|w\rangle|^2\). Its eigenvalues are \(2/3\) and zero. Expanding the outer products gives \(E_j=\tfrac13\begin{pmatrix}1&amp;e^{-i\theta_j}\\e^{i\theta_j}&amp;1\end{pmatrix}\). The off-diagonal sums vanish because \(1+e^{2\pi i/3}+e^{4\pi i/3}=0\), while each diagonal sum is one. Thus \(\sum_jE_j=I_2\).</p>
+<p>This <dfn>trine POVM</dfn> is not a projective qubit measurement. Its individual effects satisfy \(E_j^2=(2/3)E_j\), which differs from \(E_j\), and distinct vectors are not orthogonal. Their overlaps obey \(|\langle v_j|v_k\rangle|^2=(1+\cos(\theta_k-\theta_j))/2=1/4\) for \(j\ne k\). Three such vectors cannot form an orthonormal basis of a two-dimensional space.</p>
+<p>For input \(|0\rangle\), every effect has expectation \(1/3\), so the recorded labels are uniform. For input \(|v_0\rangle\), the matching label has probability \(2/3\) and the other two each have probability \((2/3)(1/4)=1/6\). The apparatus favors the direction aligned with the input without identifying it with certainty. These explicit distributions are useful checks on normalization and on the phase convention in (18.2).</p>
+<p>The trine measurement probes two equatorial directions rather than all three Bloch components. For a general Bloch vector \(\mathbf r=(r_x,r_y,r_z)\), inserting \(E_j=(I_2+\cos\theta_jX+\sin\theta_jY)/3\) yields \(p_j=[1+r_x\cos\theta_j+r_y\sin\theta_j]/3\). The probabilities do not depend on \(r_z\). A three-outcome measurement is therefore not automatically sufficient to reconstruct an arbitrary qubit state, whose density matrix has three independent real parameters.</p>
+
+<h2 id="instruments">18.3 An instrument specifies the conditional state <a class="timestamp" href="https://www.youtube.com/watch?v=3KF16kkbdbs&amp;t=1188s">[19:48]</a></h2>
+<p>Suppose one matrix \(M_j\) is assigned to each outcome and \(E_j=M_j^\dagger M_j\). The unnormalized branch map is \(\mathcal J_j(\rho)=M_j\rho M_j^\dagger\). Its trace is \(p_j\) by cyclicity. For a branch with \(p_j\gt0\), the normalized conditional output is</p>
+\[
+\rho'_j=\frac{M_j\rho M_j^\dagger}{p_j}.
+\tag{18.3}
+\]
+<p>The collection of branch maps is a <dfn>measurement instrument</dfn>. The effects determine record probabilities; the instrument also determines the output conditioned on each record. If \(p_j=0\), that outcome does not occur for the given input, and equation (18.3) must not be evaluated by dividing by zero.</p>
+<p>One valid choice is \(M_j=\sqrt{E_j}\). It satisfies the effects by construction. For any chosen unitary \(V_j\), however, the alternative \(\widetilde M_j=V_jM_j\) has exactly the same effect because \(\widetilde M_j^\dagger\widetilde M_j=M_j^\dagger V_j^\dagger V_jM_j=E_j\). Its conditional output is \(V_j\rho'_jV_j^\dagger\). Unless that state is invariant under \(V_j\), the disturbance differs while the probability of every record remains unchanged for every input.</p>
+<p>For the trine effects, the square-root operators are \(M_j=\sqrt{2/3}|v_j\rangle\langle v_j|\). Any nonzero-probability branch has output \(|v_j\rangle\langle v_j|\), because multiplication on both sides of the input projects onto that rank-one direction and normalization removes the scalar weight. Now choose \(V_j=X\) for all labels. For \(j=1\), the first apparatus prepares an output coherence \(e^{-2\pi i/3}/2=-1/4-i\sqrt3/4\); the second prepares its complex conjugate. The lab verifies both numbers on input \(|0\rangle\), where both records have probability \(1/3\).</p>
+<p>A single matrix per outcome is not the most general instrument. If one recorded label combines several unresolved microscopic branches, let \(M_{j\alpha}\) denote their matrices, where \(\alpha\) labels the unrecorded alternatives. Then \(\mathcal J_j(\rho)=\sum_\alpha M_{j\alpha}\rho M_{j\alpha}^\dagger\), and \(E_j=\sum_\alpha M_{j\alpha}^\dagger M_{j\alpha}\). The same trace formula determines \(p_j\), and normalization gives \(\rho'_j=\mathcal J_j(\rho)/p_j\). An output may be mixed even for a pure input because the record omits the \(\alpha\) information.</p>
+
+<h2 id="realization">18.4 An extended-system realization <a class="timestamp" href="https://www.youtube.com/watch?v=At_pi7kjSC0&amp;t=239s">[03:59]</a></h2>
+<p>The probability rule can be realized using the channel construction from Chapter 15. Introduce a pointer space with orthonormal vectors \(|j\rangle_P\), one per outcome. For a chosen single-matrix instrument, define</p>
+\[
+W|\psi\rangle=\sum_jM_j|\psi\rangle\otimes|j\rangle_P.
+\tag{18.4}
+\]
+<p>Its output inner product is \(\langle\phi|\sum_jM_j^\dagger M_j|\psi\rangle=\langle\phi|\psi\rangle\), so \(W\) is an isometry. As in the finite dilation argument, it can be implemented as a unitary on a sufficiently large initialized space. Projectively measuring the pointer in its \(|j\rangle_P\) basis gives branch probability \(\|M_j|\psi\rangle\|^2\), which is \(\langle\psi|E_j|\psi\rangle\). Conditioning on the pointer outcome gives the system state in (18.3).</p>
+<p>This construction does not derive the measurement postulate from unitary dynamics alone. It transfers a projective measurement on a larger pointer to a generalized description of the selected system. The measurement postulate is still used for the pointer. The construction explains consistency and realizability of the generalized rule within that framework.</p>
+<p>If the classical record is ignored, the system output is \(\sum_j\mathcal J_j(\rho)\), a trace-preserving channel. If it is retained, one can describe both data and output by the joint operator \(\sum_j|j\rangle\langle j|_{\mathrm{record}}\otimes\mathcal J_j(\rho)\). This operator contains branch probabilities in its classical block weights. Selecting one label and renormalizing is a conditional inference; its normalization makes the conditional state update nonlinear in \(\rho\), even though every unnormalized branch map is linear.</p>
+
+<h2 id="distinguishability">18.5 More outcomes do not remove nonorthogonality</h2>
+<p>A general POVM still cannot distinguish two nonorthogonal pure states perfectly in a single use with no inconclusive outcome. To prove this, suppose an effect \(E\) identifies \(|\psi\rangle\) with probability one and never fires on \(|\phi\rangle\). Then \(\langle\psi|E|\psi\rangle=1\) and \(\langle\phi|E|\phi\rangle=0\), with \(0\leq E\leq I\).</p>
+<p>The second equality gives \(\sqrt E|\phi\rangle=0\), hence \(E|\phi\rangle=0\). The first gives \(\langle\psi|(I-E)|\psi\rangle=0\), so \((I-E)|\psi\rangle=0\) and \(E|\psi\rangle=|\psi\rangle\). Hermiticity then yields \(\langle\phi|\psi\rangle=\langle\phi|E|\psi\rangle=\langle E\phi|\psi\rangle=0\). Perfect deterministic identification therefore requires orthogonal inputs.</p>
+<p>Allowing an inconclusive outcome changes the decision problem. Allowing a nonzero error probability changes it again. The proof above does not rule out those protocols; it states the assumptions under which certainty is impossible. The trine example remains consistent with the proof: its nonorthogonal candidate vectors produce overlapping record distributions.</p>
+<p>The lecture's final example introduces precisely that inconclusive alternative <a class="timestamp" href="https://www.youtube.com/watch?v=At_pi7kjSC0&amp;t=1685s">[28:05]</a>. Let the two possible inputs be known normalized, linearly independent qubit states \(|\psi\rangle,|\phi\rangle\), with overlap magnitude \(s=|\langle\psi|\phi\rangle|\in(0,1)\). Define effects</p>
+\[
+F_0=a(I-|\psi\rangle\langle\psi|),\quad
+F_1=a(I-|\phi\rangle\langle\phi|),\quad
+F_?=I-F_0-F_1.
+\tag{18.5}
+\]
+<p>The label 0 can never appear on input \(\psi\), and label 1 can never appear on input \(\phi\). Thus 0 identifies \(\phi\), 1 identifies \(\psi\), and the question mark is inconclusive. Completeness is built into the definition; positivity of the final effect still needs proof. The operator \(|\psi\rangle\langle\psi|+|\phi\rangle\langle\phi|\) has trace 2 and determinant \(1-s^2\) on their two-dimensional span. Its eigenvalues are \(1+s\) and \(1-s\). Consequently \(F_0+F_1\) has eigenvalues \(a(1-s)\) and \(a(1+s)\), so the exact permitted interval is \(0\leq a\leq1/(1+s)\). A generic statement \(a\lt1\) is insufficient to guarantee a valid POVM.</p>
+<p>For either input, the conclusive probability is \(a(1-s^2)\). Setting \(a=1/(1+s)\) makes that probability \(1-s\) and the inconclusive probability \(s\). These are achievable probabilities for the displayed measurement; no general optimization theorem is needed for this calculation. In the lecture's concrete pair \(|\psi\rangle=|0\rangle\), \(|\phi\rangle=(|0\rangle+|1\rangle)/\sqrt2\), one has \(s=1/\sqrt2\), \(a=2-\sqrt2\), and conclusive probability \(1-1/\sqrt2\), about 0.292893. Certainty is obtained only on the conclusive subset, while the inconclusive records preserve the impossibility of deterministic perfect discrimination.</p>
+
+<h2 id="lab">18.6 Comparing two instruments with the same effects</h2>
+<p>The following lab constructs the trine vectors, effects, and square-root operators. It verifies positivity and completeness, computes the uniform probabilities for \(|0\rangle\), and compares the \(j=1\) conditional output with and without the final X operation. The assertion of different outputs is intentional; equality would mean the example had failed to expose the distinction it was designed to teach.</p>
+<!-- LAB_SOURCE_START -->
+<div class="codewrap"><pre><code class="language-python" data-file="ch18_lab.py">"""Construct a trine POVM and two instruments with identical effects."""
+import numpy as np
+
+identity = np.eye(2)
+x = np.array([[0, 1], [1, 0]])
+vectors = [np.array([1, np.exp(2j * np.pi * j / 3)]) / np.sqrt(2)
+           for j in range(3)]
+projectors = [np.outer(v, v.conj()) for v in vectors]
+effects = [2 * p / 3 for p in projectors]
+operators = [np.sqrt(2 / 3) * p for p in projectors]
+assert np.allclose(sum(effects), identity)
+assert all(np.linalg.eigvalsh(e).min() &gt; -1e-12 for e in effects)
+rho = np.diag([1, 0])
+probabilities = [np.trace(rho @ e).real for e in effects]
+assert np.allclose(probabilities, np.ones(3) / 3)
+altered = [x @ a for a in operators]
+for a, b in zip(operators, altered):
+    assert np.allclose(a.conj().T @ a, b.conj().T @ b)
+j = 1
+out_a = operators[j] @ rho @ operators[j].conj().T / probabilities[j]
+out_b = altered[j] @ rho @ altered[j].conj().T / probabilities[j]
+assert not np.allclose(out_a, out_b)
+print("POVM probabilities:", np.round(probabilities, 6).tolist())
+print("Same effects for both instruments: True")
+print("Conditional coherence, first instrument:",
+      f"{out_a[0, 1].real:.6f}{out_a[0, 1].imag:+.6f}j")
+print("Conditional coherence, second instrument:",
+      f"{out_b[0, 1].real:.6f}{out_b[0, 1].imag:+.6f}j")
+psi_usd = np.array([1, 0], complex)
+phi_usd = np.array([1, 1], complex) / np.sqrt(2)
+overlap = abs(np.vdot(psi_usd, phi_usd))
+scale = 1 / (1 + overlap)
+f_zero = scale * (np.eye(2) - np.outer(psi_usd, psi_usd.conj()))
+f_one = scale * (np.eye(2) - np.outer(phi_usd, phi_usd.conj()))
+f_question = np.eye(2) - f_zero - f_one
+for effect in [f_zero, f_one, f_question]:
+    assert np.linalg.eigvalsh(effect).min() &gt; -1e-12
+assert np.allclose(f_zero @ psi_usd, 0)
+assert np.allclose(f_one @ phi_usd, 0)
+success = np.vdot(psi_usd, f_one @ psi_usd).real
+assert np.isclose(success, 1 - overlap)
+print(f"Unambiguous conclusive probability = {success:.6f}")
+</code></pre></div>
+<!-- LAB_SOURCE_END -->
+<!-- LAB_OUTPUT_START -->
+<pre><code class="output">POVM probabilities: [0.333333, 0.333333, 0.333333]
+Same effects for both instruments: True
+Conditional coherence, first instrument: -0.250000-0.433013j
+Conditional coherence, second instrument: -0.250000+0.433013j
+Unambiguous conclusive probability = 0.292893
+</code></pre>
+<!-- LAB_OUTPUT_END -->
+<p>The conjugate coherence values correspond to different Y expectations. Both apparatuses have the same record probabilities for every possible input because their effects coincide as matrices, not merely because they happened to agree on the tested input. The program verifies that stronger equality directly.</p>
+
+<h2 id="limits">18.7 What effects leave unspecified</h2>
+<p>A POVM is a probability model for one recorded measurement. It does not by itself specify an instrument, the state of any unobserved environment, detector efficiency, latency, energy cost, or the statistics of later measurements. Sequential measurement predictions require the state update or an equivalent physical instrument model. Repeating a label is not guaranteed: generalized effects need not be orthogonal projectors, and even a projective POVM can be followed by an outcome-dependent unitary that changes the subsequent record.</p>
+<p>Detector inefficiency must also be represented in the probabilities. If some trials produce no click, including a no-click outcome can give a normalized POVM. Conditioning only on clicks divides by a success probability that may depend on the input. Dropping that denominator turns a conditional distribution into an incorrect unconditional prediction. The general branch formula makes the missing normalization visible.</p>
+
+<h2 id="exercises">18.8 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex18-1">1. Verify a trine distribution</h3><p>For input \(|v_0\rangle\), derive the three trine outcome probabilities without multiplying all three density matrices explicitly.</p><details><summary>Solution</summary><p>Use \(p_j=(2/3)|\langle v_j|v_0\rangle|^2\). The matching overlap is one, giving \(p_0=2/3\). Each other squared overlap is \((1+\cos(2\pi/3))/2=1/4\), giving \(p_1=p_2=1/6\). Their sum is one. The nonzero off-label probabilities also show why the trine vectors are not perfectly distinguished by this measurement.</p></details></article>
+<article class="exercise"><h3 id="ex18-2">2. Derive the conditional-state freedom</h3><p>Let \(\widetilde M_j=V_jM_j\) with unitary \(V_j\). Prove equality of all record probabilities and derive the relation between normalized conditional states.</p><details><summary>Solution</summary><p>Unitary cancellation gives \(\widetilde M_j^\dagger\widetilde M_j=M_j^\dagger M_j\). Their effects, hence \(\operatorname{Tr}(\rho E_j)\) for every input, agree. Their unnormalized states satisfy \(\widetilde{\mathcal J}_j(\rho)=V_j\mathcal J_j(\rho)V_j^\dagger\). Dividing by their common positive probability gives \(\widetilde\rho'_j=V_j\rho'_jV_j^\dagger\). Zero-probability branches require no conditional state.</p></details></article>
+<article class="exercise"><h3 id="ex18-3">3. Same projective effects, different repeatability</h3><p>Take effects \(E_0=|0\rangle\langle0|\), \(E_1=|1\rangle\langle1|\). Compare operators \(M_j=E_j\) with \(\widetilde M_j=XE_j\). What does repeating the same apparatus do to a known first outcome?</p><details><summary>Solution</summary><p>Both instruments have the same projective effects. The first prepares \(|j\rangle\) after outcome \(j\), so repeating it produces the same label with certainty. The second prepares \(|1-j\rangle\); its next record is \(1-j\) with certainty. Projective record statistics alone therefore do not establish repeatability for an arbitrary instrument. The usual repeatable projective measurement includes a specific update rule.</p></details></article>
+<article class="exercise"><h3 id="ex18-4">4. Diagnose a discarded no-click outcome</h3><p>Suppose a two-outcome ideal measurement has effects \(E_0,E_1\), but each outcome is detected with probability \(\epsilon\in(0,1)\), independent of input. Write a normalized three-outcome POVM and derive the probabilities conditioned on a click.</p><details><summary>Solution</summary><p>The effects are \(F_0=\epsilon E_0\), \(F_1=\epsilon E_1\), and \(F_{\varnothing}=(1-\epsilon)I\). They are positive and sum to identity. The click probability is \(\epsilon\); conditional probabilities are \(\operatorname{Tr}(\rho F_j)/\epsilon=\operatorname{Tr}(\rho E_j)\). If efficiencies depend on the outcome, the click probability generally depends on \(\rho\), so the conditional probabilities require that state-dependent denominator.</p></details></article>
+<article class="exercise"><h3 id="ex18-5">5. An insufficient reconstruction design</h3><p>Show that the trine measurement gives the same probabilities for \(|0\rangle\) and \(|1\rangle\). What additional information would a state-reconstruction experiment need?</p><details><summary>Solution</summary><p>Both states have zero X and Y components, so the trine formula gives \(p_j=1/3\) for each label. Their Z components are opposite and completely invisible to this POVM. A reconstruction design must include an effect or another measurement setting sensitive to Z, such as computational-basis probabilities, in addition to sufficient independent information about X and Y.</p></details></article>
+<article class="exercise"><h3 id="ex18-6">6. Implement an unobserved measurement channel</h3><p>Extend the lab to compute \(\sum_jM_j\rho M_j^\dagger\) for a general qubit input and derive its Bloch map. Compare the result with the effect probabilities and explain which one specifies disturbance.</p><details><summary>Solution</summary><p>Each rank-one branch is \(p_j|v_j\rangle\langle v_j|\). Let \(\mathbf n_j=(\cos\theta_j,\sin\theta_j,0)\). Its Bloch vector averaged over labels is \(\sum_jp_j\mathbf n_j\). Since \(\sum_j\mathbf n_j=0\) and \(\sum_j\mathbf n_j\mathbf n_j^{\mathsf T}=\operatorname{diag}(3/2,3/2,0)\), substituting \(p_j=(1+\mathbf r\cdot\mathbf n_j)/3\) gives \((r_x/2,r_y/2,0)\). A sweep over valid Bloch vectors can compare this formula with the Kraus sum and check trace and positivity. The effects determine the probabilities \(p_j\); the chosen matrices determine this particular average state change.</p></details></article>
+
+<h2 id="primary-sources">18.9 Primary sources and attribution</h2>
+<p>The generalized-measurement introduction is also covered in <a href="https://www.youtube.com/watch?v=3KF16kkbdbs&amp;t=1096s">Decoherence 11, from 18:16</a>, after its thermal Bloch-equation discussion. That shared recording remains assigned primarily to Chapter 17; its measurement span supports this chapter.</p>
+<ul><li>NPTEL, Prof. Chiranjib Mitra, <a href="https://www.youtube.com/watch?v=At_pi7kjSC0">Positive Operator Valued Measurements</a>, official W12L2.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Quantum Information, Chapter 3</a>, October 2018, section 3.1.2, PDF pages 8–11: extended-system measurement, effects, and probability/update distinction. The trine calculations, paired-instrument example, and nonorthogonality argument here are original worked teaching material.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-17.html">Previous chapter</a> <a href="chapter-19.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

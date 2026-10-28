@@ -1,0 +1,6 @@
+p=0.000000: C=0.000000; E_F=0.000000 bits
+p=0.333333: C=0.000000; E_F=0.000000 bits
+p=0.500000: C=0.250000; E_F=0.117619 bits
+p=1.000000: C=1.000000; E_F=1.000000 bits
+Forty-one-point concurrence sweep passed: True
+Twenty-four seeded complex pure-state checks passed: True

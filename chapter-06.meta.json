@@ -1,0 +1,144 @@
+{
+  "chapter": 6,
+  "title": "Classical information and lossless coding",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "g7Qh9zeyDcw",
+      "course_label": "W3L2",
+      "course_order": 12,
+      "duration_seconds": 1800
+    },
+    {
+      "video_id": "P7bDc2fYa2A",
+      "course_label": "W3L3",
+      "course_order": 13,
+      "duration_seconds": 1853
+    },
+    {
+      "video_id": "98i3XZpEJso",
+      "course_label": "W3L4",
+      "course_order": 14,
+      "duration_seconds": 1858
+    },
+    {
+      "video_id": "Wne_ycXqFuA",
+      "course_label": "W3L5",
+      "course_order": 15,
+      "duration_seconds": 1545
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "g7Qh9zeyDcw",
+      "start_seconds": 180,
+      "end_seconds": 1780,
+      "lecture_material": "Finite alphabets, source probabilities, self-information, rain example, Shannon average",
+      "research_extension": "Continuous additive surprisal argument",
+      "teaching_construction": "Explicit probability and coding contracts"
+    },
+    {
+      "id": "entropy",
+      "video_id": "P7bDc2fYa2A",
+      "start_seconds": 240,
+      "end_seconds": 1835,
+      "lecture_material": "Continuity, nonnegative entropy, maximum, independence, and string probability",
+      "research_extension": "Shannon grouping condition and counterexample to incomplete uniqueness assumptions",
+      "teaching_construction": "Relative-entropy proof and explicit chain rule"
+    },
+    {
+      "id": "typical",
+      "video_id": "98i3XZpEJso",
+      "start_seconds": 18,
+      "end_seconds": 1250,
+      "lecture_material": "Empirical frequencies and typical-string probability",
+      "research_extension": "Typical-set inequality instead of a universal equal-probability claim",
+      "teaching_construction": "Finite support and asymptotic qualifiers"
+    },
+    {
+      "id": "prefix",
+      "video_id": "98i3XZpEJso",
+      "start_seconds": 1260,
+      "end_seconds": 1840,
+      "lecture_material": "Four-symbol dyadic coding example",
+      "research_extension": "Prefix-code and Kraft assumptions",
+      "teaching_construction": "Complete finite prefix bounds proof"
+    },
+    {
+      "id": "blocks",
+      "video_id": "Wne_ycXqFuA",
+      "start_seconds": 18,
+      "end_seconds": 1130,
+      "lecture_material": "Eight-symbol code and biased-distribution examples",
+      "research_extension": "Finite-block redundancy guarantee",
+      "teaching_construction": "Huffman laboratory and non-dyadic comparison"
+    },
+    {
+      "id": "toffoli",
+      "video_id": "Wne_ycXqFuA",
+      "start_seconds": 1140,
+      "end_seconds": 1510,
+      "lecture_material": "Toffoli truth table and reversibility",
+      "research_extension": "Equal wire counts do not imply injectivity",
+      "teaching_construction": "Self-inverse proof and permutation lab"
+    }
+  ],
+  "references": [
+    {
+      "title": "C. E. Shannon, A Mathematical Theory of Communication",
+      "url": "https://home.csulb.edu/~cwallis/382/readings/482/shannon.mathematical.theory.communication.1948.pdf",
+      "supports": "Weighted grouping requirement; noiseless coding setting; dyadic four-symbol example",
+      "locator_checked": "PDF pages 10–11,16–18; §§6,9–10, Theorems2 and9"
+    }
+  ],
+  "source_uncertainties": [
+    "Auto-captions can garble codewords and equations; codes are independently reconstructed and checked.",
+    "W3L2 opening misstates the week; the official syllabus and content identify the recording.",
+    "No comprehensive slide/audio review is claimed."
+  ],
+  "symbols": [
+    "mathsf J",
+    "mathsf K",
+    "mathcal A",
+    "q",
+    "p_j",
+    "r_j",
+    "I(p)",
+    "H_Sh",
+    "H_2",
+    "ell_j",
+    "L",
+    "K",
+    "D(p||r)",
+    "m",
+    "n_j(w)",
+    "epsilon",
+    "a,b,c bits"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch06_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch06_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch06-r1.md",
+      "report_sha256": "9c93489c49a5fa75d9b239da56466bfcd6778bbdc0dd9ab99ea74f5d52d4ebc0",
+      "verdict": "YES AFTER REVISION",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch06-r2.md",
+      "report_sha256": "7188d44e1f65a7c479906aed0be8e24a30aedbc1c12119b001e496a43420c0ba",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "9d01431a08c50b9fe47ee5515f49fe3b3d92424071541897bebe20783494f744",
+  "canonical_body_sha256": "9d01431a08c50b9fe47ee5515f49fe3b3d92424071541897bebe20783494f744",
+  "body_sha256": "9d01431a08c50b9fe47ee5515f49fe3b3d92424071541897bebe20783494f744"
+}

@@ -1,0 +1,15 @@
+127/256 continued fraction: [0, 2, 63, 2]
+127/256 convergents: [(0, 1), (1, 2), (63, 127), (127, 256)]
+N=15, a=7, M=256: reference order=4
+Largest bins: 0:0.250000, 64:0.250000, 128:0.250000, 192:0.250000
+Discarded B and unrecorded B measurement give equal marginals
+Multiple budget=1: factor-success mass=0.500000
+Multiple budget=2: factor-success mass=0.750000
+P(127)=0.000000; P(128)=0.250000
+N=21, a=2, M=512: reference order=6
+Largest bins: 0:0.166672, 85:0.113989, 171:0.113989, 256:0.166672, 341:0.113989, 427:0.113989
+Discarded B and unrecorded B measurement give equal marginals
+Multiple budget=1: factor-success mass=0.328417
+Multiple budget=2: factor-success mass=0.661642
+Return exponent 8 rejected: half-power is +1 modulo 15
+Return exponent 4 accepted: verified factors are 3 and 5

@@ -1,0 +1,178 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Noise channels: flips, depolarization, and damping</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>16. Noise channels: flips, depolarization, and damping</h1>
+<p class="lead">Two qubits can lose the same amount of off-diagonal coherence while moving toward different final states. Pure dephasing preserves the populations in its preferred basis; amplitude damping transfers excited-state population to the ground state. A single label such as “36 percent noise” does not specify either transformation. The channel equation and its parameter convention determine the prediction.</p>
+<p class="source-note"><strong>Lecture material:</strong> Decoherence 5–8, official W10L5 and W11L1–W11L3, supply the sequence from finite Kraus descriptions to depolarization, flips, phase damping, and amplitude damping. The next recording begins the master-equation development and is assigned to Chapter 17 according to its actual content. Source review and timestamp bounds are recorded in the sidecar. <strong>Reference extension:</strong> Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Chapter 3, section 3.4</a>, treats these channels using a different depolarization parameter, which is translated explicitly here. <strong>Original teaching constructions:</strong> the common Bloch-vector example, comparison table, parameter sweeps, and worked exercises.</p>
+
+<h2 id="model">16.1 A common state and a finite channel description <a class="timestamp" href="https://www.youtube.com/watch?v=8vwJDu-sbwE&amp;t=571s">W10L5 9:31</a></h2>
+<p>Let \(\rho\) be a density operator of one qubit with basis \(|0\rangle,|1\rangle\). We use the Pauli matrices \(X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}\), \(Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix}\), and \(Z=\operatorname{diag}(1,-1)\). Every qubit density matrix can be written</p>
+\[
+\rho=\frac{I_2+r_xX+r_yY+r_zZ}{2}
+=\frac12\begin{pmatrix}1+r_z&amp;r_x-ir_y\\r_x+ir_y&amp;1-r_z\end{pmatrix},
+\quad\mathbf r\in\mathbb R^3,\quad\|\mathbf r\|\leq1.
+\tag{16.1}
+\]
+<p>The real vector \(\mathbf r=(r_x,r_y,r_z)\) is the Bloch vector. Its components are expectation values, \(r_k=\operatorname{Tr}(\rho\sigma_k)\), where \((\sigma_x,\sigma_y,\sigma_z)=(X,Y,Z)\). Its length is one for a pure state. The positivity bound follows from the density eigenvalues \((1\pm\|\mathbf r\|)/2\). This representation lets us compare channels on the same input without changing coordinates between mechanisms.</p>
+<p>Use \(\mathbf r=(0.6,0,0.8)\) as a running input. Its squared length is \(0.36+0.64=1\), so it is pure, and its matrix is \(\begin{pmatrix}0.9&amp;0.3\\0.3&amp;0.1\end{pmatrix}\). A channel \(\Phi\) acts linearly on matrices through \(\Phi(\rho)=\sum_jK_j\rho K_j^\dagger\), with \(\sum_jK_j^\dagger K_j=I_2\). The Kraus representation guarantees complete positivity and trace preservation by the argument in Chapter 15.</p>
+<p>An arbitrarily large displayed Kraus list does not imply that a finite-dimensional channel needs an arbitrarily large minimal environment. For an input and output of common dimension \(d\), choose a matrix basis \(\{F_a\}_{a=1}^{d^2}\). Expand every Kraus matrix as \(K_j=\sum_ac_{ja}F_a\). Then</p>
+\[
+\Phi(\rho)=\sum_{a,b}G_{ab}F_a\rho F_b^\dagger,
+\qquad G_{ab}=\sum_jc_{ja}c_{jb}^*.
+\tag{16.2}
+\]
+<p>The \(d^2\)-by-\(d^2\) matrix \(G\) is positive semidefinite because \(v^\dagger Gv=\sum_j|\sum_av_a^*c_{ja}|^2\geq0\). Diagonalize it as \(G=\sum_\mu\lambda_\mu v_\mu v_\mu^\dagger\), retaining only positive eigenvalues. The matrices \(L_\mu=\sqrt{\lambda_\mu}\sum_a(v_\mu)_aF_a\) give the same map when substituted in an operator sum. There are at most \(d^2\) of them. A qubit-to-qubit channel therefore admits at most four Kraus matrices, although a chosen physical description may use a longer redundant list. This is a representation bound; it does not identify the actual size of an experimental environment.</p>
+
+<h2 id="depolarization">16.2 Depolarization and the meaning of its probability <a class="timestamp" href="https://www.youtube.com/watch?v=8vwJDu-sbwE&amp;t=1503s">W10L5 25:03</a></h2>
+<div class="def"><strong>Definition 16.1 — depolarizing parameter used here.</strong> For \(0\leq p\leq1\), define
+\[
+\Phi_p(\rho)=(1-p)\rho+p\frac{I_2}{2}.
+\tag{16.3}
+\]
+Here \(p\) is the weight of replacement by the maximally mixed state, not the total probability of applying a nonidentity Pauli matrix.</div>
+<p>Substitution of (16.1) cancels no directional information selectively: all three components acquire the same factor \(1-p\). This isotropic contraction is the defining geometric distinction from a bit-flip or phase-flip channel. The center \(I_2/2\) remains fixed. A channel with \(\Phi(I_2)=I_2\) is called <dfn>unital</dfn>; all Pauli channels are unital.</p>
+<p>To derive a Kraus form consistent with definition 16.1, first use the Pauli conjugations to establish \(X\rho X+Y\rho Y+Z\rho Z=2I_2-\rho\) for trace-one qubit \(\rho\). Therefore</p>
+\[
+\Phi_p(\rho)=\left(1-\frac{3p}{4}\right)\rho+
+\frac p4(X\rho X+Y\rho Y+Z\rho Z).
+\tag{16.4}
+\]
+<p>The associated Kraus matrices are \(\sqrt{1-3p/4}\,I_2\), \(\sqrt{p/4}\,X\), \(\sqrt{p/4}\,Y\), and \(\sqrt{p/4}\,Z\). Their squared products sum to \((1-3p/4+3p/4)I_2=I_2\). This also proves complete positivity throughout the stated range.</p>
+<p>Another convention applies a uniformly selected nonidentity Pauli error with total probability \(q\): \((1-q)\rho+(q/3)(X\rho X+Y\rho Y+Z\rho Z)\). Comparison with (16.4) gives \(q=3p/4\), or \(p=4q/3\). Complete randomization occurs at \(p=1\), equivalently \(q=3/4\). Substituting \(q=1\) into the alternative convention instead produces the multiplier \(-1/3\); it does not produce \(I_2/2\). Preskill uses the Pauli-error convention in <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">section 3.4.1, PDF pages 24–26</a>.</p>
+<p>The Kraus form remains completely positive for \(0\leq p\leq4/3\). This larger range includes negative Bloch multipliers, while the replacement interpretation in definition 16.1 uses only \(0\leq p\leq1\). The distinction matters when a parameter is fitted from an experimental contraction factor. A parameter value can be valid for a linear channel formula while no longer admitting a particular mixture interpretation.</p>
+
+<h2 id="pauli-flips">16.3 Random Pauli operations <a class="timestamp" href="https://www.youtube.com/watch?v=X9gOaP_SrXk&amp;t=1029s">W11L1 17:09</a> <a class="timestamp" href="https://www.youtube.com/watch?v=aJrAP5SSoAw&amp;t=635s">W11L2 10:35</a></h2>
+<p>A <dfn>bit-flip channel</dfn> applies \(X\) with probability \(q\), where \(0\leq q\leq1\), and applies the identity otherwise:</p>
+\[
+\Phi_X(\rho)=(1-q)\rho+qX\rho X.
+\tag{16.5}
+\]
+<p>Its Kraus matrices are \(\sqrt{1-q}I_2\) and \(\sqrt qX\). Their squared products sum to \((1-q)I_2+qI_2=I_2\). Conjugation by \(X\) preserves \(X\) and changes the signs of \(Y\) and \(Z\). Inserting equation (16.1) gives</p>
+\[
+(r_x,r_y,r_z)\longmapsto(r_x,(1-2q)r_y,(1-2q)r_z).
+\tag{16.6}
+\]
+<p>The factor \(1-2q\) can be negative. At \(q=1\), the operation is a deterministic unitary flip, not complete randomization. At \(q=1/2\), the components perpendicular to the X axis vanish, but the X component survives. Applying the same device to \(|+\rangle=(|0\rangle+|1\rangle)/\sqrt2\) leaves that state unchanged because it is an eigenvector of \(X\). Noise has a preferred basis in this model.</p>
+<p>The <dfn>phase-flip channel</dfn> instead chooses \(Z\): \(\Phi_Z(\rho)=(1-q)\rho+qZ\rho Z\). Since \(ZXZ=-X\), \(ZYZ=-Y\), and \(ZZZ=Z\), its Bloch map is \(((1-2q)r_x,(1-2q)r_y,r_z)\). Its computational-basis populations are unchanged. Its off-diagonal matrix elements acquire the multiplier \(1-2q\).</p>
+<p>A circuit implementation clarifies where the random choice can reside. Prepare an environment qubit in \(\tau_E=(1-q)|0\rangle\langle0|+q|1\rangle\langle1|\) and apply \(U=I_2\otimes|0\rangle\langle0|+X\otimes|1\rangle\langle1|\), with the environment controlling the system flip. The output is \((1-q)\rho\otimes|0\rangle\langle0|+qX\rho X\otimes|1\rangle\langle1|\), whose partial trace is (16.5). A pure environment vector \(\sqrt{1-q}|0\rangle+\sqrt q|1\rangle\) gives the same reduced map under the same unitary, because cross terms between different environment labels vanish on tracing. The joint preparations and correlations differ; the common system channel does not distinguish them. Replacing X by Z gives the corresponding controlled phase-flip construction.</p>
+<p>A random \(Y\) operation preserves the Y component and changes the signs of X and Z. A general <dfn>Pauli channel</dfn> selects \(I_2,X,Y,Z\) with probabilities \(w_0,w_x,w_y,w_z\), all nonnegative and summing to one. Adding the four conjugations gives the multipliers \(w_0+w_x-w_y-w_z\), \(w_0-w_x+w_y-w_z\), and \(w_0-w_x-w_y+w_z\). Complete positivity is built into these nonnegative probabilities. Three independently guessed contraction factors do not automatically describe a channel.</p>
+
+<h2 id="dephasing">16.4 Phase damping as loss of an environment overlap <a class="timestamp" href="https://www.youtube.com/watch?v=DsUMzjQTLwg&amp;t=176s">[02:56]</a></h2>
+<p>A useful model of <dfn>pure dephasing</dfn> preserves the two computational-basis populations and reduces coherence. For a real coherence factor \(0\leq\eta\leq1\), write</p>
+\[
+\Phi_\eta\begin{pmatrix}\rho_{00}&amp;\rho_{01}\\\rho_{10}&amp;\rho_{11}\end{pmatrix}
+=\begin{pmatrix}\rho_{00}&amp;\eta\rho_{01}\\\eta\rho_{10}&amp;\rho_{11}\end{pmatrix}.
+\tag{16.7}
+\]
+<p>This is the phase-flip channel with probability \(q=(1-\eta)/2\). Its Kraus matrices can therefore be chosen as \(\sqrt{(1+\eta)/2}I_2\) and \(\sqrt{(1-\eta)/2}Z\). The Bloch vector becomes \((\eta r_x,\eta r_y,r_z)\). An alternative Kraus parameter \(\lambda\) sometimes appears as \(K_0=\operatorname{diag}(1,\sqrt{1-\lambda})\), \(K_1=\operatorname{diag}(0,\sqrt\lambda)\); its coherence factor is \(\eta=\sqrt{1-\lambda}\). The symbol alone does not identify the convention.</p>
+<p>The environment gives a direct interpretation. Suppose a system-environment isometry sends \(|0\rangle|e\rangle\) to \(|0\rangle|e_0\rangle\) and \(|1\rangle|e\rangle\) to \(|1\rangle|e_1\rangle\), where both environment vectors are normalized. For an input \(\alpha|0\rangle+\beta|1\rangle\), the joint output is \(\alpha|0\rangle|e_0\rangle+\beta|1\rangle|e_1\rangle\). Its system off-diagonal entry is \(\alpha\beta^*\langle e_1|e_0\rangle\), while the diagonal entries remain \(|\alpha|^2,|\beta|^2\). If the overlap is the real number \(\eta\), this is equation (16.7).</p>
+<p>Identical environment vectors leave coherence intact. Orthogonal environment vectors remove it from the reduced state. Intermediate overlaps quantify how distinguishable the two environment records have become. A complex overlap also rotates the relative phase, so the real-\(\eta\) model deliberately separates that unitary phase shift from coherence attenuation.</p>
+<p>For the running state and \(\eta=1/2\), the Bloch vector is \((0.3,0,0.8)\). Its populations remain 0.9 and 0.1, but its coherence falls from 0.3 to 0.15. Purity falls because \(\|\mathbf r\|^2\) falls from 1 to 0.73; indeed \(\operatorname{Tr}\rho^2=(1+\|\mathbf r\|^2)/2\). Population measurements in the preferred basis alone cannot detect that lost coherence.</p>
+<p>In a spin-resonance interpretation, the transverse signal is proportional to the ensemble mean of \(\langle X\rangle+i\langle Y\rangle\). A known common Larmor precession rotates that complex signal and preserves its magnitude. A spread of accumulated phases can reduce the ensemble mean while leaving longitudinal populations unchanged. Transverse coherence decay is conventionally associated with a T2-type process; longitudinal recovery is associated with T1. Reversible static inhomogeneity can contribute to an apparent transverse decay, often distinguished by a T2-star notation and a specified refocusing protocol. The discrete channel alone does not distinguish those physical origins, and a microscopic phase-noise model must not be inferred from one attenuation factor.</p>
+
+<h2 id="amplitude-damping">16.5 Amplitude damping changes populations and coherence <a class="timestamp" href="https://www.youtube.com/watch?v=DsUMzjQTLwg&amp;t=661s">[11:01]</a></h2>
+<p>Let \(|0\rangle\) be the ground state and \(|1\rangle\) the excited state of a two-level system. In the zero-temperature model, an initially unexcited environment receives the excitation with probability \(\gamma\), where \(0\leq\gamma\leq1\). The isometry sends \(|00\rangle\) to itself and \(|10\rangle\) to \(\sqrt{1-\gamma}|10\rangle+\sqrt\gamma|01\rangle\). These two images are normalized and orthogonal, so they can be completed to a joint unitary.</p>
+<div class="prop"><strong>Proposition 16.1 — amplitude-damping map.</strong> The Kraus matrices
+\[
+K_0=\begin{pmatrix}1&amp;0\\0&amp;\sqrt{1-\gamma}\end{pmatrix},\qquad
+K_1=\begin{pmatrix}0&amp;\sqrt\gamma\\0&amp;0\end{pmatrix}
+\]
+give the trace-preserving channel
+\[
+\Phi_\gamma(\rho)=
+\begin{pmatrix}
+\rho_{00}+\gamma\rho_{11}&amp;\sqrt{1-\gamma}\rho_{01}\\
+\sqrt{1-\gamma}\rho_{10}&amp;(1-\gamma)\rho_{11}
+\end{pmatrix}.
+\tag{16.8}
+\]
+</div>
+<div class="proof"><p>Multiplication by \(K_0\) on the left and \(K_0^\dagger\) on the right scales the lower diagonal element by \(1-\gamma\) and each off-diagonal element by \(\sqrt{1-\gamma}\). The second Kraus contribution is \(\gamma\rho_{11}|0\rangle\langle0|\). Adding them gives (16.8). Completeness follows from \(K_0^\dagger K_0=\operatorname{diag}(1,1-\gamma)\) and \(K_1^\dagger K_1=\operatorname{diag}(0,\gamma)\). <span class="qed">∎</span></p></div>
+<p>Using \(\rho_{11}=(1-r_z)/2\) and \(\rho_{01}=(r_x-ir_y)/2\), equation (16.8) gives</p>
+\[
+\mathbf r\longmapsto
+\big(\sqrt{1-\gamma}r_x,\sqrt{1-\gamma}r_y,(1-\gamma)r_z+\gamma\big).
+\tag{16.9}
+\]
+<p>The Z component has an additive term. Amplitude damping contracts and shifts the Bloch ball toward \(|0\rangle\). In particular, \(I_2/2\) is sent to \(\operatorname{diag}((1+\gamma)/2,(1-\gamma)/2)\). The map is not unital when \(\gamma\ne0\). This separates relaxation from every random-Pauli channel discussed above.</p>
+<p>For \(\gamma=0.36\), the running Bloch vector becomes \((0.48,0,0.872)\). Its excited population is \(0.064\), compared with the initial \(0.1\); its coherence is \(0.24\), compared with \(0.3\). The square-root factor in coherence is different from the population survival factor. Repeated weak relaxation will turn this distinction into the factor-of-two relation between time constants in Chapter 17.</p>
+<p>Phase damping can represent fluctuations in a longitudinal phase that do not exchange energy between the two modeled levels. Amplitude damping can model spontaneous emission into an initially unexcited field. Neither simple channel is a microscopic derivation for every solid-state qubit. Thermal excitation, leakage into additional levels, colored noise, and external driving can change the fixed point and time dependence. The statements above describe explicitly defined maps; assigning them to a device requires additional physical evidence.</p>
+
+<h2 id="comparison">16.6 Comparing the mechanisms on one state</h2>
+<p>The following table summarizes the derived Bloch maps. Each parameter is defined by the channel equation above, so no common numerical “error percentage” is implied.</p>
+<table><thead><tr><th>Channel</th><th>Bloch-vector output</th><th>Fixed structure</th></tr></thead><tbody><tr><td>Bit flip, probability \(q\)</td><td>\((r_x,(1-2q)r_y,(1-2q)r_z)\)</td><td>X eigenstates survive</td></tr><tr><td>Phase flip, probability \(q\)</td><td>\(((1-2q)r_x,(1-2q)r_y,r_z)\)</td><td>Z populations survive</td></tr><tr><td>Depolarization, replacement weight \(p\)</td><td>\((1-p)\mathbf r\)</td><td>The center is fixed</td></tr><tr><td>Dephasing, coherence factor \(\eta\)</td><td>\((\eta r_x,\eta r_y,r_z)\)</td><td>Z populations survive</td></tr><tr><td>Amplitude damping, decay probability \(\gamma\)</td><td>\((\sqrt{1-\gamma}r_x,\sqrt{1-\gamma}r_y,(1-\gamma)r_z+\gamma)\)</td><td>The ground state is fixed</td></tr></tbody></table>
+<p>The table also suggests a diagnostic experiment. Prepare several known inputs spanning the three axes and measure the output Pauli expectations. A shift of the maximally mixed state distinguishes nonunital relaxation from the listed Pauli mixtures. Direction-dependent contractions distinguish pure dephasing from depolarization. These finite model distinctions do not certify a unique microscopic noise source: different environments can generate the same reduced map.</p>
+
+<h2 id="lab">16.7 A reproducible channel sweep</h2>
+<p>The lab takes the running pure state and implements the Kraus maps. It verifies completeness, trace, positivity, and analytical Bloch formulas for depolarization and amplitude damping over 21 parameter values. It then prints the amplitude-damping example, the image of a maximally mixed input, and one dephasing example. These are matrix-level checks on the declared channels; they do not fit experimental data or establish a device model.</p>
+<!-- LAB_SOURCE_START -->
+<div class="codewrap"><pre><code class="language-python" data-file="ch16_lab.py">"""Check trace, positivity, and Bloch formulas for qubit noise maps."""
+import numpy as np
+
+identity = np.eye(2)
+x = np.array([[0, 1], [1, 0]], complex)
+y = np.array([[0, -1j], [1j, 0]], complex)
+z = np.diag([1, -1])
+paulis = [x, y, z]
+r = np.array([0.6, 0.0, 0.8])
+rho = (identity + sum(v * p for v, p in zip(r, paulis))) / 2
+
+
+def bloch(state):
+    return np.array([np.trace(state @ p).real for p in paulis])
+
+
+def apply(operators, state):
+    assert np.allclose(sum(k.conj().T @ k for k in operators), identity)
+    out = sum(k @ state @ k.conj().T for k in operators)
+    assert np.isclose(np.trace(out), 1)
+    assert np.linalg.eigvalsh(out).min() &gt; -1e-12
+    return out
+
+
+for p in np.linspace(0, 1, 21):
+    operators = [np.sqrt(1 - 3 * p / 4) * identity]
+    operators += [np.sqrt(p / 4) * a for a in paulis]
+    assert np.allclose(bloch(apply(operators, rho)), (1 - p) * r)
+    operators = [np.diag([1, np.sqrt(1 - p)]),
+                 np.array([[0, np.sqrt(p)], [0, 0]])]
+    expected = [np.sqrt(1 - p) * r[0],
+                np.sqrt(1 - p) * r[1], (1 - p) * r[2] + p]
+    assert np.allclose(bloch(apply(operators, rho)), expected)
+gamma = 0.36
+operators = [np.diag([1, np.sqrt(1 - gamma)]),
+             np.array([[0, np.sqrt(gamma)], [0, 0]])]
+damped = apply(operators, rho)
+mixed = apply(operators, identity / 2)
+eta = 0.5
+dephased = apply([np.sqrt((1 + eta) / 2) * identity,
+                  np.sqrt((1 - eta) / 2) * z], rho)
+print("Input Bloch vector:", r.tolist())
+print("Amplitude damping:", bloch(damped).round(6).tolist())
+print("Damped maximally mixed state:", bloch(mixed).round(6).tolist())
+print("Pure dephasing:", bloch(dephased).round(6).tolist())
+print("Twenty-one-point channel sweeps passed: True")
+</code></pre></div>
+<!-- LAB_SOURCE_END -->
+<!-- LAB_OUTPUT_START -->
+<pre><code class="output">Input Bloch vector: [0.6, 0.0, 0.8]
+Amplitude damping: [0.48, 0.0, 0.872]
+Damped maximally mixed state: [0.0, 0.0, 0.36]
+Pure dephasing: [0.3, 0.0, 0.8]
+Twenty-one-point channel sweeps passed: True
+</code></pre>
+<!-- LAB_OUTPUT_END -->
+<p>The shifted center, \((0,0,0.36)\), directly exposes the nonunital part of amplitude damping. The dephasing result keeps the initial Z component 0.8 and halves only the X component. These outputs distinguish channels that would be conflated by reporting only one scalar coherence loss.</p>
+
+<h2 id="limits">16.8 Boundaries of the models</h2>
+<p>Every map here acts on a fixed two-dimensional subspace. Population leaving that subspace is leakage, not an automatically trace-preserving qubit channel unless the state space is enlarged or a postselection probability is included. A parameter can describe one time interval without supporting a memoryless law across intervals. For example, a phase-flip probability fitted at two durations need not combine as the same parameter added twice.</p>
+<p>Channel parameters also depend on basis and convention. A Z dephasing channel becomes dephasing in a rotated basis after conjugation by the corresponding unitary. Its physical effect has not disappeared; the axis used to describe it has changed. Experimental comparisons therefore require a declared encoding, state-preparation protocol, measurement basis, map convention, and duration.</p>
+
+<h2 id="exercises">16.9 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex16-1">1. Translate depolarization conventions</h3><p>An article defines noise by total nonidentity Pauli probability \(q=0.30\). Find the replacement parameter \(p\) of equation (16.3), and predict the output Bloch vector for the running input.</p><details><summary>Solution</summary><p>Equation (16.4) gives \(p=4q/3=0.40\). The contraction factor is \(1-p=0.60\), so the output is \((0.36,0,0.48)\). Using \(p=q\) would give \((0.42,0,0.56)\), a different map. The difference is a parameter translation, not a discrepancy in the physics.</p></details></article>
+<article class="exercise"><h3 id="ex16-2">2. Derive a composition law</h3><p>Compose amplitude damping with parameters \(\gamma_1\) and \(\gamma_2\). Derive the effective parameter and verify that the coherence factor agrees.</p><details><summary>Solution</summary><p>The excited population survives with factor \((1-\gamma_1)(1-\gamma_2)\). Thus \(\gamma_{\mathrm{eff}}=1-(1-\gamma_1)(1-\gamma_2)\). The coherence multiplier is \(\sqrt{1-\gamma_1}\sqrt{1-\gamma_2}=\sqrt{1-\gamma_{\mathrm{eff}}}\). The ground population follows by trace preservation, so the entire matrix has the amplitude-damping form.</p></details></article>
+<article class="exercise"><h3 id="ex16-3">3. A counterexample to “larger flip probability means more mixing”</h3><p>Apply the bit-flip channel to \(|0\rangle\) at probabilities zero, one half, and one. Compute purity in each case.</p><details><summary>Solution</summary><p>The outputs are \(|0\rangle\langle0|\), \(I_2/2\), and \(|1\rangle\langle1|\). Their purities are 1, \(1/2\), and 1. At probability one the error is a known deterministic unitary and can be reversed. Mixing is largest at probability one half for this input, so a probability ordering does not give a monotone mixing ordering over the full interval.</p></details></article>
+<article class="exercise"><h3 id="ex16-4">4. Diagnose an impossible qubit contraction</h3><p>A proposed map sends \((r_x,r_y,r_z)\) to \((-r_x,-r_y,-r_z)\). It preserves the Bloch ball. Show that it cannot be a Pauli channel with nonnegative probabilities.</p><details><summary>Solution</summary><p>Solving the Pauli multiplier equations with all three multipliers equal to \(-1\) gives \(w_0=(1-1-1-1)/4=-1/2\) and \(w_x=w_y=w_z=1/2\). The negative identity weight excludes a Kraus representation of this Pauli form. More strongly, the map's extension fails positivity: applying it to one half of a Bell pair gives \(I_4/2-|\Phi^+\rangle\langle\Phi^+|\), which has eigenvalue \(-1/2\) on the Bell vector. Thus positivity on one-qubit inputs is insufficient.</p></details></article>
+<article class="exercise"><h3 id="ex16-5">5. Choose a measurement that detects dephasing</h3><p>Start with \(|+\rangle\). For equation (16.7), calculate the probability of outcome \(|+\rangle\) in an X-basis measurement and compare a Z-basis measurement.</p><details><summary>Solution</summary><p>The output is \(\tfrac12\begin{pmatrix}1&amp;\eta\\\eta&amp;1\end{pmatrix}\). Its X expectation is \(\eta\), hence \(P(+)=\operatorname{Tr}[\rho(I_2+X)/2]=(1+\eta)/2\). Both Z outcomes remain one half, independent of \(\eta\). Z population data therefore miss the change, while the X-basis probability varies from one at \(\eta=1\) to one half at zero.</p></details></article>
+<article class="exercise"><h3 id="ex16-6">6. Implement a purity comparison</h3><p>Extend the lab to compare the purity of the running state under dephasing and amplitude damping. Derive analytical formulas to check the sweep, including the strong-noise endpoints.</p><details><summary>Solution</summary><p>For the running vector, dephasing gives squared length \(0.36\eta^2+0.64\), so purity is \((1.64+0.36\eta^2)/2\). Its zero-coherence endpoint is 0.82. Amplitude damping gives squared length \(0.36(1-\gamma)+(0.8+0.2\gamma)^2\), so purity is one half of one plus that expression. At \(\gamma=0\) it equals one, and at \(\gamma=1\) it again equals one because the output is the pure ground state. A parameter sweep should compare the full curves, not only their endpoints; relaxation can reduce purity and then restore it as the state approaches the ground state.</p></details></article>
+
+<h2 id="primary-sources">16.10 Primary sources and attribution</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra: <a href="https://www.youtube.com/watch?v=8vwJDu-sbwE">Decoherence 5</a>, <a href="https://www.youtube.com/watch?v=X9gOaP_SrXk">Decoherence 6</a>, <a href="https://www.youtube.com/watch?v=aJrAP5SSoAw">Decoherence 7</a>, and <a href="https://www.youtube.com/watch?v=DsUMzjQTLwg">Decoherence 8</a>.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Quantum Information, Chapter 3</a>, October 2018: section 3.4.1, PDF pages 24–26, for the alternative depolarization convention; section 3.4.2, pages 27–31, for dephasing; section 3.4.3, pages 31–33, for amplitude damping. The comparisons, matrix calculations, and parameter sweeps here are original teaching constructions.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-15.html">Previous chapter</a> <a href="chapter-17.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

@@ -1,0 +1,305 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Shor&#x27;s algorithm: measurement, continued fractions, and checks</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>Shor's algorithm: measurement, continued fractions, and checks</h1>
+<p class="lead">Take \(N=15\) and base \(a=7\). A Fourier measurement can return \(128\) from a register of dimension \(256\). The observed fraction is then \(128/256=1/2\), although the order of \(7\) modulo \(15\) is four. The algorithm has not failed, but the measurement has not directly printed the order either. This chapter follows the state to its measurement distribution, proves the rational-reconstruction condition, and carries candidate exponents through modular tests until a factor is verified.</p>
+<p class="source-note"><strong>Lecture material:</strong> <a href="https://www.youtube.com/watch?v=1Wi2Ol3uUdM">W9L2</a>, <a href="https://www.youtube.com/watch?v=JGCZ7bXtIRc">W9L3</a>, <a href="https://www.youtube.com/watch?v=iS5msxjFibM">W9L4</a>, and <a href="https://www.youtube.com/watch?v=rlsM5Dqdh64">W9L5</a> develop the two-register procedure, periodic conditional state, Fourier peaks, continued fractions, and the \(N=15,a=7\) example. These recordings are grounded in local machine transcripts. <strong>Research connection:</strong> Shor's original paper, Section 5, supplies the finite-register precision and probabilistic reconstruction analysis. <strong>Original teaching constructions:</strong> the partial-trace comparison, self-contained continued-fraction lemma, exact probability calculations, branch-checked program, and exercises. Numerical expressions in the spoken toy example are corrected by exact arithmetic rather than repeated as measurements.</p>
+
+<h2 id="order-circuit">14.1 The full order-finding circuit <a class="timestamp" href="https://www.youtube.com/watch?v=1Wi2Ol3uUdM&amp;t=380s">W9L2 6:20</a></h2>
+<p>Let \(N\) be an odd composite integer, and select an integer \(a\) with \(1\lt a\lt N\). Compute \(\gcd(a,N)\) classically first. A gcd strictly between one and \(N\) already gives a factor. The quantum subroutine considered here assumes \(\gcd(a,N)=1\). Define its multiplicative order \(r_{\mathrm{ord}}\) as the least positive integer satisfying \(a^{r_{\mathrm{ord}}}\equiv1\pmod N\). Chapter 12 proved that this order exists. The residues \(1,a,\ldots,a^{r_{\mathrm{ord}}-1}\) are distinct by minimality; each is one of the \(N-1\) nonzero residue classes. Hence \(r_{\mathrm{ord}}\leq N-1\lt N\). Order finding and gcd extraction are separate operations: an odd order, or a half-order power equal to \(-1\) modulo \(N\), can make the factoring attempt unproductive.</p>
+<p>The control register \(A\) contains \(m_A\) qubits and has dimension \(M=2^{m_A}\). Choose the least power of two satisfying \(M\geq N^2\); then \(N^2\leq M\lt2N^2\). The function register \(B\) has \(m_B=\lceil\log_2N\rceil\) qubits and dimension \(D=2^{m_B}\), enough for residues \(0,\ldots,N-1\). These choices serve different purposes. \(B\) stores a modular value; the larger \(A\) resolves a rational fraction with an unknown denominator below \(N\). Bit strings use the most-significant-qubit-first ordering of Chapter 13.</p>
+<p>Begin in \(|0\rangle_A|0\rangle_B\). Independent Hadamard gates on the \(m_A\) control qubits produce \(M^{-1/2}\sum_{x=0}^{M-1}|x\rangle_A|0\rangle_B\). The positive-sign Fourier transform of \(|0\rangle_A\) would prepare the same state, but Hadamards suffice. Let \(f(x)=a^x\bmod N\). Use the reversible evaluation oracle \(U_f|x\rangle|z\rangle=|x\rangle|z\mathbin{\oplus}f(x)\rangle\), where xor acts on \(m_B\)-bit strings. Applied to the zero function register, it gives
+\[
+ |\Psi\rangle=\frac1{\sqrt M}\sum_{x=0}^{M-1}|x\rangle_A|f(x)\rangle_B.
+ \tag{14.1}
+\]
+The first register retains \(x\), so collisions in \(f\) do not violate reversibility. Distinct first-register labels make the \(M\) summands orthogonal, proving that equation (14.1) has norm one.</p>
+<p>A physical implementation must realize \(U_f\) by a circuit, usually with additional work qubits returned to a standard state. Repeated squaring writes \(a^x\) as a product of powers \(a^{2^k}\) selected by the bits of \(x\). Modular multiplication can be made reversible; this is the arithmetic work behind the compact oracle symbol. A classical list of all \(M\) residues is not a prerequisite for that circuit. Conversely, the presence of many function values in equation (14.1) does not mean one measurement reads that list.</p>
+
+<h3 id="conditional-cosets">Measuring the function register <a class="timestamp" href="https://www.youtube.com/watch?v=JGCZ7bXtIRc&amp;t=477s">W9L3 7:57</a></h3>
+<p>For a unit \(a\), \(f(x)=f(x')\) if and only if \(x-x'\) is a multiple of \(r_{\mathrm{ord}}\). For the nontrivial direction, suppose \(x\geq x'\) and multiply \(a^x\equiv a^{x'}\) by the modular inverse of \(a^{x'}\). This gives \(a^{x-x'}\equiv1\); division by the minimal return time shows the remainder must vanish. Every occupied function-register outcome therefore identifies one residue class of exponents modulo the order.</p>
+<p>Let \(s\in\{0,\ldots,r_{\mathrm{ord}}-1\}\) denote that class, and define its actual length within the finite control register by
+\[
+ L_s=1+\left\lfloor\frac{M-1-s}{r_{\mathrm{ord}}}\right\rfloor.
+\]
+The event \(B=f(s)\) has probability \(L_s/M\). Conditional on this event, \(A\) is in the pure state
+\[
+ |C_s\rangle=\frac1{\sqrt{L_s}}\sum_{k=0}^{L_s-1}|s+kr_{\mathrm{ord}}\rangle.
+ \tag{14.2}
+\]
+The Born probability and square-root normalization follow by counting orthogonal terms in the projection of equation (14.1). \(L_s\) is a number of basis states, not a number of qubits. When the order does not divide \(M\), different classes can have lengths differing by one.</p>
+<p>Apply the positive-sign \(F_M\) of equation (13.1) to \(A\). For an integer measurement outcome \(y\in\{0,\ldots,M-1\}\), the conditional amplitude and probability are
+\[
+ A_s(y)=\frac{e^{2\pi isy/M}}{\sqrt{ML_s}}
+ \sum_{k=0}^{L_s-1}e^{2\pi ikr_{\mathrm{ord}}y/M},\qquad
+ P(y\mid s)=\frac1{ML_s}\left|\sum_{k=0}^{L_s-1}
+ e^{2\pi ikr_{\mathrm{ord}}y/M}\right|^2.
+ \tag{14.3}
+\]
+This is the finite geometric-sum kernel of Chapter 13. If \(r_{\mathrm{ord}}\) divides \(M\), it has exact support at \(y=jM/r_{\mathrm{ord}}\), where \(j=0,\ldots,r_{\mathrm{ord}}-1\), with probability \(1/r_{\mathrm{ord}}\) each. Otherwise there is leakage between peaks. Declaring every noninteger \(r_{\mathrm{ord}}y/M\) to have zero probability would replace a finite sum by an unjustified idealization.</p>
+
+<h3 id="discarded-register">Why the first measurement is optional</h3>
+<div class="prop"><b>Proposition 14.1 — discarding or measuring \(B\), proved here.</b> If the outcome of a computational-basis measurement of \(B\) is not used to control later operations, measuring \(B\) and forgetting the result gives the same \(A\)-measurement probabilities as discarding \(B\) without measuring it.</div>
+<div class="proof"><p>Tracing over the orthonormal \(B\) basis gives
+\[
+ \rho_A=\operatorname{Tr}_B|\Psi\rangle\langle\Psi|
+ =\frac1M\sum_{x,x'=0}^{M-1}
+ \delta_{f(x),f(x')}|x\rangle\langle x'|
+ =\sum_{s=0}^{r_{\mathrm{ord}}-1}\frac{L_s}{M}|C_s\rangle\langle C_s|.
+ \tag{14.4}
+\]
+The final sum is also the mixture obtained by recording outcome \(f(s)\) with probability \(L_s/M\), preparing its conditional state, then forgetting the record. Applying \(F_M\) and the Born rule gives the unconditional distribution
+\[
+ P(y)=\sum_s\frac{L_s}{M}P(y\mid s)
+ =\frac1{M^2}\sum_s\left|\sum_{k=0}^{L_s-1}
+ e^{2\pi ikr_{\mathrm{ord}}y/M}\right|^2.
+ \tag{14.5}
+\]
+One obtains this expression directly by summing the joint \(A,B\) Born probabilities over possible \(B\) outcomes. The procedures therefore agree. <span class="qed">∎</span></p></div>
+<p>The qualification about forgetting matters. Selecting one \(B\) result gives the pure state \(|C_s\rangle\), whereas discarding \(B\) gives the mixture \(\rho_A\). They need not have the same conditional probabilities when lengths differ. The global state remains coherent in \(A\otimes B\); the missing off-diagonal terms in equation (14.4) arise because different \(B\) labels are orthogonal. Unitary evolution of the whole system and an apparently incoherent description of a subsystem are compatible. This mechanism becomes central in the open-system chapters.</p>
+
+<h2 id="rational-reconstruction">14.2 Continued fractions and verified factors <a class="timestamp" href="https://www.youtube.com/watch?v=iS5msxjFibM&amp;t=406s">W9L4 6:46</a></h2>
+<p>A Fourier sample near harmonic \(j\) gives an observed rational \(y/M\) near \(j/r_{\mathrm{ord}}\). Its numerator \(j\) and denominator are unknown. The measurement returns only \(y\); \(M\) was chosen in advance. Recovering a small denominator is a classical arithmetic problem. It becomes well posed because distinct reduced fractions with denominators below \(N\) cannot be arbitrarily close.</p>
+<div class="prop"><b>Proposition 14.2 — precision and separation, proved here.</b> If \(y\) is a nearest integer to \(Mj/r_{\mathrm{ord}}\), then
+\[
+ \left|\frac yM-\frac j{r_{\mathrm{ord}}}\right|\leq\frac1{2M}
+ \lt\frac1{2r_{\mathrm{ord}}^2}.
+ \tag{14.6}
+\]
+The strict inequality uses \(r_{\mathrm{ord}}\lt N\) and \(M\geq N^2\). At most one reduced fraction with denominator below \(N\) lies within \(1/(2M)\) of \(y/M\).</div>
+<div class="proof"><p>Rounding changes a real number by at most one half; division by \(M\) proves the first bound. Two distinct fractions \(u/v\) and \(j/r_{\mathrm{ord}}\), with positive denominators below \(N\), differ by
+\[
+ \left|\frac uv-\frac j{r_{\mathrm{ord}}}\right|
+ =\frac{|ur_{\mathrm{ord}}-jv|}{vr_{\mathrm{ord}}}
+ \geq\frac1{vr_{\mathrm{ord}}}\gt\frac1{N^2}.
+\]
+If both were within \(1/(2M)\) of the observation, the triangle inequality would bound their separation by \(1/M\leq1/N^2\), a contradiction. Reduction can only decrease a denominator. The same argument applies to any two candidate reduced fractions, with the second denominator replacing \(r_{\mathrm{ord}}\). <span class="qed">∎</span></p></div>
+<p>Equation (14.6) is conditional on a suitable sample. It is a precision theorem, not a claim that every measurement is a nearest-bin outcome. Continued fractions supply a short list that contains a sufficiently close reduced approximation. Modular tests decide whether its denominators are useful.</p>
+
+<h3 id="continued-fractions">Euclidean divisions and convergents <a class="timestamp" href="https://www.youtube.com/watch?v=iS5msxjFibM&amp;t=666s">W9L4 11:06</a></h3>
+<p>A finite simple continued fraction is
+\[
+ [c_0;c_1,\ldots,c_\nu]
+ =c_0+\frac1{c_1+\displaystyle\frac1{\ddots+1/c_\nu}},
+\]
+where \(c_0\) is an integer and later coefficients are positive integers. For a nonnegative rational input, repeated Euclidean division supplies these coefficients exactly. The example \(15/4=3+3/4\) gives \(4/3=1+1/3\), hence \(15/4=[3;1,3]\). There is no floating-point inversion or rounding in this computation.</p>
+<p>Define convergent numerators \(P_n\) and denominators \(Q_n\) by
+\[
+ P_{-2}=0,\quad P_{-1}=1,\qquad Q_{-2}=1,\quad Q_{-1}=0,
+\]
+and the recurrences
+\[
+ P_n=c_nP_{n-1}+P_{n-2},\qquad
+ Q_n=c_nQ_{n-1}+Q_{n-2}.
+ \tag{14.7}
+\]
+Substitution into the nested fraction verifies \(P_n/Q_n=[c_0;\ldots,c_n]\). For \(15/4\), the convergents are \(3/1,4/1,15/4\). Consecutive pairs have determinant
+\[
+ P_nQ_{n-1}-P_{n-1}Q_n=(-1)^{n-1}.
+ \tag{14.8}
+\]
+Substituting equation (14.7) cancels terms containing \(c_n\) and reverses the preceding determinant's sign; the initial value fixes the alternating sign. Thus every convergent is reduced, and consecutive pairs form an integer basis of the two-dimensional integer lattice. That determinant is the hinge in the reconstruction proof.</p>
+<div class="lem"><b>Lemma 14.3 — a sufficiently close fraction is a convergent, proved here.</b> Let \(\xi\) be a real number and \(p/q\) a reduced rational with \(q\gt0\). If
+\[
+ \left|\xi-\frac pq\right|\lt\frac1{2q^2},
+ \tag{14.9}
+\]
+then \(p/q\) is a simple continued-fraction convergent of \(\xi\).</div>
+<div class="proof"><p>Suppose first that the expansion extends past a convergent with \(Q_n\leq q\lt Q_{n+1}\); choose the last such convergent if initial denominators coincide. Write its next complete quotient as \(t=[c_{n+1};c_{n+2},\ldots]\). Then \(t\geq c_{n+1}\) and
+\[
+ \xi=\frac{P_nt+P_{n-1}}{Q_nt+Q_{n-1}}.
+\]
+Set \(e_n=Q_n\xi-P_n\). This identity gives \(e_{n-1}=-te_n\). By equation (14.8), any integers \(a,b\) have a unique representation \((a,b)=u(P_n,Q_n)+v(P_{n-1},Q_{n-1})\) with integer \(u,v\). Consequently \(b\xi-a=(u-vt)e_n\).</p>
+<p>For \(0\lt b\lt Q_{n+1}\), one cannot have \(|u-vt|\lt1\). If \(v\geq1\), that inequality forces \(u\geq vc_{n+1}\), whence \(b\geq vQ_{n+1}\). If \(v\leq-1\), it forces \(u\leq vc_{n+1}\), whence \(b\lt0\). If \(v=0\), it forces \(u=0\), whence \(b=0\). All three contradict the range of \(b\). Therefore \(|b\xi-a|\geq|e_n|\): no smaller-denominator fraction has a smaller error after multiplication by its denominator.</p>
+<p>Apply this fact to \(a=p,b=q\). If \(p/q\ne P_n/Q_n\), the nonzero integer determinant obeys
+\[
+ \begin{aligned}
+ 1&\leq|pQ_n-P_nq|\\
+ &\leq Q_n|p-q\xi|+q|Q_n\xi-P_n|\\
+ &\leq(Q_n+q)|p-q\xi|\leq2q|p-q\xi|.
+ \end{aligned}
+\]
+This implies \(|\xi-p/q|\geq1/(2q^2)\), contrary to equation (14.9). If \(\xi=A/B\) is rational in lowest terms, the remaining case is \(q\geq B\). Any distinct \(p/q\) differs from \(\xi\) by at least \(1/(Bq)\geq1/q^2\), again a contradiction. Equality \(p/q=\xi\) is the final convergent. These cases prove the lemma. <span class="qed">∎</span></p></div>
+<p>Apply the lemma with \(\xi=y/M\). If \(j/r_{\mathrm{ord}}\) is reduced, equation (14.6) identifies it as a convergent. If \(g=\gcd(j,r_{\mathrm{ord}})\gt1\), rational reconstruction instead sees \((j/g)/(r_{\mathrm{ord}}/g)\). The same approximation bound still guarantees a convergent, but its denominator is \(r_{\mathrm{ord}}/g\), a divisor of the order. A theorem about a reduced fraction cannot recover a canceled common factor from that observation alone.</p>
+<p>The convergent list is short. Later denominators satisfy \(Q_{n+2}\geq Q_{n+1}+Q_n\geq2Q_n\). They therefore at least double every two steps, apart from initial indexing. Since the final denominator of \(y/M\) is at most \(M\), there are \(O(\log M)\) convergents. Euclidean divisions operate on \(O(\log M)\)-bit values. This avoids enumerating all denominators below \(N\), a search exponential in the binary input length \(\log_2N\).</p>
+
+<h3 id="checked-factors">Testing a reconstructed denominator <a class="timestamp" href="https://www.youtube.com/watch?v=iS5msxjFibM&amp;t=1450s">W9L4 24:10</a></h3>
+<p>For a candidate denominator \(q\), compute \(a^q\bmod N\) by repeated squaring. A value other than one rejects \(q\) as a return exponent, although it may divide the true order. A small, explicitly bounded set of multiples can be tested; alternatively, several samples supply denominators whose least common multiple is checked. The bound matters. Testing an unrestricted sequence of multiples until the order appears would hide an exponentially long classical search inside the postprocessing.</p>
+<p>Even \(a^R\equiv1\pmod N\) does not establish that a tested integer \(R\) is the <em>minimal</em> order. For factoring, minimality is unnecessary if subsequent checks succeed. Require \(R\) even, calculate \(b=a^{R/2}\bmod N\), and reject \(b=1\) or \(b=N-1\). Otherwise compute
+\[
+ g_-=\gcd(b-1,N),\qquad g_+=\gcd(b+1,N).
+ \tag{14.10}
+\]
+Verify \(1\lt g_\pm\lt N\) and divisibility before reporting factors. The difference-of-squares proof in Chapter 12 applies because \(b^2\equiv1\pmod N\) and neither \(b-1\) nor \(b+1\) vanishes modulo \(N\). For example \(7^8\equiv1\pmod{15}\), but exponent eight has half-power \(7^4\equiv1\), so it fails this test. Return exponent four has half-power four, giving gcds three and five.</p>
+<p>A zero Fourier outcome supplies no nonzero harmonic information and is discarded by the lab. An odd return exponent or a half-power of minus one also requires another attempt. A reconstructed divisor may be rescued by another sample or a small multiple; it must never be silently declared the full order. Shor's <a href="https://arxiv.org/pdf/quant-ph/9508027">original Section 5, PDF pages 18–19</a>, analyzes sufficiently accurate outcomes, coprime harmonic numerators, and repetitions that recover the order efficiently. The factoring reduction adds a random-base success analysis after classical handling of even integers and prime powers. These are probabilistic guarantees over attempts, not guarantees for each shot or base.</p>
+
+<h3 id="worked-example">The complete \(15,7,256\) example <a class="timestamp" href="https://www.youtube.com/watch?v=rlsM5Dqdh64&amp;t=268s">W9L5 4:28</a></h3>
+<p>For \(N=15,a=7\), the powers are \(1,7,4,13,1,\ldots\), so \(r_{\mathrm{ord}}=4\). The control register has eight qubits, dimension \(M=256\); the function register needs four qubits. Every function-register class has length \(64\). For \(B=7\), equation (14.2) is \(64^{-1/2}\sum_{k=0}^{63}|1+4k\rangle\). Its Fourier probabilities, and the unconditional probabilities, are exactly</p>
+<table><thead><tr><th>Outcome \(y\)</th><th>Probability</th><th>Reduced \(y/M\)</th><th>Denominator information</th></tr></thead><tbody>
+<tr><td>0</td><td>\(1/4\)</td><td>\(0/1\)</td><td>No useful harmonic</td></tr>
+<tr><td>64</td><td>\(1/4\)</td><td>\(1/4\)</td><td>Full order four</td></tr>
+<tr><td>128</td><td>\(1/4\)</td><td>\(1/2\)</td><td>Divisor two; \(7^2\bmod15=4\)</td></tr>
+<tr><td>192</td><td>\(1/4\)</td><td>\(3/4\)</td><td>Full order four</td></tr>
+</tbody></table>
+<p>A denominator-only procedure succeeds on the two coprime nonzero harmonics, with total probability \(1/2\). Allowing the additional multiple \(2q\) rescues outcome \(128\), raising this particular procedure's success probability to \(3/4\). No postprocessing makes the zero outcome informative in the one-shot procedure described here.</p>
+<p>The nearby integer \(127\) is not an ideal outcome for this divisible-period example: \(P(127)=0\). Moreover, \(127/256=[0;2,63,2]\), whose convergents are \(0/1,1/2,63/127,127/256\). Four is not one of their denominators. One may use \(127\) as an artificial perturbed input to test robustness, but it cannot simultaneously illustrate the exact ideal sampling law. This distinction protects the argument from a plausible-looking arithmetic calculation attached to a zero-probability event.</p>
+
+<h2 id="lab">14.3 An exact state simulation and honest success counts</h2>
+<p>The complete NumPy program below stores a joint amplitude matrix with row \(x\) for \(A\) and column \(z\) for \(B\). Multiplication by the dense Fourier matrix transforms its rows. Summing squared magnitudes over columns implements unconditional Born probabilities. An independent calculation normalizes each occupied column, Fourier-transforms it, and recombines the conditional distributions with their Born weights. Equality verifies Proposition 14.1 for the examples without assuming equal progression lengths.</p>
+<p>The second case, \(N=21,a=2,M=512\), has order six, which does not divide a power of two. It checks finite-window leakage and reduced-denominator failures. The program enumerates every outcome and sums its probability when the declared postprocessing succeeds; these are exact-distribution success masses up to floating-point error, not frequencies estimated from random trials. The reference-order loop diagnoses tiny examples and is not used by reconstruction. The code tests all convergents and only the declared bounded multiples. It accepts factors only after modular-return, parity, half-power, and proper-gcd checks.</p>
+<pre><code class="language-python" data-file="ch14_lab.py">&quot;&quot;&quot;Exact toy order-finding probabilities and checked rational reconstruction.
+
+NumPy is the only nonstandard dependency. This is a dense state simulation,
+not a scalable implementation of modular-exponentiation gates.
+&quot;&quot;&quot;
+
+from math import gcd
+
+import numpy as np
+
+
+def continued_fraction(numerator, denominator):
+    terms, fractions = [], []
+    p_old, p_now, q_old, q_now = 0, 1, 1, 0
+    while denominator:
+        coefficient, remainder = divmod(numerator, denominator)
+        terms.append(coefficient)
+        p_old, p_now = p_now, coefficient * p_now + p_old
+        q_old, q_now = q_now, coefficient * q_now + q_old
+        fractions.append((p_now, q_now))
+        numerator, denominator = denominator, remainder
+    return terms, fractions
+
+
+def exact_order(a, modulus):
+    assert gcd(a, modulus) == 1
+    value = 1
+    for exponent in range(1, modulus):
+        value = value * a % modulus
+        if value == 1:
+            return exponent
+    raise AssertionError(&quot;A unit must return to one&quot;)
+
+
+def factor_from_return(a, modulus, candidate):
+    &quot;&quot;&quot;A return exponent need not be the minimal order; check every branch.&quot;&quot;&quot;
+    if candidate % 2 or pow(a, candidate, modulus) != 1:
+        return None
+    half = pow(a, candidate // 2, modulus)
+    if half in (1, modulus - 1):
+        return None
+    factors = (gcd(half - 1, modulus), gcd(half + 1, modulus))
+    if all(1 &lt; factor &lt; modulus for factor in factors):
+        return tuple(sorted(factors))
+    return None
+
+
+def reconstruct(y, size, a, modulus, max_multiple=1):
+    if y == 0:
+        return None
+    _, fractions = continued_fraction(y, size)
+    for _, denominator in fractions:
+        if not 1 &lt; denominator &lt; modulus:
+            continue
+        for multiplier in range(1, max_multiple + 1):
+            candidate = denominator * multiplier
+            if candidate &gt;= modulus:
+                continue
+            factors = factor_from_return(a, modulus, candidate)
+            if factors is not None:
+                return candidate, factors
+    return None
+
+
+def distribution(a, modulus, size):
+    target_size = 1 &lt;&lt; (modulus - 1).bit_length()
+    joint = np.zeros((size, target_size), dtype=complex)
+    for x in range(size):
+        joint[x, pow(a, x, modulus)] = 1 / np.sqrt(size)
+    labels = np.arange(size)
+    fourier = np.exp(2j * np.pi * np.outer(labels, labels) / size)
+    fourier /= np.sqrt(size)
+    transformed = fourier @ joint
+    marginal = np.sum(np.abs(transformed) ** 2, axis=1)
+
+    # Independently sum conditional coset distributions with Born weights.
+    mixture = np.zeros(size)
+    for z in range(target_size):
+        column = joint[:, z]
+        weight = np.vdot(column, column).real
+        if weight:
+            conditional = column / np.sqrt(weight)
+            mixture += weight * np.abs(fourier @ conditional) ** 2
+    assert np.allclose(mixture, marginal, atol=1e-12)
+    assert np.isclose(marginal.sum(), 1)
+    return marginal
+
+
+def main():
+    assert continued_fraction(15, 4) == ([3, 1, 3], [(3, 1), (4, 1), (15, 4)])
+    terms, fractions = continued_fraction(127, 256)
+    print(f&quot;127/256 continued fraction: {terms}&quot;)
+    print(f&quot;127/256 convergents: {fractions}&quot;)
+    for modulus, a, size in ((15, 7, 256), (21, 2, 512)):
+        order = exact_order(a, modulus)
+        probabilities = distribution(a, modulus, size)
+        largest = np.argsort(-probabilities, kind=&quot;stable&quot;)[:order]
+        print(f&quot;N={modulus}, a={a}, M={size}: reference order={order}&quot;)
+        print(&quot;Largest bins: &quot; + &quot;, &quot;.join(
+            f&quot;{y}:{probabilities[y]:.6f}&quot; for y in sorted(largest)))
+        print(&quot;Discarded B and unrecorded B measurement give equal marginals&quot;)
+        for budget in (1, 2):
+            success_mass = sum(
+                probability for y, probability in enumerate(probabilities)
+                if reconstruct(y, size, a, modulus, budget) is not None
+            )
+            print(f&quot;Multiple budget={budget}: &quot;
+                  f&quot;factor-success mass={success_mass:.6f}&quot;)
+        if modulus == 15:
+            expected = np.zeros(size)
+            expected[[0, 64, 128, 192]] = 0.25
+            assert np.allclose(probabilities, expected, atol=1e-12)
+            print(f&quot;P(127)={probabilities[127]:.6f}; &quot;
+                  f&quot;P(128)={probabilities[128]:.6f}&quot;)
+            assert reconstruct(128, size, a, modulus, 1) is None
+            assert reconstruct(128, size, a, modulus, 2) == (4, (3, 5))
+    assert pow(7, 8, 15) == 1
+    assert factor_from_return(7, 15, 8) is None
+    assert factor_from_return(7, 15, 4) == (3, 5)
+    print(&quot;Return exponent 8 rejected: half-power is +1 modulo 15&quot;)
+    print(&quot;Return exponent 4 accepted: verified factors are 3 and 5&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<pre><code class="output">127/256 continued fraction: [0, 2, 63, 2]
+127/256 convergents: [(0, 1), (1, 2), (63, 127), (127, 256)]
+N=15, a=7, M=256: reference order=4
+Largest bins: 0:0.250000, 64:0.250000, 128:0.250000, 192:0.250000
+Discarded B and unrecorded B measurement give equal marginals
+Multiple budget=1: factor-success mass=0.500000
+Multiple budget=2: factor-success mass=0.750000
+P(127)=0.000000; P(128)=0.250000
+N=21, a=2, M=512: reference order=6
+Largest bins: 0:0.166672, 85:0.113989, 171:0.113989, 256:0.166672, 341:0.113989, 427:0.113989
+Discarded B and unrecorded B measurement give equal marginals
+Multiple budget=1: factor-success mass=0.328417
+Multiple budget=2: factor-success mass=0.661642
+Return exponent 8 rejected: half-power is +1 modulo 15
+Return exponent 4 accepted: verified factors are 3 and 5
+</code></pre>
+<p>The marginal agreement includes the non-dividing period-six case. Its bins near \(512j/6\) dominate, but other bins have nonzero probability. The success masses depend on the reconstruction rule: one extra multiple changes the period-six case from about \(0.3284\) to \(0.6616\). They are not universal Shor success constants. The lab also checks explicitly that return exponent eight is rejected while four yields the running example's factors.</p>
+<p>The simulation allocates \(M\times D\) complex amplitudes and a dense \(M\times M\) Fourier matrix. Since \(M\) is of order \(N^2\), it scales exponentially in binary input length. Its purpose is to make normalization, conditioning, and rejection inspectable. The efficient quantum algorithm uses the gate decomposition and reversible modular arithmetic; it does not build these classical dense arrays.</p>
+
+<h2 id="exercises">14.4 Exercises and worked solutions</h2>
+<article class="exercise"><h3 id="ex14-1">Exercise 1 — a conditional state and its probability</h3><p>For \(N=21,a=2,M=512\), find the exponents producing \(B=1\), their number, and the probability of that result. Compare with the class \(B=2\). Write both normalized conditional states.</p><details><summary>Solution</summary><p>The powers \(1,2,4,8,16,11,1\) show order six. \(B=1\) corresponds to \(x=6k\), \(k=0,\ldots,85\), giving 86 labels and probability \(86/512=43/256\). Its state is \(86^{-1/2}\sum_{k=0}^{85}|6k\rangle\). \(B=2\) corresponds to \(x=1+6k\), also \(k=0,\ldots,85\), with the same count, weight, and normalization. Its state is \(86^{-1/2}\sum_{k=0}^{85}|1+6k\rangle\). Offsets two through five instead have 85 labels each. The total is \(2\cdot86+4\cdot85=512\). Count and number of qubits must be distinguished.</p></details></article>
+<article class="exercise"><h3 id="ex14-2">Exercise 2 — tracing is not selecting</h3><p>Why is the state of \(A\) after ignoring \(B\) generally not \(|C_s\rangle\langle C_s|\) for one chosen \(s\)? What changes if the experiment retains \(B\)'s result and applies an outcome-dependent operation to \(A\)?</p><details><summary>Solution</summary><p>Tracing sums over all orthogonal \(B\) outcomes and yields \(\sum_s(L_s/M)|C_s\rangle\langle C_s|\). Distinct cosets have disjoint computational support, so, when more than one is occupied, this mixture has rank greater than one. A selected branch has rank one. They cannot be the same density operator. With outcome-dependent unitaries \(V_s\), the unconditional state becomes \(\sum_s(L_s/M)V_s|C_s\rangle\langle C_s|V_s^\dagger\). This need not equal evolution under one common unitary, so Proposition 14.1 needs its condition about not using the outcome. Reading or discarding a record differs from acting on its information.</p></details></article>
+<article class="exercise"><h3 id="ex14-3">Exercise 3 — canceled denominator information</h3><p>Suppose the true order is twelve and an accurately resolved harmonic is \(j=8\). Which denominator does reconstruction expose? If another accurate shot has \(j=3\), what least common multiple becomes available? Why is modular verification still necessary?</p><details><summary>Solution</summary><p>The first harmonic is \(8/12=2/3\), exposing denominator three. The second is \(3/12=1/4\), exposing four. Their least common multiple is twelve, the true order in this stated example. Either denominator alone is smaller. Real observations can miss the sufficient-accuracy condition or supply irrelevant convergents, so a proposed least common multiple must still satisfy \(a^{12}\equiv1\pmod N\). Minimality requires further information, but factor extraction can instead check the even exponent's half-power and resulting gcds. The missing factors of twelve cannot be read from the first reduced fraction alone.</p></details></article>
+<article class="exercise"><h3 id="ex14-4">Exercise 4 — one fewer control qubit</h3><p>For \(N=21\), the prescribed minimum dimension is \(512\). If \(M=256\), does the uniform precision proof still guarantee the continued-fraction criterion for every denominator below \(21\)? Compare the grid-error bound with the threshold for denominator twenty. Do not equate loss of a guarantee with certain failure.</p><details><summary>Solution</summary><p>The nearest-bin error bound is \(1/(2M)=1/512\). For denominator twenty the sufficient threshold is \(1/(2\cdot20^2)=1/800\), which is smaller. The register-size argument alone cannot establish the criterion uniformly over all denominators below 21. This does not assert that order twenty occurs modulo 21; it tests the general proof using only \(r_{\mathrm{ord}}\lt N\). Additional arithmetic information may give a smaller order bound and permit fewer qubits. Individual observations may also be more accurate than the worst-case grid bound. The conclusion is loss of this uniform sufficient guarantee.</p></details></article>
+<article class="exercise"><h3 id="ex14-5">Exercise 5 — diagnose a toy observation</h3><p>A report states that the exact ideal \(N=15,a=7,M=256\) circuit returns \(127\) with probability \(1/4\), then reads order four directly from a convergent. Identify two independently checkable defects and give a valid replacement.</p><details><summary>Solution</summary><p>Because order four divides 256, the exact distribution has support only at \(0,64,128,192\); the probability of 127 is zero. Separately, \(256=2\cdot127+2\) and \(127=63\cdot2+1\) give \(127/256=[0;2,63,2]\). Its convergent denominators are \(1,2,127,256\), not four. A valid replacement is outcome 64, of probability \(1/4\), giving \(1/4\) directly. Outcome 128, also of probability \(1/4\), gives denominator two and requires testing its multiple four. Either replacement keeps the sampling and arithmetic statements consistent.</p></details></article>
+<article class="exercise"><h3 id="ex14-6">Exercise 6 — a reconstruction-budget sweep</h3><p>Extend the lab's multiple budgets to three and four. For both examples, compute the probability mass of accepted factor outputs. Explain saturation and check that no accepted output contains a trivial factor.</p><details><summary>Solution</summary><p>Change the budget loop to \((1,2,3,4)\), retaining the rule \(R\lt N\). For \(N=15\), the masses are \(0.500000,0.750000,0.750000,0.750000\). For \(N=21\), they are \(0.328417,0.661642,0.828944,0.828944\). A denominator two, including the exact \(y=256\) observation, reaches the useful return exponent six only when multiplier three is included. Denominator three is rescued by multiplier two. The zero outcome remains rejected; finite leakage and the short convergent lists determine residual failures. Every accepted pair passes the proper-gcd tests, excluding one and \(N\). Bounded search improves these cases, but this sweep does not justify an unrestricted multiplier search as an efficient general algorithm.</p></details></article>
+
+<h2 id="limits">14.5 What has been established</h2>
+<p>The derivation specifies normalized two-register states, conditional and unconditional Born probabilities, a sufficient rational-approximation condition, the convergent containing a sufficiently accurate reduced fraction, and modular checks for useful factors. It distinguishes a divisor of the order from the order itself. The exact \(15\) example and non-dividing \(21\) example check different parts of that chain; neither replaces the general proof or cited probabilistic analysis.</p>
+<p>The chapter does not establish classical factoring hardness or the security of a complete encryption system. It does not give a gate-optimized implementation, fault-tolerant resource estimate, or hardware timing claim. Small instances with precomputed arithmetic can conceal the cost of general modular exponentiation, so toy factoring supplies evidence about the stated toy circuit. Noise, finite gate accuracy, and environmental coupling require a dynamical model beyond this exact-unitary calculation.</p>
+<h2 id="primary-sources">14.6 Primary sources and attribution</h2>
+<p><a href="https://arxiv.org/pdf/quant-ph/9508027">P. W. Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer</a>, Section 5, PDF pages 15–19: factoring reduction, the \(N^2\)-scale Fourier register, modular-function states, finite Fourier probabilities, continued-fraction reconstruction, and repeated trials. Section 4 supplies the circuit discussed in Chapter 13. The lattice proof of Lemma 14.3, independent-marginal lab, and exact corrections to the numerical example are pedagogical derivations in this edition.</p>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-13.html">Previous chapter</a> <a href="chapter-15.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

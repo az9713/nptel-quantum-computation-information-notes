@@ -1,0 +1,335 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Quantum Fourier transform and periodic interference</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>Quantum Fourier transform and periodic interference</h1>
+<p class="lead">A four-step progression in a sixteen-dimensional register transforms into four exact Fourier bins. A three-step progression in the same register leaks into neighboring bins. Both computations use a unitary quantum Fourier transform; the difference comes from the arithmetic relation between the period and the finite register dimension. The task is to derive the transform, build its gate circuit with a stated bit order, and predict what a finite measurement can reveal about a period.</p>
+<p class="source-note"><strong>Lecture material:</strong> the six recordings <a href="https://www.youtube.com/watch?v=8gNF9Gdf3-0">W8L1</a>, <a href="https://www.youtube.com/watch?v=Y3V1X-qTxgg">W8L2</a>, <a href="https://www.youtube.com/watch?v=Lcgalmdt4KI">W8L3</a>, <a href="https://www.youtube.com/watch?v=Mb9cCQmMjUU">W8L4</a>, <a href="https://www.youtube.com/watch?v=TWuU4nFGzmk">W8L5</a>, and <a href="https://www.youtube.com/watch?v=G3joYDuEhf4">W9L1</a> develop the coefficient transform, tensor-product factorization, binary fractions, controlled phases, three-qubit example, and general circuit. The last three are grounded in local machine transcriptions. <strong>Research connection:</strong> Shor's primary paper connects a finite Fourier transform to order finding. <strong>Original teaching constructions:</strong> the complete unitarity proof, gate-by-gate numerical comparison, finite-progression kernel and spectrum figure, truncation bound, and exercises. Mathematical expressions are reconstructed under the conventions stated below rather than treated as literal speech transcriptions.</p>
+
+<h2 id="fourier-model">13.1 Fourier matrix and qubit factorization <a class="timestamp" href="https://www.youtube.com/watch?v=8gNF9Gdf3-0&amp;t=183s">W8L1 3:03</a></h2>
+<p>Let \(M\) be a positive integer. The computational basis of \(\mathbb C^M\) is \(|x\rangle\), indexed by integers \(x=0,\ldots,M-1\). A state vector is \(|\psi\rangle=\sum_x\alpha_x|x\rangle\), where each amplitude \(\alpha_x\) is complex and \(\sum_x|\alpha_x|^2=1\). The Fourier transform acts on these amplitudes by a linear operator. Its matrix entries are phases with a common magnitude, so their signs, normalization, and index conventions must be specified together.</p>
+<div class="def"><b>Definition 13.1 — positive-sign quantum Fourier transform.</b> Define
+\[
+ F_M|x\rangle=\frac1{\sqrt M}\sum_{y=0}^{M-1}
+ e^{2\pi ixy/M}|y\rangle,\qquad
+ (F_M)_{yx}=\frac{e^{2\pi ixy/M}}{\sqrt M}.
+ \tag{13.1}
+\]
+The imaginary unit is \(i\), satisfying \(i^2=-1\). Both \(x\) and \(y\) are integer basis labels. The phase exponent is dimensionless.</div>
+<p>For an arbitrary input, linearity gives output amplitudes
+\(\widetilde\alpha_y=M^{-1/2}\sum_x\alpha_xe^{2\pi ixy/M}\).
+This is the unitary-normalized discrete Fourier transform of the coefficient vector. It is not a procedure that prints every transformed amplitude as a classical list. A quantum device prepares the output state; subsequent measurements yield samples determined by its amplitudes.</p>
+<div class="thm"><b>Theorem 13.2 — Fourier unitarity, proved here.</b> The matrix in equation (13.1) obeys \(F_M^{\dagger}F_M=I_M\). Its inverse uses the same normalization and a negative phase exponent.</div>
+<div class="proof"><p>The inner product of columns \(x\) and \(x'\) is
+\[
+ \langle x|F_M^{\dagger}F_M|x'\rangle=
+ \frac1M\sum_{y=0}^{M-1}e^{2\pi i(x'-x)y/M}.
+\]
+If \(x=x'\), all \(M\) terms equal one and the result is one. Otherwise set \(z=e^{2\pi i(x'-x)/M}\). Then \(z\ne1\) but \(z^M=1\). Multiplying the finite sum by \(1-z\) telescopes:
+\[
+ (1-z)\sum_{y=0}^{M-1}z^y=1-z^M=0.
+\]
+Because \(1-z\ne0\), the sum vanishes. The columns are orthonormal, proving unitarity. Taking the adjoint conjugates the phase, so the negative-sign matrix is the inverse. <span class="qed">∎</span></p></div>
+<p>The normalization follows from this proof. Each Fourier column has \(M\) entries, and multiplying each by \(1/\sqrt M\) gives squared norm \(M/M=1\). A factor \(1/M\) would instead give squared norm \(1/M\). A classical transform may use that convention alongside a differently normalized inverse, but it is not the norm-preserving gate of equation (13.1).</p>
+<p>For one qubit, \(M=2\), and \(e^{\pi i}=-1\). Therefore
+\[
+ F_2=\frac1{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}=H.
+\]
+Here \(H\) is the Hadamard gate. It maps \(|0\rangle\) to \((|0\rangle+|1\rangle)/\sqrt2\) and \(|1\rangle\) to \((|0\rangle-|1\rangle)/\sqrt2\). The same single-qubit identification does not make the many-qubit transform equal to independent Hadamard gates: the phases in equation (13.1) depend jointly on input and output integer labels.</p>
+
+<h3 id="binary-labels">Integer labels and binary fractions <a class="timestamp" href="https://www.youtube.com/watch?v=Y3V1X-qTxgg&amp;t=730s">W8L2 12:10</a></h3>
+<p>For a qubit register let \(M=2^n\), where \(n\geq1\) is its number of qubits. Write the input integer using the most-significant-bit-first convention:
+\[
+ x=x_1 2^{n-1}+x_2 2^{n-2}+\cdots+x_n,
+ \qquad x_k\in\{0,1\}.
+\]
+Thus \(|x\rangle=|x_1\rangle\otimes\cdots\otimes|x_n\rangle\). For example, \(5=1\cdot4+0\cdot2+1\), so the three-qubit label is \(|101\rangle\). An integer label is not a single physical qubit unless its range has only two values.</p>
+<p>A binary fraction is defined by
+\[
+ 0.x_jx_{j+1}\cdots x_n
+ =\frac{x_j}{2}+\frac{x_{j+1}}{2^2}+\cdots+
+ \frac{x_n}{2^{n-j+1}}.
+ \tag{13.2}
+\]
+This notation denotes a real number between zero and one, not a ket or a product of bits. Dividing the integer \(x\) by \(2^k\) separates an integer part from the last \(k\) binary digits. Since an integer contributes phase \(e^{2\pi i\times\mathrm{integer}}=1\),
+\[
+ e^{2\pi ix/2^k}=e^{2\pi i(0.x_{n-k+1}\cdots x_n)}.
+ \tag{13.3}
+\]
+For \(x=5\), the successive fractional parts of \(x/2,x/4,x/8\) are \(0.1=1/2\), \(0.01=1/4\), and \(0.101=5/8\). Their phases are \(-1\), \(i\), and \(-(1+i)/\sqrt2\). These are the three relative phases in the register's Fourier image.</p>
+
+<h3 id="tensor-factorization">Factorization of a Fourier basis vector <a class="timestamp" href="https://www.youtube.com/watch?v=Y3V1X-qTxgg&amp;t=988s">W8L2 16:28</a></h3>
+<p>Expand the output integer as \(y=\sum_{k=1}^ny_k2^{n-k}\). Substitution into the phase separates the output bits:
+\[
+ e^{2\pi ixy/2^n}=\prod_{k=1}^n e^{2\pi ix y_k/2^k}.
+\]
+Summing independently over each \(y_k\in\{0,1\}\) distributes the sum into a tensor product:
+\[
+ F_{2^n}|x\rangle=
+ \bigotimes_{k=1}^n\frac{|0\rangle+e^{2\pi ix/2^k}|1\rangle}{\sqrt2}.
+ \tag{13.4}
+\]
+Expanding the right-hand side chooses either \(|0\rangle\) or \(|1\rangle\) in each factor. The coefficient of any chosen output string is exactly the product phase above, with total normalization \(2^{-n/2}\). This proves the factorization rather than inferring it from a few numerical examples.</p>
+<p>Using binary fractions, the factors in output order are
+\[
+ \frac{|0\rangle+e^{2\pi i(0.x_n)}|1\rangle}{\sqrt2}
+ \otimes\frac{|0\rangle+e^{2\pi i(0.x_{n-1}x_n)}|1\rangle}{\sqrt2}
+ \otimes\cdots\otimes
+ \frac{|0\rangle+e^{2\pi i(0.x_1\cdots x_n)}|1\rangle}{\sqrt2}.
+\]
+The first output wire carries the shortest suffix fraction; the last carries the full fraction. For \(x=5,n=3\), equation (13.4) is the product of the three phase states computed above. Expanding it produces all eight amplitudes of the corresponding dense Fourier column. The lab checks that equality as a vector, so a missing bit reversal cannot be concealed by identical basis-state measurement probabilities.</p>
+<p>Equation (13.4) says that a computational-basis input has a product Fourier image. It does not say that \(F_{2^n}\) maps every product state to a product state. A superposition of several product Fourier images can be entangled. The gate circuit must act linearly on arbitrary input amplitudes, not measure the input bits and then prepare a classically selected product state.</p>
+
+<h3 id="phase-gates">Hadamard gates and controlled phase gates <a class="timestamp" href="https://www.youtube.com/watch?v=Mb9cCQmMjUU&amp;t=198s">W8L4 3:18</a></h3>
+<p>Define the single-qubit phase gate
+\[
+ R_k=\begin{pmatrix}1&amp;0\\0&amp;e^{2\pi i/2^k}\end{pmatrix},
+ \qquad k\geq1.
+\]
+It leaves the amplitude of \(|0\rangle\) fixed and multiplies the amplitude of \(|1\rangle\) by a phase. Its controlled version acts as \(R_k\) on the target when the control is one, and as identity when the control is zero. In ordered two-qubit basis \((00,01,10,11)\), it is \(\operatorname{diag}(1,1,1,e^{2\pi i/2^k})\).</p>
+<p>In this convention \(R_1=\operatorname{diag}(1,-1)=Z\). It is not the Hadamard matrix: a diagonal phase gate cannot turn \(|0\rangle\) into a superposition. No omitted scalar normalization repairs that difference. The gates \(R_2=\operatorname{diag}(1,i)\) and \(R_3=\operatorname{diag}(1,e^{i\pi/4})\) are commonly called \(S\) and \(T\), respectively. Their <em>controlled</em> versions in the Fourier circuit remain two-qubit gates; replacing a controlled \(S\) by a one-qubit \(S\) changes the transformation.</p>
+<p>Start with a basis string \(|x_1\cdots x_n\rangle\). Apply \(H\) to the first wire. Its state becomes \((|0\rangle+e^{2\pi ix_1/2}|1\rangle)/\sqrt2\). Control an \(R_2\) on that wire with \(x_2\), then an \(R_3\) with \(x_3\), continuing through \(R_n\) controlled by \(x_n\). Each control is still a basis bit at this stage, so it adds its phase contribution without changing its own value. The first-wire phase becomes
+\[
+ 2\pi\left(\frac{x_1}{2}+\frac{x_2}{2^2}+\cdots+
+ \frac{x_n}{2^n}\right).
+\]
+Repeat on the second wire, using controls from the third onward, and continue to the last wire. Before reversing outputs, the wire factors are ordered by suffixes \(0.x_1\cdots x_n,0.x_2\cdots x_n,\ldots,0.x_n\). This is the reverse of equation (13.4).</p>
+<p>Finally swap the first and last output wires, the second and next-to-last, and so on. The result agrees with equation (13.4) for every computational-basis input. Because both the circuit and the matrix act linearly, agreement on a basis proves agreement on every input state. This last step matters: checking only a basis state's output probabilities would miss phase errors and could miss the wire reversal entirely.</p>
+<p>For three qubits the sequence is \(H_1\), controlled \(R_2\) from wire 2 to 1, controlled \(R_3\) from wire 3 to 1, \(H_2\), controlled \(R_2\) from wire 3 to 2, \(H_3\), then swap wires 1 and 3. The general circuit uses \(n\) Hadamards, \(n(n-1)/2\) controlled phase gates, and \(\lfloor n/2\rfloor\) wire swaps. This count treats each stated gate as an elementary allowed operation; decomposition into a device's native gates is an additional compilation problem.</p>
+
+<h2 id="periodic-interference">13.2 Period peaks and finite precision</h2>
+<p>The Fourier transform is useful for period finding because several input amplitudes interfere at each output bin. Consider a normalized finite arithmetic progression
+\[
+ |\psi_{s,r}\rangle=\frac1{\sqrt L}
+ \sum_{k=0}^{L-1}|s+kr\rangle,
+ \tag{13.5}
+\]
+</p>
+<p>Here \(r\) is a positive integer step, and \(s\) is an integer offset with \(0\leq s\lt M\). The progression includes every nonnegative integer \(k\) for which \(s+kr\lt M\), so \(L=1+\lfloor(M-1-s)/r\rfloor\geq1\). Its listed basis vectors are distinct and orthogonal; the factor \(1/\sqrt L\) therefore normalizes the state. For an order-finding application, \(r=r_{\mathrm{ord}}\), the modular order from Chapter 12. We temporarily write \(r\) to expose the period dependence in the finite Fourier calculation; it is a chapter-local scalar period, not a Bloch vector.</p>
+<p>Insert equation (13.5) into equation (13.1). The amplitude for output bin \(y\) is
+\[
+ A_y=\frac{e^{2\pi isy/M}}{\sqrt{ML}}
+ \sum_{k=0}^{L-1}e^{2\pi ikry/M}.
+ \tag{13.6}
+\]
+The offset contributes a common phase and, through the allowed end point, may also change \(L\). For a fixed \(L\), that common phase cancels from \(|A_y|^2\). The sum over \(k\) decides whether amplitudes reinforce or cancel. One should therefore transform amplitudes and only then take squared magnitudes; Fourier-transforming the input probabilities would erase the interference mechanism.</p>
+<div class="prop"><b>Proposition 13.3 — exact-period part of R13, proved here.</b> If \(r\) divides \(M\) and equation (13.5) contains the full coset with \(0\leq s\lt r\), then measurement after \(F_M\) has support exactly at
+\[
+ y=j\frac{M}{r},\qquad j=0,\ldots,r-1,
+\]
+with probability \(1/r\) at each supported bin.</div>
+<div class="proof"><p>Divisibility gives \(L=M/r\). Let \(z=e^{2\pi iry/M}\). Then \(z^L=e^{2\pi iy}=1\). If \(z\ne1\), the geometric sum in equation (13.6) vanishes as in the unitarity proof. If \(z=1\), all \(L\) terms add, giving squared amplitude \(L^2/(ML)=L/M=1/r\). The condition \(z=1\) is \(ry/M\) integer, giving exactly the listed bins. <span class="qed">∎</span></p></div>
+<p>For \(M=16,r=4,s=1\), the input is \((|1\rangle+|5\rangle+|9\rangle+|13\rangle)/2\). Its output probabilities are one quarter at bins \(0,4,8,12\) and zero elsewhere. The offset affects output phases but not this probability distribution. The spacings between Fourier peaks are \(M/r\); converting a measured bin into a normalized fraction gives \(y/M=j/r\). This reciprocal structure connects Fourier sampling to order reconstruction.</p>
+
+<h3 id="finite-kernel">A non-dividing period gives a finite geometric-sum profile</h3>
+<p>If \(r\) does not divide \(M\), the sum in equation (13.6) does not generally cancel away from a perfectly aligned grid. Put \(\delta=2\pi ry/M\). The finite-sum identity is
+\[
+ \sum_{k=0}^{L-1}e^{ik\delta}
+ =e^{i(L-1)\delta/2}\frac{\sin(L\delta/2)}{\sin(\delta/2)}
+\]
+when the denominator is nonzero. It follows either by multiplying the geometric sum by \(1-e^{i\delta}\), or by writing numerator and denominator as centered complex exponentials. Taking squared magnitudes removes the phase and gives
+\[
+ \Pr(y)=\frac1{ML}
+ \left[\frac{\sin(\pi Lry/M)}{\sin(\pi ry/M)}\right]^2.
+ \tag{13.7}
+\]
+At points with \(e^{i\delta}=1\), use the original sum, which equals \(L\), so \(\Pr(y)=L/M\). This limiting prescription avoids a spurious division by zero.</p>
+<p>For \(M=16,r=3,s=1\), the input indices are \(1,4,7,10,13\), so \(L=5\). Bin zero has probability \(L/M=5/16=0.3125\). The largest other peaks occur at bins five and eleven, near the ideal continuous locations \(16/3\) and \(32/3\); each has probability approximately \(0.227055\). Additional bins have nonzero probability. The lab computes the entire normalized distribution directly from the dense matrix rather than evaluating the sine quotient near its removable singularities.</p>
+<p>Figure 13.1 compares the exact and non-dividing cases using the same register and offset. The lower plot's broadened probability is a finite-register effect, not detector noise. Increasing \(M\) improves the rational sampling grid, but a measured bin still needs classical interpretation. A zero outcome carries no useful denominator by itself, and a numerator sharing a factor with \(r\) can reduce the denominator. Chapter 14 treats those reconstruction failures explicitly.</p>
+<figure id="fig13-spectrum">
+<svg viewBox="0 0 720 540" role="img" aria-labelledby="ch13-spectrum-title">
+<title id="ch13-spectrum-title">Finite Fourier probabilities for periods four and three in a sixteen-bin register</title>
+<rect width="720" height="540" fill="#151e28"/>
+<text x="65" y="55" fill="#e6edf3" font-size="18">Period 4, offset 1, M = 16</text>
+<text x="65" y="80" fill="#bdcbd6" font-size="14">Probability per bin</text>
+<line x1="65" x2="675" y1="220" y2="220" stroke="#394957"/>
+<text x="55" y="225" text-anchor="end" fill="#bdcbd6" font-size="13">0</text>
+<line x1="65" x2="675" y1="170.0" y2="170.0" stroke="#394957"/>
+<text x="55" y="175.0" text-anchor="end" fill="#bdcbd6" font-size="13">0.125</text>
+<line x1="65" x2="675" y1="120.0" y2="120.0" stroke="#394957"/>
+<text x="55" y="125.0" text-anchor="end" fill="#bdcbd6" font-size="13">0.25</text>
+<rect x="72" y="120.0000" width="24" height="100.0000" fill="#7accc4"/>
+<text x="84" y="243" text-anchor="middle" fill="#bdcbd6" font-size="14">0</text>
+<rect x="109" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="146" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="183" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="220" y="120.0000" width="24" height="100.0000" fill="#7accc4"/>
+<text x="232" y="243" text-anchor="middle" fill="#bdcbd6" font-size="14">4</text>
+<rect x="257" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="294" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="331" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="368" y="120.0000" width="24" height="100.0000" fill="#7accc4"/>
+<text x="380" y="243" text-anchor="middle" fill="#bdcbd6" font-size="14">8</text>
+<rect x="405" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="442" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="479" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="516" y="120.0000" width="24" height="100.0000" fill="#7accc4"/>
+<text x="528" y="243" text-anchor="middle" fill="#bdcbd6" font-size="14">12</text>
+<rect x="553" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="590" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<rect x="627" y="220.0000" width="24" height="0.0000" fill="#7accc4"/>
+<text x="639" y="243" text-anchor="middle" fill="#bdcbd6" font-size="14">15</text>
+<text x="675" y="263" text-anchor="end" fill="#bdcbd6" font-size="14">Output bin y</text>
+<text x="65" y="310" fill="#e6edf3" font-size="18">Period 3, offset 1, M = 16</text>
+<text x="65" y="335" fill="#bdcbd6" font-size="14">Probability per bin</text>
+<line x1="65" x2="675" y1="475" y2="475" stroke="#394957"/>
+<text x="55" y="480" text-anchor="end" fill="#bdcbd6" font-size="13">0</text>
+<line x1="65" x2="675" y1="425.0" y2="425.0" stroke="#394957"/>
+<text x="55" y="430.0" text-anchor="end" fill="#bdcbd6" font-size="13">0.125</text>
+<line x1="65" x2="675" y1="375.0" y2="375.0" stroke="#394957"/>
+<text x="55" y="380.0" text-anchor="end" fill="#bdcbd6" font-size="13">0.25</text>
+<rect x="72" y="350.0000" width="24" height="125.0000" fill="#7accc4"/>
+<text x="84" y="498" text-anchor="middle" fill="#bdcbd6" font-size="14">0</text>
+<rect x="109" y="474.3835" width="24" height="0.6165" fill="#7accc4"/>
+<rect x="146" y="474.1421" width="24" height="0.8579" fill="#7accc4"/>
+<rect x="183" y="473.3956" width="24" height="1.6044" fill="#7accc4"/>
+<rect x="220" y="470.0000" width="24" height="5.0000" fill="#7accc4"/>
+<text x="232" y="498" text-anchor="middle" fill="#bdcbd6" font-size="14">4</text>
+<rect x="257" y="384.1779" width="24" height="90.8221" fill="#7accc4"/>
+<rect x="294" y="445.8579" width="24" height="29.1421" fill="#7accc4"/>
+<rect x="331" y="468.0430" width="24" height="6.9570" fill="#7accc4"/>
+<rect x="368" y="470.0000" width="24" height="5.0000" fill="#7accc4"/>
+<text x="380" y="498" text-anchor="middle" fill="#bdcbd6" font-size="14">8</text>
+<rect x="405" y="468.0430" width="24" height="6.9570" fill="#7accc4"/>
+<rect x="442" y="445.8579" width="24" height="29.1421" fill="#7accc4"/>
+<rect x="479" y="384.1779" width="24" height="90.8221" fill="#7accc4"/>
+<rect x="516" y="470.0000" width="24" height="5.0000" fill="#7accc4"/>
+<text x="528" y="498" text-anchor="middle" fill="#bdcbd6" font-size="14">12</text>
+<rect x="553" y="473.3956" width="24" height="1.6044" fill="#7accc4"/>
+<rect x="590" y="474.1421" width="24" height="0.8579" fill="#7accc4"/>
+<rect x="627" y="474.3835" width="24" height="0.6165" fill="#7accc4"/>
+<text x="639" y="498" text-anchor="middle" fill="#bdcbd6" font-size="14">15</text>
+<text x="675" y="518" text-anchor="end" fill="#bdcbd6" font-size="14">Output bin y</text>
+</svg>
+<figcaption><strong>Figure 13.1.</strong> Computed probabilities after the positive-sign Fourier transform of normalized arithmetic progressions. The vertical scale is probability per output bin. The period-four state has exact support at four bins because four divides sixteen. The period-three state has finite-register leakage, with the strongest bins near multiples of sixteen thirds. The source is equation (13.6), evaluated by <code>ch13_spectrum.py</code>; these are theoretical probabilities, not measured photon counts.</figcaption>
+</figure>
+
+<h3 id="precision-cost">Gate precision and a controlled approximation</h3>
+<p>The exact gate count is polynomial in \(n=\log_2M\), even though a dense matrix has \(M^2\) entries. This distinction concerns the action on a prepared quantum state. Preparing an arbitrary amplitude vector and recovering an entire classical list of Fourier coefficients are additional tasks; they are not performed by merely counting the Fourier gates. A basis input itself produces uniform output probabilities, so its input label is encoded in phase rather than directly readable from one computational-basis sample.</p>
+<p>Very small controlled phases need not always be retained. As an original error-budget calculation, omit all controlled \(R_k\) gates with \(k\gt b\), where \(b\) is a positive cutoff integer. For one omitted gate the operator-norm difference from identity is \(|e^{2\pi i/2^k}-1|\leq2\pi/2^k\). Here the operator norm is the maximum vector-norm amplification over unit vectors. Comparing the full and shortened products by a telescoping sum, with all retained factors unitary, bounds the total error by the sum of omitted single-gate errors.</p>
+<p>There are at most \(n\) gates for each rotation index \(k\). If \(\widetilde F\) denotes the truncated circuit, the resulting conservative bound is
+\[
+ \|F_{2^n}-\widetilde F\|\leq
+ 2\pi n\sum_{k=b+1}^{\infty}2^{-k}
+ =\frac{2\pi n}{2^b}.
+ \tag{13.8}
+\]
+Choosing a cutoff large enough for a desired tolerance reduces small-angle requirements while controlling the operator error. If the chosen cutoff exceeds the largest available rotation index, keep the exact circuit. At most \(n(b-1)\) controlled phases remain when \(b\geq1\), though edge wires use fewer.</p>
+<p>The lab's deliberately coarse example \(n=5,b=3\) has measured numerical operator difference \(0.942793\) and bound \(3.926991\). Since the distance between two unitary matrices is at most two, that particular bound is conservative and does not certify a high-precision approximation. The example demonstrates how to audit an omitted-gate proposal instead of assuming that every small-looking phase can be discarded harmlessly. Shor's paper, Section 4, separately discusses approximate Fourier transforms in the factoring context; no general factoring-error guarantee is inferred from this one matrix experiment.</p>
+
+<h2 id="lab">13.3 Dense matrices, circuits, and finite progressions</h2>
+<p>The program constructs the dense positive-sign Fourier matrix and an independent gate implementation. Wires are indexed from the most significant input bit. The circuit explicitly applies Hadamard pairs, controlled phases, and the final bit reversal. It compares the <em>complex matrices</em> on every basis vector for one through five qubits, checks unitarity, reconstructs the three-qubit \(x=5\) tensor product, and evaluates the two finite-period distributions. The final computation uses the largest singular value of a matrix difference as its operator norm.</p>
+<pre><code class="language-python" data-file="ch13_lab.py">&quot;&quot;&quot;Positive-sign QFT: dense matrix, gate circuit, and finite periods.&quot;&quot;&quot;
+
+import numpy as np
+
+
+def fourier(size):
+    labels = np.arange(size)
+    return np.exp(2j*np.pi*np.outer(labels, labels)/size)/np.sqrt(size)
+
+
+def circuit(state, qubits, cutoff=None):
+    state = np.array(state, dtype=complex, copy=True)
+    size = 1 &lt;&lt; qubits
+    assert state.shape == (size,)
+    labels = np.arange(size)
+    for target in range(qubits):
+        target_bit = 1 &lt;&lt; (qubits - 1 - target)
+        for index in range(size):
+            if not index &amp; target_bit:
+                other = index | target_bit
+                low, high = state[index], state[other]
+                state[index] = (low + high)/np.sqrt(2)
+                state[other] = (low - high)/np.sqrt(2)
+        for control in range(target + 1, qubits):
+            rotation_index = control - target + 1
+            if cutoff is not None and rotation_index &gt; cutoff:
+                continue
+            control_bit = 1 &lt;&lt; (qubits - 1 - control)
+            selected = ((labels &amp; target_bit) != 0)
+            selected &amp;= ((labels &amp; control_bit) != 0)
+            angle = 2*np.pi/(1 &lt;&lt; rotation_index)
+            state[selected] *= np.exp(1j*angle)
+    reversed_labels = np.array([
+        int(f&quot;{i:0{qubits}b}&quot;[::-1], 2) for i in range(size)])
+    return state[reversed_labels]
+
+
+def progression(size, period, offset):
+    state = np.zeros(size, dtype=complex)
+    labels = np.arange(offset, size, period)
+    state[labels] = 1/np.sqrt(len(labels))
+    return state, len(labels)
+
+
+def main():
+    for qubits in range(1, 6):
+        size = 1 &lt;&lt; qubits
+        dense = fourier(size)
+        basis = np.eye(size)
+        gates = np.column_stack([
+            circuit(basis[:, i], qubits) for i in range(size)])
+        assert np.allclose(dense.conj().T @ dense, basis, atol=1e-12)
+        assert np.allclose(gates, dense, atol=1e-12)
+        phases = qubits*(qubits - 1)//2
+        print(f&quot;n={qubits}, M={size}: circuit=dense, &quot;
+              f&quot;H={qubits}, controlled phases={phases}, &quot;
+              f&quot;swaps={qubits//2}&quot;)
+    factors = [np.array([1, np.exp(2j*np.pi*5/(1 &lt;&lt; k))])
+               / np.sqrt(2) for k in [1, 2, 3]]
+    product = np.kron(np.kron(factors[0], factors[1]), factors[2])
+    assert np.allclose(product, fourier(8)[:, 5])
+    print(&quot;x=5, M=8: tensor-product phase reconstruction passed&quot;)
+    for period in [4, 3]:
+        state, length = progression(16, period, 1)
+        probabilities = np.abs(fourier(16) @ state)**2
+        assert np.isclose(probabilities.sum(), 1)
+        peaks = sorted(range(16), key=lambda i: (-probabilities[i], i))
+        peaks = sorted(peaks[:period])
+        print(f&quot;M=16, period={period}, offset=1, length={length}&quot;)
+        print(&quot;Largest bins: &quot; + &quot;, &quot;.join(
+            f&quot;{i}:{probabilities[i]:.6f}&quot; for i in peaks))
+        if period == 4:
+            expected = np.zeros(16)
+            expected[::4] = 0.25
+            assert np.allclose(probabilities, expected)
+    qubits, cutoff = 5, 3
+    basis = np.eye(1 &lt;&lt; qubits)
+    truncated = np.column_stack([
+        circuit(basis[:, i], qubits, cutoff) for i in range(1 &lt;&lt; qubits)])
+    error = np.linalg.norm(truncated - fourier(1 &lt;&lt; qubits), ord=2)
+    bound = 2*np.pi*qubits/(1 &lt;&lt; cutoff)
+    assert error &lt;= bound + 1e-12
+    print(f&quot;Truncated n={qubits}, cutoff={cutoff}: &quot;
+          f&quot;operator error={error:.6f}, bound={bound:.6f}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<pre><code class="output">n=1, M=2: circuit=dense, H=1, controlled phases=0, swaps=0
+n=2, M=4: circuit=dense, H=2, controlled phases=1, swaps=1
+n=3, M=8: circuit=dense, H=3, controlled phases=3, swaps=1
+n=4, M=16: circuit=dense, H=4, controlled phases=6, swaps=2
+n=5, M=32: circuit=dense, H=5, controlled phases=10, swaps=2
+x=5, M=8: tensor-product phase reconstruction passed
+M=16, period=4, offset=1, length=4
+Largest bins: 0:0.250000, 4:0.250000, 8:0.250000, 12:0.250000
+M=16, period=3, offset=1, length=5
+Largest bins: 0:0.312500, 5:0.227055, 11:0.227055
+Truncated n=5, cutoff=3: operator error=0.942793, bound=3.926991
+</code></pre>
+<p>The matrix comparison simultaneously checks relative phases, transform sign, and output order. Merely observing a normalized output would be much weaker: many incorrect unitary circuits preserve norm. The non-dividing period check shows that substantial probability can occupy nearby bins even when arithmetic and gates are ideal. The inverse-transform convention is obtained by conjugating the Fourier matrix, not by changing a sign in only part of the controlled-phase circuit.</p>
+
+<h2 id="exercises">13.4 Exercises and worked solutions</h2>
+<article class="exercise"><h3 id="ex13-1">Exercise 1 — applying the transform twice</h3><p>Show that \(F_M^2|x\rangle=|-x\bmod M\rangle\). Deduce \(F_M^4=I_M\), and explain why \(F_M\) is not generally its own inverse.</p><details><summary>Solution</summary><p>The amplitude of \(|z\rangle\) after two transforms is \(M^{-1}\sum_{y=0}^{M-1}e^{2\pi iy(x+z)/M}\). The geometric sum is one after normalization when \(x+z\equiv0\pmod M\), and zero otherwise. Thus the label is negated modulo \(M\). Repeating negation returns the original label, proving the fourth-power identity. Except in dimensions where every relevant label equals its own negative, the square is a nonidentity permutation, so the inverse is the adjoint rather than the same forward transform.</p></details></article>
+<article class="exercise"><h3 id="ex13-2">Exercise 2 — phase gate or Hadamard?</h3><p>Compare \(R_1|0\rangle\), \(R_1|1\rangle\), \(H|0\rangle\), and \(H|1\rangle\). Can multiplying \(R_1\) by a scalar make it equal to \(H\)?</p><details><summary>Solution</summary><p>They are \(|0\rangle,-|1\rangle,(|0\rangle+|1\rangle)/\sqrt2,(|0\rangle-|1\rangle)/\sqrt2\), respectively. A scalar multiple of the diagonal matrix \(R_1\) still has zero off-diagonal entries, whereas \(H\) does not. Therefore no scalar gives equality. Multiplying \(R_1\) by \(1/\sqrt2\) would additionally violate unitarity, because the adjoint-product would be \(I_2/2\).</p></details></article>
+<article class="exercise"><h3 id="ex13-3">Exercise 3 — the role of the final swap</h3><p>For a three-qubit input \(|x_1x_2x_3\rangle\), list the three relative phases before and after the final swap. Explain why checking only output probabilities on a basis input cannot detect the omitted swap.</p><details><summary>Solution</summary><p>Before swapping they are \(e^{2\pi i(0.x_1x_2x_3)}\), \(e^{2\pi i(0.x_2x_3)}\), and \(e^{2\pi i(0.x_3)}\). After swapping first and last they appear in the reverse order, agreeing with equation (13.4). Every factor has equal \(|0\rangle\) and \(|1\rangle\) magnitudes, so every three-bit output has probability \(1/8\) in either ordering. A complex-amplitude comparison, or a suitable interferometric test using superposed inputs, is necessary to expose the error.</p></details></article>
+<article class="exercise"><h3 id="ex13-4">Exercise 4 — different progression lengths</h3><p>For \(M=16,r=3\), compare offsets \(s=0\) and \(s=1\). Determine each progression length and its Fourier probability at bin zero. Does offset independence hold without qualification?</p><details><summary>Solution</summary><p>The offset-zero progression is \(0,3,6,9,12,15\), so \(L_0=6\). The offset-one progression is \(1,4,7,10,13\), so \(L_1=5\). At zero frequency all phases align, giving probabilities \(6/16=3/8\) and \(5/16\). For a fixed length an offset contributes only a global phase at each Fourier bin, but truncating at the register boundary can change the length. The probability distribution can consequently depend on the offset through \(L\).</p></details></article>
+<article class="exercise"><h3 id="ex13-5">Exercise 5 — a product input can become entangled</h3><p>Apply \(F_4\) to \(|0\rangle\otimes(|0\rangle+|1\rangle)/\sqrt2\). Use the two-qubit coefficient-matrix determinant to decide whether the output is a product.</p><details><summary>Solution</summary><p>The input is \((|0\rangle+|1\rangle)/\sqrt2\) in integer labels. Adding the first two Fourier columns gives amplitudes \((2,1+i,0,1-i)/(2\sqrt2)\). The coefficient matrix in row-first-qubit order is \(\bigl(\begin{smallmatrix}1/\sqrt2&amp;(1+i)/(2\sqrt2)\\0&amp;(1-i)/(2\sqrt2)\end{smallmatrix}\bigr)\). Its determinant is \((1-i)/4\ne0\), so it has rank two and the output is entangled. Product images of individual computational-basis vectors do not imply that the whole operator is a tensor product of one-qubit gates.</p></details></article>
+<article class="exercise"><h3 id="ex13-6">Exercise 6 — precision and leakage sweeps</h3><p>Extend the lab to compare several register sizes for a fixed period three, then compare controlled-phase cutoffs for a fixed qubit count. Report normalization, peak-bin errors, and complex-matrix operator error separately.</p><details><summary>Solution</summary><p>For each chosen power-of-two dimension, construct the finite progression with its actual length and compute the normalized distribution. For each harmonic \(j/r\), compare a nearby output fraction \(y/M\), recording its error rather than demanding nonexistent exact support. For the gate sweep, build each truncated circuit matrix and calculate its norm difference from the exact matrix as in the lab. Norm preservation alone cannot quantify approximation quality, because every truncated circuit is still unitary. An experiment may have a normalized distribution, a small grid error, and a large gate-approximation error simultaneously; those are distinct quantities.</p><p>Executing the sweep with offset one and dimensions \(8,16,32,64\) gives lengths \(3,5,11,21\), normalization one in every case, and maximum nearest-harmonic fraction errors \(0.041666667,0.020833333,0.010416667,0.005208333\). For five qubits, cutoffs \(1,2,3,4,5\) give operator errors \(1.998347873,1.999579350,0.942793474,0.196034281,0\). Adding one level of phases does not force this operator-norm error to decrease at every step: the first two values provide a computed counterexample. The bound in the text controls omitted gates without asserting monotonicity of the actual error.</p></details></article>
+
+<h2 id="limits">13.5 What the Fourier calculation establishes</h2>
+<p>The exact transform and circuit are proved equivalent under the positive-sign, most-significant-bit-first convention with output reversal. The full-coset support theorem assumes that the period divides the register dimension. Equation (13.6) supplies the finite alternative when it does not. Neither a basis image's separability nor a short gate list makes arbitrary amplitudes available as a classical data table.</p>
+<p>The phase-error calculation treats an ideal gate circuit and omits gates under a defined norm budget. It does not model hardware control errors, decoherence, or fault-tolerant synthesis overhead. For order finding, the useful output is a sampled rational approximation to a harmonic of the inverse period. Continued fractions and modular checks are therefore part of the algorithm rather than optional bookkeeping after the quantum computation.</p>
+
+<h2 id="primary-sources">13.6 Primary sources and attribution</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=8gNF9Gdf3-0">Mitra, W8L1: Quantum Fourier Transform I</a> — amplitude and basis definitions, one-qubit transform, and simple basis examples.</li><li><a href="https://www.youtube.com/watch?v=Y3V1X-qTxgg">Mitra, W8L2: Quantum Fourier Transform II</a> — binary integer notation and tensor-product factorization.</li><li><a href="https://www.youtube.com/watch?v=Lcgalmdt4KI">Mitra, W8L3: Quantum Fourier Transform III</a> — the three-qubit phase example and the pattern of output-bit phases.</li><li><a href="https://www.youtube.com/watch?v=Mb9cCQmMjUU">Mitra, W8L4: Quantum Fourier Transform IV</a> — phase rotations, controlled rotations, and the three-wire circuit.</li><li><a href="https://www.youtube.com/watch?v=TWuU4nFGzmk">Mitra, W8L5: Quantum Fourier Transform V</a> — circuit generalization and explicit wire reversal.</li><li><a href="https://www.youtube.com/watch?v=G3joYDuEhf4">Mitra, W9L1: Quantum Fourier Transform VI</a> — suffix binary fractions and the general circuit construction.</li><li><a href="https://arxiv.org/pdf/quant-ph/9508027">Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer</a> — Section 4, PDF pages 12–15, for finite Fourier circuits and approximate phases; Section 5 for order finding. The geometric-sum probability calculation and conservative omission bound above are derived here.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-12.html">Previous chapter</a> <a href="chapter-14.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

@@ -1,0 +1,246 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Entangled photons and experimental protocol accounting</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>Entangled photons and experimental protocol accounting</h1>
+<p class="lead">A Bell analyzer can identify half of a uniformly sampled set of four ideal Bell states and still return the correct label on every event it accepts. Perfect conditional correctness and a fifty-percent acceptance rate describe different properties. A photonic communication experiment must keep both quantities, then account for pair generation, transmission, and detector losses. The task is to connect a polarization state to actual click patterns without silently replacing a probabilistic optical apparatus by an ideal four-outcome Bell measurement.</p>
+<p class="source-note"><strong>Lecture material:</strong> <a href="https://www.youtube.com/watch?v=b_buCwPz5vE">W6L5</a> develops down-conversion and polarization entanglement; <a href="https://www.youtube.com/watch?v=v5shBFNplkI">W7L1</a> develops beam-splitter symmetry and Bell analysis; <a href="https://www.youtube.com/watch?v=sPg5IlAo6Bw">W7L2</a> connects these tools to dense coding and teleportation. <strong>Research extensions and corrections:</strong> the type-II source model is checked against Kwiat and colleagues, and the restricted linear-optical discrimination bound is attributed to Calsamiglia and Lütkenhaus. <strong>Original teaching constructions:</strong> the environment-overlap model, creation-operator derivation, probability ledger, executable lab, and exercises below. The mathematical optical model assumes a selected pair of spatial modes and ideal indistinguishability apart from polarization; it does not reproduce an apparatus calibration.</p>
+
+<h2 id="model">11.1 Photon pairs and polarization models <a class="timestamp" href="https://www.youtube.com/watch?v=b_buCwPz5vE&amp;t=79s">W6L5 1:19</a></h2>
+<p>The qubit is encoded in one photon's polarization within a specified spatial mode. Write \(|H\rangle=(1,0)^{\mathsf T}\) and \(|V\rangle=(0,1)^{\mathsf T}\) for horizontal and vertical polarization in a fixed transverse reference frame. The two photons initially occupy distinct modes, labeled \(a\) and \(b\). A ket such as \(|HV\rangle\) means horizontal polarization in mode \(a\) and vertical polarization in mode \(b\); the labels identify modes, not permanently distinguishable particle identities.</p>
+<p>The polarization Hilbert space is \(\mathcal H_a\otimes\mathcal H_b\simeq\mathbb C^2\otimes\mathbb C^2\). We use the ordered basis \((|HH\rangle,|HV\rangle,|VH\rangle,|VV\rangle)\). The density operator \(\rho\) is a positive semidefinite, trace-one matrix on this four-dimensional space. It may describe a pure prepared polarization state or a mixed state obtained after ignoring time, frequency, spatial mode, or classical preparation information.</p>
+<div class="def"><b>Definition 11.1 — polarization Bell basis.</b> The four normalized vectors are
+\[
+ |\Phi^{\pm}\rangle=\frac{|HH\rangle\pm|VV\rangle}{\sqrt2},\qquad
+ |\Psi^{\pm}\rangle=\frac{|HV\rangle\pm|VH\rangle}{\sqrt2}.
+\]
+The corresponding projectors are \(P_j=|B_j\rangle\langle B_j|\), where \(j\) labels these four vectors \(|B_j\rangle\).</div>
+<p>Each vector has two orthogonal components of magnitude \(1/\sqrt2\), so its squared norm is one. The inner product between a plus and minus partner is \((1-1)/2=0\). A \(\Phi\) vector and a \(\Psi\) vector have disjoint computational-basis support and are orthogonal. Four orthonormal vectors in a four-dimensional space form a complete basis. This elementary check is the starting point for an ideal Bell measurement, before we ask what optical elements can implement it.</p>
+
+<h3 id="down-conversion">Nonlinear polarization and pair production <a class="timestamp" href="https://www.youtube.com/watch?v=b_buCwPz5vE&amp;t=233s">W6L5 3:53</a></h3>
+<p>In a dielectric, the electric field can induce a polarization density, meaning electric dipole moment per unit volume. In SI units a schematic expansion of its \(i\)-th Cartesian component is
+\[
+ P_i=\epsilon_0\left(\sum_j\chi^{(1)}_{ij}E_j+
+ \sum_{jk}\chi^{(2)}_{ijk}E_jE_k+\cdots\right).
+\]
+Here \(E_j\) is an electric-field component in volts per meter, \(\epsilon_0\) is the vacuum permittivity, and the susceptibilities specify the material response. The second-order susceptibility \(\chi^{(2)}\) has units of meter per volt in this convention. It therefore cannot be compared numerically with the dimensionless \(\chi^{(1)}\) without including the appropriate field scale. The expansion terms, rather than the bare coefficients with different units, determine whether nonlinear response is appreciable.</p>
+<p>Spontaneous parametric down-conversion uses a second-order interaction to convert energy from a pump into a pair of lower-frequency modes. For pump, signal, and idler angular frequencies \(\omega_p,\omega_s,\omega_i\), energy conservation requires \(\omega_p=\omega_s+\omega_i\). Efficient coherent buildup also requires phase matching: in a simple bulk configuration the corresponding wave vectors satisfy \(\mathbf k_p\approx\mathbf k_s+\mathbf k_i\). These wave vectors depend on the refractive index and polarization inside the crystal. The condition is not obtained by adding vacuum wavelengths directly.</p>
+<p>At degenerate down-conversion, the two output frequencies are equal, so each is half the pump frequency. Since the vacuum wavelength obeys \(\lambda=2\pi c/\omega\), each output wavelength is twice the pump wavelength. Thus an illustrative pump wavelength of \(400\) nm corresponds to \(800\) nm daughters under degeneracy. This is a kinematic example, not the operating wavelength of every experiment. Down-conversion and second-harmonic generation are different directions of a second-order optical process; the former creates lower-frequency pairs, whereas the latter combines energy into a higher-frequency mode.</p>
+<p>A simple quantum model makes the probabilistic nature explicit. Treat the strong pump as a prescribed classical field and let \(a_s^{\dagger}\) and \(a_i^{\dagger}\) create photons in selected signal and idler modes. The dagger denotes the adjoint. A pair-creation interaction can be written \(H_{\mathrm{int}}=\hbar g a_s^{\dagger}a_i^{\dagger}+\hbar g^*a_sa_i\), where \(g\) has units of inverse time and incorporates the pump amplitude and coupling. Starting from the vacuum \(|\mathrm{vac}\rangle\), a short interaction time \(\tau\) gives
+\[
+ e^{-iH_{\mathrm{int}}\tau/\hbar}|\mathrm{vac}\rangle
+ =|\mathrm{vac}\rangle-i g\tau|1_s1_i\rangle+
+ O(|g\tau|^2).
+\]
+The one-pair probability is approximately \(|g\tau|^2\) in the weak-conversion regime. The approximation includes a vacuum component and omits higher-pair terms. Increasing pump strength increases useful pair production, but eventually also makes multipair contamination important. A source that occasionally produces a pair is not a deterministic two-photon source simply because the pair's conditional polarization state is well controlled.</p>
+
+<h3 id="coherent-alternatives">Coherent alternatives and which-path information <a class="timestamp" href="https://www.youtube.com/watch?v=b_buCwPz5vE&amp;t=475s">W6L5 7:55</a></h3>
+<p>In a type-II configuration, the two down-converted photons have orthogonal polarizations. Select two collection directions for which the alternatives “horizontal in \(a\), vertical in \(b\)” and “vertical in \(a\), horizontal in \(b\)” cannot be distinguished by unused degrees of freedom. With equal amplitudes, the conditional pair state has the form
+\[
+ |\Psi_\varphi\rangle=
+ \frac{|HV\rangle+e^{i\varphi}|VH\rangle}{\sqrt2}.
+ \tag{11.1}
+\]
+The phase \(\varphi\) is dimensionless. Birefringent elements can change relative optical phase, and a half-wave plate can exchange \(H\) and \(V\) in one arm. Equation (11.1) gives \(|\Psi^+\rangle\) at \(\varphi=0\) and \(|\Psi^-\rangle\) at \(\varphi=\pi\). Applying the polarization flip \(X|H\rangle=|V\rangle\), \(X|V\rangle=|H\rangle\) in one arm converts these into the \(\Phi\) pair. These statements describe ideal unitary actions; an actual wave plate also needs a stated axis orientation and retardance convention.</p>
+<p>The <a href="https://doi.org/10.1103/PhysRevLett.75.4337">type-II source reported by Kwiat and colleagues</a> uses intersecting emission directions and compensation for distinguishability; its equation (1) and the surrounding discussion on printed page 4338 motivate precisely this coherent-pair description. Geometrical overlap alone is insufficient. Unobserved arrival-time or spatial information can label the alternatives even when the detected polarizations look correct.</p>
+<p>To see the distinction mathematically, append normalized environmental states \(|e_1\rangle\) and \(|e_2\rangle\) that record unused degrees of freedom. The joint pure state is
+\[
+ |\Omega\rangle=\frac{|HV\rangle|e_1\rangle+
+ e^{i\varphi}|VH\rangle|e_2\rangle}{\sqrt2}.
+\]
+For clarity choose the overlap \(\mu=\langle e_2|e_1\rangle\) real with \(0\leq\mu\leq1\); any overlap phase can be absorbed into \(\varphi\). Tracing out the environment gives
+\[
+ \rho_{\mathrm{pol}}=\frac12\bigl(|HV\rangle\langle HV|
+ +|VH\rangle\langle VH|+
+ \mu e^{-i\varphi}|HV\rangle\langle VH|
+ +\mu e^{i\varphi}|VH\rangle\langle HV|\bigr).
+ \tag{11.2}
+\]
+The diagonal terms survive because each environment vector has norm one. The cross terms are multiplied by the overlap because a partial trace contracts the environmental bra and ket. At \(\mu=1\), no environmental label distinguishes the alternatives and equation (11.2) is the pure state in equation (11.1). At \(\mu=0\), the state is the separable mixture of \(|HV\rangle\) and \(|VH\rangle\). Both cases have the same equal \(H/V\) probabilities in either arm. Local polarization randomness therefore does not certify entanglement.</p>
+<p>For \(\varphi=0\), direct multiplication gives \(\langle\Psi^+|\rho_{\mathrm{pol}}|\Psi^+\rangle=(1+\mu)/2\). This is the fidelity with the pure target state: the target projector's probability. It rises from one half to one as indistinguishability is restored. Measuring only in the \(H/V\) basis cannot see this increase, because the diagonal probabilities stay fixed. Measurements in another polarization basis are needed to expose the coherence.</p>
+
+<h2 id="bell-analysis">11.2 Bell analysis and experimental evidence <a class="timestamp" href="https://www.youtube.com/watch?v=v5shBFNplkI&amp;t=365s">W7L1 6:05</a></h2>
+<p>A nonpolarizing balanced beam splitter mixes two spatial input modes while acting identically on both polarizations. Let \(a_\lambda^{\dagger},b_\lambda^{\dagger}\) create an input photon of polarization \(\lambda\in\{H,V\}\). Let \(c_\lambda^{\dagger},d_\lambda^{\dagger}\) create output photons. Choose the real phase convention
+\[
+ a_\lambda^{\dagger}\mapsto
+ \frac{c_\lambda^{\dagger}+d_\lambda^{\dagger}}{\sqrt2},
+ \qquad
+ b_\lambda^{\dagger}\mapsto
+ \frac{c_\lambda^{\dagger}-d_\lambda^{\dagger}}{\sqrt2}.
+ \tag{11.3}
+\]
+The minus sign is essential for unitarity. The two columns \((1,1)^{\mathsf T}/\sqrt2\) and \((1,-1)^{\mathsf T}/\sqrt2\) have zero inner product. A map with two identical plus-sign columns would not preserve orthogonality and could not describe a lossless two-port beam splitter. Other optical phase conventions are valid, but their input and output phases must be propagated consistently.</p>
+<p>Assume equal temporal and spectral wave packets at the two inputs, no loss, and no extra distinguishing label. Bosonic creation operators in different modes commute. A normalized two-photon state in one mode is \((c_H^{\dagger})^2|\mathrm{vac}\rangle/\sqrt2\), whereas \(c_H^{\dagger}d_V^{\dagger}|\mathrm{vac}\rangle\) already has unit norm. The extra factorial normalization matters when converting polynomial coefficients into photon-counting probabilities.</p>
+<div class="prop"><b>Proposition 11.2 — balanced-splitter Bell patterns, proved here under the stated mode assumptions.</b> The \(\Psi^-\) input exits into different spatial ports; the \(\Psi^+\) input exits into the same port with orthogonal polarizations. Both \(\Phi\) inputs exit into the same port with equal polarizations, and their photon-number detection distributions are identical.</div>
+<div class="proof"><p>Insert equation (11.3) into the Bell-state creation polynomials. For the antisymmetric polarization combination, the same-port terms cancel:
+\[
+ \frac{a_H^{\dagger}b_V^{\dagger}-a_V^{\dagger}b_H^{\dagger}}{\sqrt2}
+ \mapsto\frac{c_V^{\dagger}d_H^{\dagger}-
+ c_H^{\dagger}d_V^{\dagger}}{\sqrt2}.
+\]
+Each remaining term has one photon in each port. With the plus sign, the different-port terms instead cancel:
+\[
+ \frac{a_H^{\dagger}b_V^{\dagger}+a_V^{\dagger}b_H^{\dagger}}{\sqrt2}
+ \mapsto\frac{c_H^{\dagger}c_V^{\dagger}-
+ d_H^{\dagger}d_V^{\dagger}}{\sqrt2}.
+\]
+Finally,
+\[
+ \frac{a_H^{\dagger}b_H^{\dagger}\pm a_V^{\dagger}b_V^{\dagger}}{\sqrt2}
+ \mapsto\frac{(c_H^{\dagger})^2-(d_H^{\dagger})^2
+ \pm(c_V^{\dagger})^2\mp(d_V^{\dagger})^2}{2\sqrt2}.
+\]
+After the same-mode factorial normalization, the last expression has four distinct occupation outcomes, each of probability one quarter. Its relative signs distinguish the two states as vectors, but photon-number probabilities cannot distinguish those signs. <span class="qed">∎</span></p></div>
+<p>The singlet's separation at the splitter is compatible with bosonic symmetry. The complete state includes spatial and polarization degrees of freedom; an antisymmetric polarization factor can accompany an antisymmetric spatial factor, making their product symmetric. It would be incorrect to say that the photons become fermions. The creation-operator calculation avoids assigning permanent labels to identical particles and shows exactly which amplitudes cancel.</p>
+<p>Place a polarizing beam splitter in each output port, sending \(H\) and \(V\) to separate detectors. The distinguishable ideal patterns are then:</p>
+<table><thead><tr><th>Input</th><th>Spatial ports</th><th>Polarizations within the occupied port(s)</th><th>Unambiguous label?</th></tr></thead><tbody><tr><td>\(\Psi^-\)</td><td>Different</td><td>Orthogonal</td><td>Yes</td></tr><tr><td>\(\Psi^+\)</td><td>Same</td><td>One \(H\), one \(V\)</td><td>Yes</td></tr><tr><td>\(\Phi^+\)</td><td>Same</td><td>Both \(H\) or both \(V\)</td><td>No; overlaps \(\Phi^-\)</td></tr><tr><td>\(\Phi^-\)</td><td>Same</td><td>Both \(H\) or both \(V\)</td><td>No; overlaps \(\Phi^+\)</td></tr></tbody></table>
+<p>A same-port event is not necessarily a single detector click: opposite polarizations are separated by the output polarizer. Conversely, a conventional threshold detector need not resolve two photons arriving in the same detector mode. Detector number resolution, dead time, and which coincidence channels are recorded belong to the apparatus model. Calling a same-port coincidence “homodyne” or a different-port coincidence “heterodyne” would confuse this photon-counting experiment with coherent detection terminology; we use the actual port and polarization labels.</p>
+
+<h3 id="ideal-versus-partial">Ideal projectors and a partial analyzer</h3>
+<div class="prop"><b>Proposition 11.3 — R11, proved here.</b> The four Bell projectors obey \(P_jP_k=\delta_{jk}P_j\) and \(\sum_jP_j=I_4\), where \(\delta_{jk}\) is one for equal labels and zero otherwise. For any density operator \(\rho\), ideal Bell probabilities \(p_j=\operatorname{Tr}(\rho P_j)\) are nonnegative and sum to one.</div>
+<div class="proof"><p>Orthonormality gives
+\(P_jP_k=|B_j\rangle\langle B_j|B_k\rangle\langle B_k|=\delta_{jk}P_j\).
+Completeness follows by expanding any vector in the four-vector Bell basis. Moreover \(p_j=\langle B_j|\rho|B_j\rangle\geq0\) by positivity of \(\rho\), and
+\(\sum_jp_j=\operatorname{Tr}(\rho\sum_jP_j)=\operatorname{Tr}\rho=1\).
+These are consequences of a valid state and complete measurement model, not statements about detector efficiency. <span class="qed">∎</span></p></div>
+<p>The balanced-splitter apparatus resolves the \(\Psi^+\) and \(\Psi^-\) labels and leaves an ambiguous outcome for the \(\Phi\) subspace. Its coarse-grained effects are \(P_{\Psi^+}\), \(P_{\Psi^-}\), and \(P_{\Phi^+}+P_{\Phi^-}\). They also sum to \(I_4\), but the last event supplies no relative-phase label. If the input is selected uniformly from the four Bell states, its unambiguous success probability is
+\[
+ p_{\mathrm{succ}}=\tfrac14(1+1+0+0)=\tfrac12.
+ \tag{11.4}
+\]
+For a source that always sends \(\Psi^-\), this particular measurement succeeds ideally every time; the uniform-prior qualification in equation (11.4) matters.</p>
+<p>For a fixed passive linear-optical network with auxiliary modes initially in vacuum, ideal photon counting, and four equiprobable polarization Bell inputs, <a href="https://arxiv.org/pdf/quant-ph/0007058">Calsamiglia and Lütkenhaus prove a maximum unambiguous success probability of one half</a>. Their Section III states the restrictions and the bound. Our explicit pattern calculation demonstrates that the simple analyzer attains that value; it does not prove the optimization over every allowed optical network. Extra ancillary photons, different encodings, or broader operations change the hypothesis set and must be analyzed separately.</p>
+
+<h3 id="dense-coding-optics">Dense coding through physical output channels <a class="timestamp" href="https://www.youtube.com/watch?v=sPg5IlAo6Bw&amp;t=79s">W7L2 1:19</a></h3>
+<p>Ideal dense coding uses a shared Bell pair, a local encoding on the sender's photon, transmission of that photon, and joint decoding at the receiver. The four Pauli encodings prepare four mutually orthogonal Bell vectors. An abstract circuit with a controlled-NOT gate and a Hadamard gate can convert this Bell basis into the computational basis. A passive optical beam splitter should not be substituted for that full two-qubit circuit merely because its one-photon mode matrix resembles a Hadamard matrix. The many-photon transformation is constrained by the way mode creation operators transform.</p>
+<p>With the analyzer just derived, the receiver obtains a definite message for the two \(\Psi\) codewords, while the \(\Phi\) codewords remain ambiguous. An experimental claim of complete decoding therefore needs additional resources or a different demonstrated measurement. Wave plates can prepare the four codewords, but preparation ability does not itself establish their complete discrimination by the receiver. The finite laboratory below makes this distinction testable by comparing the two \(\Phi\) detection distributions.</p>
+
+<h3 id="teleportation-optics">Teleportation, heralds, and verification <a class="timestamp" href="https://www.youtube.com/watch?v=sPg5IlAo6Bw&amp;t=1562s">W7L2 26:02</a></h3>
+<p>In teleportation, let photon 1 carry the unknown polarization \(|\psi\rangle=\alpha|H\rangle+\beta|V\rangle\), with \(|\alpha|^2+|\beta|^2=1\). Photons 2 and 3 share an ideal Bell state. Alice jointly measures photons 1 and 2; Bob holds photon 3. The Bell expansion decomposes the joint state into four branches, each with squared norm one quarter and with Bob's conditional state related to \(|\psi\rangle\) by a known Pauli operation. Accepting only one identifiable Bell branch gives success probability one quarter before optical losses; accepting the two identifiable branches can give one half if the corresponding corrections or data interpretation are implemented.</p>
+<p>A successful branch still requires an operational definition. Let \(S\) be the event that the specified Bell-detector pattern occurs within the coincidence window, and let \(j\) label a later polarization outcome at Bob. Conditional probabilities are
+\[
+ \Pr(j\mid S)=\frac{\Pr(j\cap S)}{\Pr(S)},\qquad \Pr(S)\gt0.
+ \tag{11.5}
+\]
+Their sum is one because the events \(j\cap S\) partition the accepted set. This normalization does not determine \(\Pr(S)\). A normalized conditional state may have unit fidelity with the target even if accepted events are rare. Conditioning must be declared before comparing a fidelity and a transmission rate.</p>
+<p>For an explicitly simplified two-detector budget, suppose pair creation occurs with probability \(p_{\mathrm{pair}}\), the analyzer identifies the needed outcome with probability \(p_{\mathrm{succ}}\) conditional on a pair, and each photon is detected independently with efficiency \(\eta\). Ignoring background, mode mismatch, and all other losses, an accepted-event probability is \(p_{\mathrm{pair}}p_{\mathrm{succ}}\eta^2\). With illustrative inputs \(p_{\mathrm{pair}}=0.02\), \(p_{\mathrm{succ}}=1/2\), and \(\eta=3/4\), it equals \(0.005625\), giving an expected \(56.25\) accepted events in \(10{,}000\) independent trials. The lab computes this value; it is a teaching budget, not an experimental measurement or a complete teleportation rate model.</p>
+<p>A teleportation verification can require a third detection at Bob, and a source herald can introduce a fourth detector. These are different coincidence records with different denominators. The two detections used for Bell analysis, the presence of a herald, Bob's verification detection, and the number of pump attempts should all be identified. A fourfold postselected record does not by itself supply the probability that an unmeasured output photon was delivered for use elsewhere.</p>
+<p>The <a href="https://doi.org/10.1038/37539">1997 experiment by Bouwmeester and colleagues</a> demonstrates photonic polarization teleportation. Its <a href="https://arxiv.org/abs/1901.11004">author-deposited abstract</a> describes the polarization-transfer mechanism; no apparatus fidelity is inferred here. Testing only H and V leaves relative-phase errors untested: both an ideal transfer and complete H/V dephasing preserve those two input projectors. By contrast, dephasing sends the diagonal state \((|H\rangle+|V\rangle)/\sqrt2\) to the equal incoherent H/V mixture. One convenient coherence-sensitive design therefore includes diagonal and circular input polarizations, with output measurements sensitive to the corresponding off-diagonal matrix elements. Other informationally complete designs are possible. A coincidence dip or peak concerns a specified interference setting; it does not by itself characterize the complete accepted channel.</p>
+
+<h2 id="lab">11.3 A finite optical laboratory</h2>
+<p>The program takes no command-line inputs and prints deterministic checks for the ideal model. It constructs the Bell projectors, transforms creation-operator pairs through equation (11.3), and collects coefficients in normalized photon-number states. The four output modes are ordered \((c_H,c_V,d_H,d_V)\), and an occupation tuple records the number in each. The factor \(\sqrt2\) for two photons in one mode is explicitly included. It then checks the environment-overlap family in equation (11.2) and the illustrative acceptance budget.</p>
+<p>The program neither samples detector noise nor reproduces a crystal emission spectrum. Its assertions check positivity, normalization, unitarity, and the distinctions established by the derivation. Identical \(\Phi\) detection distributions and the one-half uniform-input success probability are independent finite checks of the algebra, not a proof of the general linear-optical bound.</p>
+<pre><code class="language-python" data-file="ch11_lab.py">&quot;&quot;&quot;Ideal polarization Bell analysis and explicit conditioning budgets.&quot;&quot;&quot;
+
+from math import sqrt
+
+import numpy as np
+
+
+def two_photon_output(terms, mixing):
+    &quot;&quot;&quot;Map creation-operator pairs to normalized output Fock amplitudes.&quot;&quot;&quot;
+    amplitudes = {}
+    for coefficient, first, second in terms:
+        for i in range(4):
+            for j in range(4):
+                occupation = tuple(int(k == i) + int(k == j)
+                                   for k in range(4))
+                factor = sqrt(2) if i == j else 1
+                value = coefficient*mixing[i, first]*mixing[j, second]
+                amplitudes[occupation] = (
+                    amplitudes.get(occupation, 0) + factor*value)
+    return {key: value for key, value in amplitudes.items()
+            if abs(value) &gt; 1e-12}
+
+
+def main():
+    basis = np.eye(4)
+    bells = [
+        (basis[:, 0] + basis[:, 3])/sqrt(2),
+        (basis[:, 0] - basis[:, 3])/sqrt(2),
+        (basis[:, 1] + basis[:, 2])/sqrt(2),
+        (basis[:, 1] - basis[:, 2])/sqrt(2),
+    ]
+    projectors = [np.outer(v, v.conj()) for v in bells]
+    assert np.allclose(sum(projectors), np.eye(4))
+    for i, first in enumerate(projectors):
+        for j, second in enumerate(projectors):
+            assert np.allclose(first @ second, first if i == j else 0)
+    print(&quot;Bell projectors: orthogonal, complete, trace one&quot;)
+
+    # Input modes aH,aV,bH,bV; output modes cH,cV,dH,dV.
+    mixing = np.array([[1, 0, 1, 0], [0, 1, 0, 1],
+                       [1, 0, -1, 0], [0, 1, 0, -1]])/sqrt(2)
+    assert np.allclose(mixing.conj().T @ mixing, np.eye(4))
+    root = 1/sqrt(2)
+    inputs = {
+        &quot;Phi+&quot;: [(root, 0, 2), (root, 1, 3)],
+        &quot;Phi-&quot;: [(root, 0, 2), (-root, 1, 3)],
+        &quot;Psi+&quot;: [(root, 0, 3), (root, 1, 2)],
+        &quot;Psi-&quot;: [(root, 0, 3), (-root, 1, 2)],
+    }
+    distributions = {}
+    for name, terms in inputs.items():
+        output = two_photon_output(terms, mixing)
+        probabilities = {key: abs(value)**2
+                         for key, value in output.items()}
+        assert np.isclose(sum(probabilities.values()), 1)
+        coincidence = sum(value for key, value in probabilities.items()
+                          if sum(key[:2]) == sum(key[2:]) == 1)
+        distributions[name] = probabilities
+        print(f&quot;{name}: patterns={len(output)}, &quot;
+              f&quot;different-port probability={coincidence:.6f}&quot;)
+    assert distributions[&quot;Phi+&quot;] == distributions[&quot;Phi-&quot;]
+    identified = 0
+    for name, distribution in distributions.items():
+        for pattern, probability in distribution.items():
+            compatible = sum(pattern in other
+                             for other in distributions.values())
+            if compatible == 1:
+                identified += probability/4
+    print(f&quot;Equiprobable Bell-input success: {identified:.6f}&quot;)
+
+    for overlap in [0, 0.5, 1]:
+        rho = np.zeros((4, 4))
+        rho[1, 1] = rho[2, 2] = 0.5
+        rho[1, 2] = rho[2, 1] = overlap/2
+        fidelity = np.trace(rho @ projectors[2]).real
+        assert np.linalg.eigvalsh(rho).min() &gt;= -1e-12
+        print(f&quot;Environment overlap={overlap:.1f}: &quot;
+              f&quot;Psi+ fidelity={fidelity:.6f}&quot;)
+
+    pair_probability, efficiency, trials = 0.02, 0.75, 10000
+    accepted = pair_probability*identified*efficiency**2
+    print(f&quot;Illustrative accepted-event probability: {accepted:.6f}&quot;)
+    print(f&quot;Expected accepted events in {trials} trials: &quot;
+          f&quot;{trials*accepted:.2f}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<pre><code class="output">Bell projectors: orthogonal, complete, trace one
+Phi+: patterns=4, different-port probability=0.000000
+Phi-: patterns=4, different-port probability=0.000000
+Psi+: patterns=2, different-port probability=0.000000
+Psi-: patterns=2, different-port probability=1.000000
+Equiprobable Bell-input success: 0.500000
+Environment overlap=0.0: Psi+ fidelity=0.500000
+Environment overlap=0.5: Psi+ fidelity=0.750000
+Environment overlap=1.0: Psi+ fidelity=1.000000
+Illustrative accepted-event probability: 0.005625
+Expected accepted events in 10000 trials: 56.25
+</code></pre>
+<p>The singlet alone has unit different-port probability, but polarization-resolving detectors also identify the same-port, opposite-polarization \(\Psi^+\) pattern. The two \(\Phi\) states have equal number probabilities despite different amplitude signs. The environment sweep changes target fidelity while leaving the computational-basis populations fixed. These are three separate diagnostics: spatial-port interference, information available in number detection, and coherence lost to an ignored label.</p>
+
+<h2 id="exercises">11.4 Exercises and worked solutions</h2>
+<article class="exercise"><h3 id="ex11-1">Exercise 1 — Bell completeness</h3><p>Write \(P_{\Phi^+}\) and \(P_{\Phi^-}\) in the declared four-dimensional basis. Show why summing them destroys sensitivity to the \(HH/VV\) relative phase.</p><details><summary>Solution</summary><p>The two matrices have diagonal entries \(1/2\) in positions \(HH,HH\) and \(VV,VV\). Their \(HH,VV\) and \(VV,HH\) entries are respectively \(+1/2\) and \(-1/2\). Adding cancels the off-diagonal entries, yielding \(|HH\rangle\langle HH|+|VV\rangle\langle VV|\). Thus the probability of the combined event depends only on \(\rho_{HH,HH}+\rho_{VV,VV}\), not on the relative-phase coherence. The state may still contain that coherence; this measurement outcome does not reveal it.</p></details></article>
+<article class="exercise"><h3 id="ex11-2">Exercise 2 — a distinguishable source</h3><p>Set \(\mu=0\) in equation (11.2). Give an explicit separable decomposition, and compare the local \(H/V\) statistics with those of \(\Psi^+\).</p><details><summary>Solution</summary><p>The state is \(\rho=(|H\rangle\langle H|\otimes|V\rangle\langle V|+|V\rangle\langle V|\otimes|H\rangle\langle H|)/2\). This is a convex combination of product states and hence separable. Either local partial trace is \(I_2/2\), exactly as for \(\Psi^+\). The difference is in the off-diagonal \(HV/VH\) entries. For example, projection onto \(\Psi^+\) has probability one half for the mixture and one for the pure Bell state. Local marginal randomness is therefore insufficient.</p></details></article>
+<article class="exercise"><h3 id="ex11-3">Exercise 3 — the normalization trap</h3><p>For the \(\Phi^+\) beam-splitter output, a calculation assigns probability \(1/8\) to each of four double-occupancy terms and obtains total probability one half. Locate the error and repair it.</p><details><summary>Solution</summary><p>The polynomial coefficient of each term \((c_\lambda^{\dagger})^2|\mathrm{vac}\rangle\) or \((d_\lambda^{\dagger})^2|\mathrm{vac}\rangle\) has magnitude \(1/(2\sqrt2)\). This creation-operator state has norm \(\sqrt2\), not one. In a normalized Fock basis the amplitude is therefore \(1/2\) and the probability is \(1/4\). Four such terms sum to one. The missing factorial factor produces the erroneous one-half norm.</p></details></article>
+<article class="exercise"><h3 id="ex11-4">Exercise 4 — conditional success and bias</h3><p>Suppose the Bell priors are \(1/10,2/10,3/10,4/10\) in the order \(\Phi^+,\Phi^-,\Psi^+,\Psi^-\). Find the ideal analyzer success probability and the conditional probability that an accepted label is \(\Psi^-\). Does the one-half equiprobable bound apply to this prior?</p><details><summary>Solution</summary><p>The accepted labels have total weight \(3/10+4/10=7/10\). Conditioning gives \(\Pr(\Psi^-\mid S)=(4/10)/(7/10)=4/7\). The cited bound is formulated for equal priors and does not assert that this biased ensemble must have success at most one half. The apparatus has not gained new discrimination capability; the source sends identifiable states more often.</p></details></article>
+<article class="exercise"><h3 id="ex11-5">Exercise 5 — apparatus design judgment</h3><p>A source can produce all four Bell states. A receiver uses only a balanced nonpolarizing beam splitter followed by polarization-resolved number detection. Identify the missing evidence in a claim that every two-bit dense-coded message is decoded without error or rejection.</p><details><summary>Solution</summary><p>The preparation claim establishes four orthogonal input states. The derived receiver distributions establish identical detection probabilities for \(\Phi^+\) and \(\Phi^-\). A decision rule based only on those outcomes cannot assign both states distinct deterministic labels correctly. The claim needs an additional physically implemented discrimination resource, or it must report an ambiguous/rejected outcome. Adding only a different name to the same detector pattern does not change its information.</p></details></article>
+<article class="exercise"><h3 id="ex11-6">Exercise 6 — computational conditioning sweep</h3><p>Modify the lab to sweep detector efficiency \(\eta\) from zero to one for fixed pair probability and analyzer success. Compare a two-detector record with a three-detector record under independent identical efficiencies. Explain why a conditional fidelity curve could stay constant while these rates change.</p><details><summary>Solution</summary><p>The two idealized probabilities are \(p_2=p_{\mathrm{pair}}p_{\mathrm{succ}}\eta^2\) and \(p_3=p_{\mathrm{pair}}p_{\mathrm{succ}}\eta^3\). For \(\eta\gt0\), their ratio is \(p_3/p_2=\eta\); at zero both vanish and no normalized accepted-state fidelity is defined. Implement the sweep with nonnegative arrays and assert \(p_3\leq p_2\). Under state-independent loss and perfect accepted transformations, losses remove events without changing the normalized accepted polarization state. Its conditional fidelity can thus remain one while the useful event rate falls. State-dependent loss or background can invalidate this explanation and must be modeled separately.</p></details></article>
+
+<h2 id="limits">11.5 What this model captures and misses</h2>
+<p>The selected-mode model captures polarization coherence, beam-splitter interference, number-pattern distinguishability, and conditional probability accounting. Its exact statements assume a pair in the specified modes, the stated optical phase convention, matched unused degrees of freedom, and ideal measurement elements. The environmental overlap in equation (11.2) isolates one mechanism of lost coherence; it is not a complete model of a real crystal.</p>
+<p>Pair spectral distributions, phase-matching bandwidth, multipair production, dark counts, detector timing, afterpulsing, transmission loss, and acceptance-window selection require additional physical parameters. They cannot be read off from a Bell vector. The open-system chapters provide tools for reduced states and noisy maps; they do not retroactively turn the present illustrative budget into a measured apparatus characterization.</p>
+
+<h2 id="primary-sources">11.6 Primary sources and attribution</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=b_buCwPz5vE">Mitra, W6L5: Generation of Entangled Photons</a> — nonlinear susceptibility, energy and phase matching, type-II polarization pairs, and the start of symmetry-based Bell analysis.</li><li><a href="https://www.youtube.com/watch?v=v5shBFNplkI">Mitra, W7L1: Bell State Analyzer</a> — balanced-splitter convention, same-port and different-port interference, and polarization analysis.</li><li><a href="https://www.youtube.com/watch?v=sPg5IlAo6Bw">Mitra, W7L2: Experimental Teleportation and Dense Coding</a> — optical implementation and coincidence-based verification.</li><li><a href="https://doi.org/10.1103/PhysRevLett.75.4337">Kwiat et al., New High-Intensity Source of Polarization-Entangled Photon Pairs, Physical Review Letters 75, 4337 (1995)</a> — printed page 4338, equations (1)–(2) and the compensation discussion. This chapter derives its own reduced-state overlap model rather than reproducing the experimental data.</li><li><a href="https://arxiv.org/pdf/quant-ph/0007058">Calsamiglia and Lütkenhaus, Maximum efficiency of a linear-optical Bell-state analyzer</a> — PDF pages 1–3, especially the restricted fixed-network model in Section III. The one-half optimum is cited under those restrictions.</li><li><a href="https://doi.org/10.1038/37539">Bouwmeester et al., Experimental quantum teleportation, Nature 390, 575–579 (1997)</a> — publisher abstract for the historical transfer mechanism; no detailed experimental number is used here.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-10.html">Previous chapter</a> <a href="chapter-12.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

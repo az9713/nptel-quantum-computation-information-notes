@@ -1,0 +1,199 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>What quantum computation changes: states, resources, and qubits</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>1. What quantum computation changes: states, resources, and qubits</h1>
+<p class="lead">A direct state-vector simulation of 30 qubits needs 16 GiB just to store one vector in double-precision complex arithmetic. Yet a measurement of that register returns one 30-bit string. The large vector and the short observed answer describe different resources. Understanding their relationship is the first requirement for judging a quantum algorithm's claimed advantage.</p>
+<p class="source-note"><strong>Lecture material:</strong> <a href="https://www.youtube.com/watch?v=1NA7u71SUjg">W1L1</a> motivates computation through computability, complexity, physical devices, factoring, and superposition; <a href="https://www.youtube.com/watch?v=32jXI3i460M">W1L2</a> introduces qubits, composite bases, initialization, unitary evolution, and readout. <strong>Primary-reference clarifications:</strong> <a href="https://arxiv.org/pdf/quant-ph/9508027">Shor, §1</a>, distinguishes computational theses from theorems and frames the factoring result in terms of input size; <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Preskill, §2.1</a>, states the quantum postulates. <strong>Original teaching constructions:</strong> the memory calculation, complex product state, explicit basis proof, interference example, laboratory, and exercises. Machine transcripts establish topic order; no complete audiovisual transcription is claimed.</p>
+
+<h2 id="model">1.1 Computational questions and the resources used to answer them <a class="timestamp" href="https://www.youtube.com/watch?v=1NA7u71SUjg&amp;t=1118s">W1L1 18:38</a></h2>
+<p>A computational problem specifies permitted inputs and acceptable outputs. An algorithm supplies a finite rule for producing an acceptable output from each input in its domain. <em>Computability</em> asks whether such a rule exists in a specified model. <em>Complexity</em> asks how its resource use grows as inputs become larger. These questions remain distinct when the physical carrier of information changes.</p>
+<p>A Turing machine is a mathematical model with a finite control, a tape of discrete symbols, and rules for updating its control and tape. Universality means that one machine can simulate the rules of another when given its description. The Church–Turing thesis connects the informal idea of an effective algorithm with a formal computation model. It is a thesis about that connection, rather than a theorem obtained by manipulating a vector space. An efficiency claim adds a further condition on the resources required for simulation. Shor makes these distinctions explicitly in <a href="https://arxiv.org/pdf/quant-ph/9508027">§1, PDF pages 2–3</a>.</p>
+<p>The choice of physical system matters to efficiency. A classical algorithm and a quantum algorithm can solve the same finite input-output problem while requiring different numbers of elementary operations. A direct classical simulation of a quantum circuit is itself an algorithm. Its cost depends on the circuit's structure, desired accuracy, and chosen representation. The cost of storing a completely general state vector establishes a cost for that representation. It does not establish that every classical method must pay that cost for every circuit.</p>
+
+<h3 id="input-length">Input length determines the scaling variable</h3>
+<p>Let \(N\) be a positive integer supplied in binary, and let \(\ell(N)\) be the number of bits in its binary representation without leading zeroes. This local use of \(N\) concerns input encoding. Later factoring chapters restrict \(N\) to an odd composite integer.</p>
+<div class="prop"><strong>Proposition 1.1 — Binary input length.</strong> For \(N\geq1\),
+\[
+\ell(N)=\lfloor\log_2 N\rfloor+1.
+\tag{1.1}
+\]
+This is an exact encoding count, proved here.</div>
+<div class="proof"><p>A positive integer represented with \(\ell\) bits has a leading one. The smallest such integer is \(2^{\ell-1}\), and the largest is \(2^\ell-1\). Hence \(2^{\ell-1}\leq N\lt2^\ell\). Taking base-two logarithms gives \(\ell-1\leq\log_2N\lt\ell\), which identifies the integer floor and proves (1.1). <span class="qed">∎</span></p></div>
+<p>Trial division tests candidate divisors up to \(\sqrt N\), since any composite integer has a factor no larger than that. This particular algorithm therefore makes at most order \(\sqrt N\) trial divisions. In terms of binary input length, its upper bound grows exponentially: \(N\) lies between successive powers of two, so \(\sqrt N\) is comparable to \(2^{\ell/2}\). A polynomial in the numerical value of an input is not generally a polynomial in the size of its encoding.</p>
+<p>This example compares an algorithm with an encoding convention. It does not prove a lower bound for factoring. Nor does successful verification of a proposed factorization determine how hard it is to find one. If a candidate pair multiplies to \(N\), multiplication verifies the claim; the existence of a quick verification procedure alone does not supply a lower bound on every possible search procedure. The quantum factoring result is a constructive algorithmic statement under a stated computation model, as described in <a href="https://arxiv.org/pdf/quant-ph/9508027">Shor's abstract and §1</a>.</p>
+<p>We will count qubits, elementary circuit operations, oracle queries, and repeated measurements separately. A query is one permitted invocation of a specified input-output operation whose internal construction is hidden by the model. An improvement in query count becomes a claim about a physical device only after state preparation, the operation's implementation, control errors, and readout have also been accounted for. Chapter 2 uses a query problem small enough to enumerate exactly.</p>
+
+<h3 id="storage">The opening memory calculation</h3>
+<p>A <em>qubit</em> is a quantum system modeled by a two-dimensional complex state space. The composition postulate, developed below, gives a register of \(n\) qubits a state-vector space of dimension \(d=2^n\), where \(n\) is a nonnegative integer. A dense numerical representation stores one complex amplitude per basis vector. In NumPy's <code>complex128</code> representation each amplitude uses 16 bytes: two 64-bit floating-point components. The array storage is therefore \(16\,2^n\) bytes, excluding metadata and working memory. These are representation counts, not measured memory consumption of a complete simulator.</p>
+<table><thead><tr><th>Register</th><th>Dense vector bytes</th><th>Binary storage unit</th></tr></thead><tbody>
+<tr><td>30 qubits</td><td>17,179,869,184</td><td>16 GiB</td></tr>
+<tr><td>40 qubits</td><td>17,592,186,044,416</td><td>16 TiB</td></tr>
+<tr><td>50 qubits</td><td>18,014,398,509,481,984</td><td>16 PiB</td></tr>
+</tbody></table>
+<p>Here a GiB is \(2^{30}\) bytes, a TiB is \(2^{40}\) bytes, and a PiB is \(2^{50}\) bytes. The laboratory computes every entry without allocating the corresponding large array. Ten additional qubits multiply this storage by \(2^{10}\). A product state, however, can be stored as its individual one-qubit vectors until operations require a more general representation. We must first understand how a state, its representation, and its measured outcomes differ.</p>
+
+<h2 id="states">1.2 Qubits as normalized vectors <a class="timestamp" href="https://www.youtube.com/watch?v=32jXI3i460M&amp;t=65s">W1L2 1:05</a></h2>
+<p>In finite dimension a Hilbert space is a complex vector space equipped with a positive-definite inner product. Completeness is automatic in this finite-dimensional setting. We write the one-qubit space as \(\mathcal H=\mathbb C^2\), and represent a vector by a column. Dirac's notation writes that column as a <em>ket</em>, \(|\psi\rangle\). Its conjugate transpose is the corresponding <em>bra</em>, \(\langle\psi|\). Their product is the squared norm, \(\langle\psi|\psi\rangle\). Complex conjugation is essential: the norm of a coefficient is its modulus squared, not its ordinary square.</p>
+<p>The computational basis is the ordered orthonormal pair
+\[
+|0\rangle=\begin{pmatrix}1\\0\end{pmatrix},
+\qquad
+|1\rangle=\begin{pmatrix}0\\1\end{pmatrix}.
+\]
+Orthonormality means \(\langle0|0\rangle=\langle1|1\rangle=1\) and \(\langle0|1\rangle=\langle1|0\rangle=0\). The labels zero and one name basis states; they are not the entries of a classical variable that already possesses both values.</p>
+<div class="def"><strong>Definition 1.1 — Pure qubit state.</strong> A normalized vector
+\[
+|\psi\rangle=\alpha_0|0\rangle+\alpha_1|1\rangle,
+\qquad
+\alpha_0,\alpha_1\in\mathbb C,\quad
+|\alpha_0|^2+|\alpha_1|^2=1
+\tag{1.2}
+\]
+represents a pure state. Two normalized vectors differing by a common factor \(e^{i\chi}\), with real \(\chi\), represent the same physical pure state. This identification and the measurement rule are physical postulates; their algebraic consequences are derived below.</div>
+<p>For example, \((\sqrt3/2)|0\rangle+(i/2)|1\rangle\) is normalized because \(3/4+1/4=1\). Replacing \(i/2\) by \(-i/2\) changes a relative phase. Multiplying both coefficients by \(i\) changes only the common phase. A common phase cannot affect any measurement amplitude's modulus, while a relative phase can affect the result of first combining amplitudes by a unitary operation.</p>
+<p>A basis measurement is specified along with the state. The Born rule assigns outcome \(x\) the probability \(|\langle x|\psi\rangle|^2\). In the computational basis, those probabilities are \(p_0=|\alpha_0|^2\) and \(p_1=|\alpha_1|^2\). Their sum is one by normalization. Conditional on an outcome of nonzero probability, an ideal rank-one projective measurement leaves the corresponding basis state. This conditional update is a further part of the projective measurement model; a general physical readout need not be an ideal projective measurement.</p>
+<p>The same two-dimensional model can be embedded in different physical systems. Two selected atomic levels or two orthogonal photon polarizations can define the logical basis. The restriction to a controlled two-level subspace is an assumption. Additional atomic levels, other photon modes, or coupling to an environment can take the physical system outside that model. A choice of two basis labels does not prove that a device remains inside the chosen subspace.</p>
+
+<h2 id="composites">1.3 Composite systems and the computational basis <a class="timestamp" href="https://www.youtube.com/watch?v=32jXI3i460M&amp;t=930s">W1L2 15:30</a></h2>
+<p>The quantum composition postulate assigns systems \(A\) and \(B\), with spaces \(\mathcal H_A\) and \(\mathcal H_B\), the joint space \(\mathcal H_A\otimes\mathcal H_B\). The tensor product combines basis labels and allows linear combinations of their products. It is different from the direct sum, which would add alternative vector spaces rather than describe both subsystems together. If the two systems are independently prepared in pure states, their joint vector is their tensor product. General joint pure states need not have this product form.</p>
+<p>For columns \(a=(a_0,a_1)^{\mathsf T}\) and \(b=(b_0,b_1)^{\mathsf T}\), the chosen Kronecker-product convention is
+\[
+a\otimes b=
+\begin{pmatrix}
+a_0b_0\\a_0b_1\\a_1b_0\\a_1b_1
+\end{pmatrix}.
+\tag{1.3}
+\]
+The first qubit is the most significant bit: the ordered labels are \(00,01,10,11\). Thus \(|01\rangle=(0,1,0,0)^{\mathsf T}\) and \(|10\rangle=(0,0,1,0)^{\mathsf T}\). Software using another bit order can represent the same physical state, but indices and gates must be converted consistently.</p>
+<div class="prop"><strong>Proposition 1.2 — Basis size and normalized probabilities.</strong> For \(n\) qubits the product vectors \(|x\rangle=|x_1\rangle\otimes\cdots\otimes|x_n\rangle\), with every \(x_j\in\{0,1\}\), form an orthonormal basis of \(2^n\) vectors. Every normalized vector has a unique expansion
+\[
+|\psi\rangle=\sum_{x=0}^{2^n-1}\alpha_x|x\rangle,\qquad
+\sum_{x=0}^{2^n-1}|\alpha_x|^2=1.
+\tag{1.4}
+\]
+Computational-basis measurement returns \(x\) with probability \(|\alpha_x|^2\). The basis and normalization statements are proved here under the composition postulate; the last statement is the Born rule applied to that basis.</div>
+<div class="proof"><p>The tensor-product inner product satisfies \(\langle x|y\rangle=\prod_{j=1}^n\langle x_j|y_j\rangle\). Each factor is one when the two bits agree and zero otherwise. Hence the product vectors are orthonormal. They span because each factor space is spanned by its two basis vectors, and multilinearity expands every elementary tensor in those product vectors. There are two choices for each of \(n\) labels, giving \(2^n\) possibilities. Orthonormality also makes the expansion unique. Substituting the expansion into its norm gives
+\[
+\langle\psi|\psi\rangle
+=\sum_{x,y}\alpha_x^*\alpha_y\langle x|y\rangle
+=\sum_x|\alpha_x|^2.
+\]
+The asterisk denotes complex conjugation. A unit norm makes the last sum one, exactly the normalization required of the outcome probabilities. For \(n=0\), the empty tensor product is the one-dimensional scalar space, consistent with \(2^0=1\). <span class="qed">∎</span></p></div>
+<p>For two independently prepared qubits, choose
+\[
+|a\rangle=\frac{\sqrt3}{2}|0\rangle+\frac{i}{2}|1\rangle,
+\qquad
+|b\rangle=\frac{|0\rangle-|1\rangle}{\sqrt2}.
+\]
+Equation (1.3) gives the joint coefficients
+\[
+|a\rangle\otimes|b\rangle
+=\sqrt{\frac38}|00\rangle-\sqrt{\frac38}|01\rangle
++\frac{i}{\sqrt8}|10\rangle-\frac{i}{\sqrt8}|11\rangle.
+\tag{1.5}
+\]
+The probabilities are \(3/8,3/8,1/8,1/8\). Their sum is one. Summing over the second bit gives first-qubit probabilities \(3/4,1/4\), while summing over the first gives second-qubit probabilities \(1/2,1/2\). Marginalization discards a measured label by summing probabilities; it does not sum complex amplitudes belonging to distinct orthogonal outcomes.</p>
+<p>The vector \((|00\rangle+|11\rangle)/\sqrt2\) cannot be written as a product of two one-qubit vectors. To check this directly, write a hypothetical product's coefficients as \(a_0b_0,a_0b_1,a_1b_0,a_1b_1\). The first and last must be nonzero, forcing all four one-qubit coefficients to be nonzero. Then the middle two products cannot vanish, a contradiction. Such a nonproduct joint pure state is called <em>entangled</em>. Chapters 7–8 develop its local description and quantitative structure. The counterexample already shows why the space of possible joint vectors is larger than the collection of independent preparations.</p>
+
+<h2 id="evolution">1.4 Initialization, unitary manipulation, and readout <a class="timestamp" href="https://www.youtube.com/watch?v=32jXI3i460M&amp;t=1338s">W1L2 22:18</a></h2>
+<p>A circuit model begins by preparing a known register state, often \(|0\rangle^{\otimes n}\). Preparation is a physical operation and can have a resource cost. The ideal isolated manipulation is a linear map \(U:\mathcal H\to\mathcal H\) satisfying \(U^\dagger U=I_d\), where the dagger denotes conjugate transpose and \(I_d\) is the identity in dimension \(d\). Such a map is called unitary.</p>
+<div class="prop"><strong>Proposition 1.3 — Unitary norm preservation.</strong> If \(U^\dagger U=I_d\), then \(\|U|\psi\rangle\|^2=\|\psi\rangle\|^2\) for every vector. Conversely, a complex linear map preserving every vector's norm in the same finite dimension is unitary.</div>
+<div class="proof"><p>The first claim follows by inserting \(U^\dagger U\) between the bra and ket. For the converse put \(D=U^\dagger U-I_d\), a Hermitian matrix. Norm preservation gives \(\langle v|D|v\rangle=0\) for every \(v\). Taking each basis vector makes every diagonal entry zero. Taking the sums of two distinct basis vectors gives twice the real part of the corresponding off-diagonal entry; taking one plus \(i\) times the other gives its imaginary part. Both parts vanish, so \(D=0\). This uses preservation for all inputs and complex linearity, not just successful normalization of one test vector. <span class="qed">∎</span></p></div>
+<p>For a closed system with a time-independent Hermitian Hamiltonian \(H_{\rm phys}\), quantum dynamics gives \(U(t)=\exp(-iH_{\rm phys}t/\hbar)\). Here \(t\) is elapsed time in seconds and \(\hbar\) is the reduced Planck constant in joule seconds; \(H_{\rm phys}\) has units of energy, making the exponent dimensionless. Diagonalizing a Hermitian Hamiltonian shows that this exponential has eigenvalues of unit modulus and is unitary. The time-independent hypothesis matters: simply inserting a time-dependent Hamiltonian into this exponential generally omits time ordering. Density operators and general dynamics are developed in Chapters 5 and 15.</p>
+<p>Readout is a measurement after the manipulation. The computational-basis probability is \(|\langle x|U|\psi\rangle|^2\). A state vector is a rule for these probabilities, not a list delivered in a single observation. Repeating a circuit means preparing the input again, applying the operations again, and sampling another output. An immediate second ideal measurement of the already measured register instead repeats the same basis label.</p>
+
+<h3 id="phase">A relative phase can change the observed answer</h3>
+<p>Define \(|+\rangle=(|0\rangle+|1\rangle)/\sqrt2\) and \(|-\rangle=(|0\rangle-|1\rangle)/\sqrt2\). Both give the same probabilities \(1/2,1/2\) in the computational basis. They are nevertheless different states: their inner product is zero. To distinguish them, define the Hadamard matrix
+\[
+H_{\rm gate}=\frac1{\sqrt2}
+\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
+\tag{1.6}
+\]
+Direct multiplication gives \(H_{\rm gate}^\dagger H_{\rm gate}=I_2\), \(H_{\rm gate}|+\rangle=|0\rangle\), and \(H_{\rm gate}|-\rangle=|1\rangle\). Thus applying that unitary before readout makes the two states perfectly distinguishable. The off-diagonal combining of coefficients turns a relative sign into a different probability distribution. This is interference in an exactly solvable two-dimensional example.</p>
+<p>A common phase cannot produce the same distinction. For any real \(\chi\), \(\langle x|Ue^{i\chi}|\psi\rangle=e^{i\chi}\langle x|U|\psi\rangle\), so its modulus squared is unchanged for every outcome and every unitary. Relative phase and global phase therefore have different operational roles. The proof does not require an interpretation of a qubit as two classical computations whose answers can both be read independently.</p>
+
+<h3 id="repetition">Repeated shots estimate probabilities</h3>
+<p>For a fixed outcome of probability \(p\), let \(X_k\) be one if shot \(k\) gives that outcome and zero otherwise. Under independent identical preparations, \(E[X_k]=p\) and \(\operatorname{Var}(X_k)=p(1-p)\), since \(X_k^2=X_k\). The empirical frequency after \(m\) shots is \(\widehat p=m^{-1}\sum_{k=1}^mX_k\). Independence makes cross-covariances vanish, giving
+\[
+E[\widehat p]=p,\qquad
+\operatorname{Var}(\widehat p)=\frac{p(1-p)}m\leq\frac1{4m}.
+\tag{1.7}
+\]
+The bound follows from \(p(1-p)=1/4-(p-1/2)^2\). It is a variance bound, not a deterministic error guarantee or a confidence interval. For the \(00\) outcome in (1.5), \(p=3/8\). With 1024 independent shots, the predicted frequency standard deviation is approximately 0.015129. The laboratory computes this number from the stated distribution; it does not report an experiment.</p>
+<p>Even perfect knowledge of one basis's probabilities does not reveal all relative phases: \(|+\rangle\) and \(|-\rangle\) supply a counterexample. Recovering an unknown state from repeated preparations requires sufficiently informative measurement settings and statistical inference, a procedure called state tomography. We have not proved a general sample-complexity bound for tomography. We have established the simpler obstruction: one computational-basis distribution cannot uniquely specify an arbitrary complex pure state.</p>
+
+<h2 id="lab">1.5 Laboratory: check the model before allocating the simulator</h2>
+<p>The program constructs computational bases for one, two, and three qubits in most-significant-bit-first order. It checks their Gram matrices, constructs (1.5), sums a marginal, distinguishes the two phase states, and computes storage counts without allocating large vectors. Inputs are the finite states and register sizes shown in the source; outputs are the deterministic values below. NumPy is required. Assertions use floating-point tolerances and verify these finite constructions, rather than proving all possible circuit behavior.</p>
+<pre><code class="language-python" data-file="ch01_lab.py">"""Finite checks for qubit bases, measurement, and storage accounting."""
+import numpy as np
+
+zero = np.array([1, 0], dtype=complex)
+one = np.array([0, 1], dtype=complex)
+for n in (1, 2, 3):
+    vectors = []
+    for x in range(2**n):
+        vector = np.array([1], dtype=complex)
+        for bit in f"{x:0{n}b}":
+            vector = np.kron(vector, zero if bit == "0" else one)
+        vectors.append(vector)
+    basis = np.column_stack(vectors)
+    assert np.allclose(basis.conj().T @ basis, np.eye(2**n))
+    assert np.allclose(basis, np.eye(2**n))
+    print(f"n={n}: {len(vectors)} orthonormal basis vectors")
+
+left = np.array([np.sqrt(3) / 2, 0.5j])
+right = np.array([1, -1]) / np.sqrt(2)
+psi = np.kron(left, right)
+probabilities = np.abs(psi)**2
+assert np.isclose(np.vdot(psi, psi), 1)
+assert np.allclose(probabilities, [0.375, 0.375, 0.125, 0.125])
+print("product probabilities:", np.round(probabilities, 6))
+print("first-qubit marginal:", probabilities.reshape(2, 2).sum(axis=1))
+
+hadamard = np.array([[1, 1], [1, -1]]) / np.sqrt(2)
+plus = np.array([1, 1]) / np.sqrt(2)
+minus = np.array([1, -1]) / np.sqrt(2)
+assert np.allclose(np.abs(plus)**2, np.abs(minus)**2)
+assert np.allclose(np.abs(hadamard @ plus)**2, [1, 0])
+assert np.allclose(np.abs(hadamard @ minus)**2, [0, 1])
+print("Z probabilities, plus and minus: [0.5 0.5], [0.5 0.5]")
+print("after Hadamard, plus and minus: [1. 0.], [0. 1.]")
+for n in (30, 40, 50):
+    storage = 16 * 2**n
+    print(f"n={n}: dense complex128 state requires {storage} bytes")
+shots = 1024
+p = probabilities[0]
+standard_deviation = np.sqrt(p * (1 - p) / shots)
+print(f"1024-shot frequency standard deviation: {standard_deviation:.6f}")
+assert (1023).bit_length() == 10 and (1024).bit_length() == 11
+print("all finite checks passed")
+</code></pre>
+<pre><code class="output">n=1: 2 orthonormal basis vectors
+n=2: 4 orthonormal basis vectors
+n=3: 8 orthonormal basis vectors
+product probabilities: [0.375 0.375 0.125 0.125]
+first-qubit marginal: [0.75 0.25]
+Z probabilities, plus and minus: [0.5 0.5], [0.5 0.5]
+after Hadamard, plus and minus: [1. 0.], [0. 1.]
+n=30: dense complex128 state requires 17179869184 bytes
+n=40: dense complex128 state requires 17592186044416 bytes
+n=50: dense complex128 state requires 18014398509481984 bytes
+1024-shot frequency standard deviation: 0.015129
+all finite checks passed
+</code></pre>
+<p>The product probabilities agree with the algebra in (1.5), and the marginal recovers the first preparation's \(3/4,1/4\) weights. The interference lines compare mathematical probabilities before and after a unitary, not noisy samples. The storage lines reproduce the opening table. A failed normalization or basis-order assertion is a reason to stop interpreting the simulator's output: it indicates that the implemented representation differs from the model just derived.</p>
+
+<h2 id="limits">1.6 What this model establishes and what it omits</h2>
+<p>The chapter establishes a finite state-space model with explicit composition, a norm-preserving isolated manipulation, and a specified projective readout. It explains the dense-vector storage count and proves why the Born probabilities normalize. It also supplies a concrete interference example. These results do not demonstrate a useful speedup for a particular application; that requires an algorithm, a cost model, and a justified comparison.</p>
+<p>Initialization errors, leakage outside the two-level subspace, imperfect controls, and coupling to an environment are absent from the ideal circuit model. Density operators in Chapter 5 and open dynamics in Chapters 15–17 address several of these omissions. General measurement effects appear in Chapter 18. The dimension count by itself proves neither a universal classical simulation lower bound nor unlimited readable information in a qubit. Chapter 2 identifies a specific promise-free Boolean query task and derives what one quantum query actually determines.</p>
+
+<h2 id="exercises">1.7 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex1">1. Input value versus input length</h3><p>Find the binary input lengths of 1023 and 1024. Explain why a loop with \(N\) iterations need not be polynomial in the binary input length.</p><details><summary>Solution</summary><p>Since \(2^9\leq1023\lt2^{10}\), equation (1.1) gives 10 bits. Since \(1024=2^{10}\), its representation has 11 bits. In general \(2^{\ell-1}\leq N\lt2^\ell\), so a loop taking \(N\) steps can grow exponentially in \(\ell\). This concerns that loop; it does not rule out another algorithm with a smaller cost.</p></details></article>
+<article class="exercise"><h3 id="ex2">2. Complex coefficients and a product preparation</h3><p>Expand the product state in (1.5), compute each basis probability, and determine the probability that the first measured bit is one.</p><details><summary>Solution</summary><p>Multiply each coefficient of the left vector by each coefficient of the right, in the order \(00,01,10,11\). The amplitudes are \(\sqrt{3/8},-\sqrt{3/8},i/\sqrt8,-i/\sqrt8\). Their modulus squares are \(3/8,3/8,1/8,1/8\). The first bit is one for the final two labels, so its probability is \(1/8+1/8=1/4\). Squaring \(i/\sqrt8\) without complex conjugation would give a negative number and is not the Born rule.</p></details></article>
+<article class="exercise"><h3 id="ex3">3. Equal probabilities do not identify a state</h3><p>Give two distinct pure states with identical computational-basis statistics and a unitary/readout procedure that distinguishes them with certainty.</p><details><summary>Solution</summary><p>Use \(|+\rangle\) and \(|-\rangle\). Each has component modulus squares \(1/2,1/2\), but their inner product is \((1-1)/2=0\). Multiplication by (1.6) sends them to \(|0\rangle\) and \(|1\rangle\). Computational-basis readout then distinguishes them exactly. The change of measurement procedure exposes their relative sign; it does not expose a common phase.</p></details></article>
+<article class="exercise"><h3 id="ex4">4. One successful norm test is insufficient</h3><p>A proposed gate is \(G=\operatorname{diag}(1,2)\). It preserves the norm of \(|0\rangle\). Does that establish a valid isolated gate? Find a counterexample input.</p><details><summary>Solution</summary><p>It does not. On \(|1\rangle\), the squared norm of the output is four. Equivalently \(G^\dagger G=\operatorname{diag}(1,4)\ne I_2\). Unitarity preserves the norm of every input, as required in Proposition 1.3. Renormalizing each output by hand changes the transformation into an input-dependent nonlinear rule; it does not turn the original matrix into the specified unitary.</p></details></article>
+<article class="exercise"><h3 id="ex5">5. Decide what must be simulated</h3><p>A circuit prepares \(n\) independent one-qubit states and applies only one-qubit unitaries. Explain why its state can remain a product representation even though the full state space has dimension \(2^n\). State when your argument would stop applying.</p><details><summary>Solution</summary><p>The initial state is \(\bigotimes_j|\psi_j\rangle\). An operation on qubit \(k\) acts as the identity on all other factors and replaces only \(|\psi_k\rangle\) by \(U_k|\psi_k\rangle\). Induction over the circuit preserves a product of \(n\) two-component vectors. This particular representation therefore stores a linear number of complex coefficients. An operation capable of entangling factors can invalidate the representation; even then, whether another compact representation exists requires further analysis. The full Hilbert-space dimension alone does not settle that question.</p></details></article>
+<article class="exercise"><h3 id="ex6">6. Implement a marginal and diagnose sampling</h3><p>Modify the laboratory to compute the second-qubit marginal of (1.5). Then derive the frequency variance for its outcome zero under \(m\) independent repetitions. Explain why measuring the same already-collapsed register \(m\) times does not supply the assumed samples.</p><details><summary>Solution</summary><p>Reshape the four probabilities as a two-by-two array whose row is the first bit and whose column is the second. Summing over rows, <code>probabilities.reshape(2, 2).sum(axis=0)</code>, gives \((1/2,1/2)\). Thus \(p=1/2\), and the Bernoulli calculation in (1.7) gives variance \(1/(4m)\). After the first ideal projective readout of one register, immediately repeating that readout returns its existing basis state. Those outcomes are correlated and do not represent independent preparations of the original vector. The variance calculation requires resetting and preparing the original input for every shot.</p></details></article>
+
+<h2 id="primary-sources">1.8 Sources and scope of verification</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=1NA7u71SUjg">Mitra, W1L1: Historical introduction</a> and <a href="https://www.youtube.com/watch?v=32jXI3i460M">W1L2: Hilbert space of multiple qubits</a>. Complete available auto-caption text read; relevant source topics are linked in the headings.</li>
+<li><a href="https://arxiv.org/pdf/quant-ph/9508027">Peter Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer, §1, PDF pages 2–3</a>: distinction between computability, resource-sensitive simulation theses, and input-size complexity. Historical implementation speculation in that paper is not used as a current hardware claim.</li>
+<li><a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">John Preskill, Foundations I: States and Ensembles, §2.1, PDF pages 3–7</a>: rays, inner products, projective measurement, unitary dynamics, and tensor-product composition. The derivations and finite examples here are original teaching constructions under those postulates.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-02.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

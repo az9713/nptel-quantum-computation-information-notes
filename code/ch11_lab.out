@@ -1,0 +1,11 @@
+Bell projectors: orthogonal, complete, trace one
+Phi+: patterns=4, different-port probability=0.000000
+Phi-: patterns=4, different-port probability=0.000000
+Psi+: patterns=2, different-port probability=0.000000
+Psi-: patterns=2, different-port probability=1.000000
+Equiprobable Bell-input success: 0.500000
+Environment overlap=0.0: Psi+ fidelity=0.500000
+Environment overlap=0.5: Psi+ fidelity=0.750000
+Environment overlap=1.0: Psi+ fidelity=1.000000
+Illustrative accepted-event probability: 0.005625
+Expected accepted events in 10000 trials: 56.25

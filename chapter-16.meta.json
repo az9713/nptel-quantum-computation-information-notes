@@ -1,0 +1,158 @@
+{
+  "chapter": 16,
+  "title": "Noise channels: flips, depolarization, and damping",
+  "status": "complete; independent round2 ACCEPT",
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "8vwJDu-sbwE",
+      "course_order": 50,
+      "start_seconds": 571,
+      "end_seconds": 1123,
+      "lecture_material": "Dilation and the maximum Kraus count",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "depolarization",
+      "video_id": "8vwJDu-sbwE",
+      "course_order": 50,
+      "start_seconds": 1177,
+      "end_seconds": 1900,
+      "lecture_material": "Corrected depolarizing weights",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "pauli-flips",
+      "video_id": "X9gOaP_SrXk",
+      "course_order": 51,
+      "start_seconds": 1029,
+      "end_seconds": 2000,
+      "lecture_material": "Bit flip and environment control",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "pauli-flips",
+      "video_id": "aJrAP5SSoAw",
+      "course_order": 52,
+      "start_seconds": 356,
+      "end_seconds": 1535,
+      "lecture_material": "Bit/phase-flip Bloch maps",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "dephasing",
+      "video_id": "DsUMzjQTLwg",
+      "course_order": 53,
+      "start_seconds": 176,
+      "end_seconds": 661,
+      "lecture_material": "NMR transverse phase dispersion",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "amplitude-damping",
+      "video_id": "DsUMzjQTLwg",
+      "course_order": 53,
+      "start_seconds": 661,
+      "end_seconds": 1640,
+      "lecture_material": "Amplitude-damping Kraus and Bloch maps",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    }
+  ],
+  "references": [
+    {
+      "title": "John Preskill, Quantum Information Chapter 3, October 2018",
+      "url": "https://www.preskill.caltech.edu/ph219/chap3_15.pdf",
+      "locator_checked": "PDF pp22,24–33; Kraus bound and noise channels"
+    }
+  ],
+  "symbols": [
+    "gamma",
+    "K_j",
+    "rho",
+    "r",
+    "Phi"
+  ],
+  "exercises": 6,
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch16-r1.md",
+      "report_sha256": "1ab4fa857f5b4537cfde4aa9dda57c70ee891a06006bb6460dfea4accf8e6375",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch16-r2.md",
+      "report_sha256": "4fd6e603dac1ed632a69bf83538b4eb062297854d66c925ef0dc9f1c29e12d24",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "source_uncertainties": [
+    "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+    "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+    "Depolarizing p/3 weights are corrected to p/4 in the recording itself; the later frame was checked.",
+    "The Kraus bound uses d squared for a d-dimensional input/output, not an arbitrary environment dimension.",
+    "Recording54 is moved to Chapter17 because its actual content is the master-equation derivation."
+  ],
+  "recordings": [
+    {
+      "video_id": "8vwJDu-sbwE",
+      "course_label": "W10L5",
+      "course_order": 50,
+      "duration_seconds": 1924
+    },
+    {
+      "video_id": "X9gOaP_SrXk",
+      "course_label": "W11L1",
+      "course_order": 51,
+      "duration_seconds": 2007
+    },
+    {
+      "video_id": "aJrAP5SSoAw",
+      "course_label": "W11L2",
+      "course_order": 52,
+      "duration_seconds": 1736
+    },
+    {
+      "video_id": "DsUMzjQTLwg",
+      "course_label": "W11L3",
+      "course_order": 53,
+      "duration_seconds": 1646
+    }
+  ],
+  "visual_evidence": [
+    {
+      "course_order": 50,
+      "frame_paths": [
+        "sources/frames/50_8vwJDu-sbwE/t1480.jpg",
+        "sources/frames/50_8vwJDu-sbwE/t1535.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    },
+    {
+      "course_order": 53,
+      "frame_paths": [
+        "sources/frames/53_DsUMzjQTLwg/t1280.jpg",
+        "sources/frames/53_DsUMzjQTLwg/t1490.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    }
+  ],
+  "code_check": {
+    "command": "python code/ch16_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch16_lab.out"
+  },
+  "accepted_html_sha256": "942cba9a629d141cf5e49f7e817e50b5d99a9c434fd41e699665cb210d69c905",
+  "accepted_body_sha256": "942cba9a629d141cf5e49f7e817e50b5d99a9c434fd41e699665cb210d69c905",
+  "canonical_body_sha256": "942cba9a629d141cf5e49f7e817e50b5d99a9c434fd41e699665cb210d69c905",
+  "body_sha256": "d70a0d19f9113076ad6687fc97087fd02bdb2f43d42ceee301a9f9462090d073"
+}

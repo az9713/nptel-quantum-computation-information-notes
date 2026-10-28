@@ -1,0 +1,1139 @@
+{
+  "scope": "Independent mathematical rewrite of all60 recordings",
+  "chapters": [
+    {
+      "chapter": 1,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "1NA7u71SUjg",
+          "start_seconds": 1118,
+          "end_seconds": 2488,
+          "lecture_material": "Computability, complexity, integer factoring, motivation",
+          "research_extension": "Qualify computation-model theses and distinguish known costs from lower bounds",
+          "teaching_construction": "Input length proof and explicit state-vector storage accounting"
+        },
+        {
+          "id": "states",
+          "video_id": "32jXI3i460M",
+          "start_seconds": 65,
+          "end_seconds": 501,
+          "lecture_material": "Two-dimensional Hilbert spaces, normalized qubits, physical realizations",
+          "research_extension": "Rays and explicit physical postulates",
+          "teaching_construction": "Complex normalized state"
+        },
+        {
+          "id": "composites",
+          "video_id": "32jXI3i460M",
+          "start_seconds": 507,
+          "end_seconds": 1318,
+          "lecture_material": "Multiple-qubit basis and tensor products",
+          "research_extension": "Explicit basis convention and entangled-vector obstruction",
+          "teaching_construction": "Product example and basis proof"
+        },
+        {
+          "id": "evolution",
+          "video_id": "32jXI3i460M",
+          "start_seconds": 1338,
+          "end_seconds": 2026,
+          "lecture_material": "Initialization, unitary evolution, readout",
+          "research_extension": "Unitary converse and qualification of Hamiltonian assumptions",
+          "teaching_construction": "Hadamard phase discrimination and independent-shot variance"
+        }
+      ],
+      "source_uncertainties": [
+        "Complete available auto-captions read; no full audiovisual review claimed.",
+        "Storage counts are exact representation calculations, not a hardware memory benchmark."
+      ]
+    },
+    {
+      "chapter": 2,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "XU-Y8Nay3wo",
+          "start_seconds": 300,
+          "end_seconds": 478,
+          "lecture_material": "Constant and balanced Boolean functions and classical evaluation comparison",
+          "research_extension": "Explicit worst-case and uniform-prior query proofs",
+          "teaching_construction": "Four-table enumeration"
+        },
+        {
+          "id": "oracle",
+          "video_id": "XU-Y8Nay3wo",
+          "start_seconds": 480,
+          "end_seconds": 1375,
+          "lecture_material": "Reversible XOR oracle, Hadamard states, phase kickback",
+          "research_extension": "Coherent phase specification of an oracle",
+          "teaching_construction": "Block-matrix and eigenstate derivations"
+        },
+        {
+          "id": "interference",
+          "video_id": "XU-Y8Nay3wo",
+          "start_seconds": 1381,
+          "end_seconds": 2160,
+          "lecture_material": "Complete one-query circuit and readout",
+          "research_extension": "Exact algorithm provenance",
+          "teaching_construction": "Controlled target-preparation error sweep"
+        }
+      ],
+      "source_uncertainties": [
+        "Full auto-caption text read; no complete audiovisual review.",
+        "Transcript labels balanced/equality inconsistently in one passage; classification is fixed by the exact Boolean definition."
+      ]
+    },
+    {
+      "chapter": 3,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "XEZ7bH11Hds",
+          "start_seconds": 101,
+          "end_seconds": 280,
+          "lecture_material": "Logical gates and loss of input information",
+          "research_extension": "Specify symmetric degenerate physical memory and side-information boundary",
+          "teaching_construction": "Known-data and reversible-embedding comparisons"
+        },
+        {
+          "id": "bound",
+          "video_id": "XEZ7bH11Hds",
+          "start_seconds": 284,
+          "end_seconds": 386,
+          "lecture_material": "Erasure heat bound",
+          "research_extension": "Distinguish total entropy production from entropy exported; biased and imperfect reset",
+          "teaching_construction": "Explicit signed entropy balance"
+        },
+        {
+          "id": "compression",
+          "video_id": "XEZ7bH11Hds",
+          "start_seconds": 387,
+          "end_seconds": 1040,
+          "lecture_material": "Piston and ideal-gas compression example",
+          "research_extension": "Separate particle-count and mole normalizations and logical versus full physical entropy",
+          "teaching_construction": "Dimensionless quadrature"
+        },
+        {
+          "id": "demon",
+          "video_id": "XEZ7bH11Hds",
+          "start_seconds": 1114,
+          "end_seconds": 1840,
+          "lecture_material": "Maxwell demon and finite memory",
+          "research_extension": "Bennett controller-cycle clarification; finite-reservoir theorem cited from ReebWolf",
+          "teaching_construction": "One-particle expansion/reset balance"
+        }
+      ],
+      "source_uncertainties": [
+        "Full available auto-caption text read; no full audiovisual review.",
+        "Entropy signs and particle/mole normalization clarified by derivation; no blanket claim that every gate or measurement dissipates the one-bit bound.",
+        "Ideal isothermal reservoir and reversible saturation are limiting models, not measurements.",
+        "Heat and work bounds explicitly concern ensemble means; individual reset trials may fluctuate."
+      ]
+    },
+    {
+      "chapter": 4,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "fbK5QYKHtXs",
+          "start_seconds": 33,
+          "end_seconds": 1708,
+          "lecture_material": "Pure Bloch spinors, poles, equator, and Pauli expectations",
+          "research_extension": "Explicit outcome projectors for an arbitrary axis",
+          "teaching_construction": "Complex generic finite example"
+        },
+        {
+          "id": "convention",
+          "video_id": "hrkmrOR0cCs",
+          "start_seconds": 78,
+          "end_seconds": 1782,
+          "lecture_material": "Active/passive rotations, orbital generators and spin generators",
+          "research_extension": "Fixed active right-handed sign convention",
+          "teaching_construction": "Taylor expansion with a declared inverse coordinate map"
+        },
+        {
+          "id": "exponential",
+          "video_id": "TtJjIJmIOfY",
+          "start_seconds": 275,
+          "end_seconds": 733,
+          "lecture_material": "Pauli product identity and exponentiation",
+          "research_extension": "Full Rodrigues derivation",
+          "teaching_construction": "Conjugated pure projector calculation"
+        },
+        {
+          "id": "gates",
+          "video_id": "TtJjIJmIOfY",
+          "start_seconds": 733,
+          "end_seconds": 1456,
+          "lecture_material": "Hadamard construction using two rotations",
+          "research_extension": "Global versus controlled phase accounting",
+          "teaching_construction": "Full gate comparison on superpositions"
+        },
+        {
+          "id": "alignment",
+          "video_id": "XhI45Ob4Ikc",
+          "start_seconds": 544,
+          "end_seconds": 1795,
+          "lecture_material": "Five-factor axis-alignment rotation",
+          "research_extension": "Separate from three-factor Euler existence",
+          "teaching_construction": "Axis-coefficient and zero-angle checks"
+        },
+        {
+          "id": "euler",
+          "video_id": "XhI45Ob4Ikc",
+          "start_seconds": 497,
+          "end_seconds": 1795,
+          "lecture_material": "Motivation for gate decomposition",
+          "research_extension": "Barenco Lemma4.1 with opposite-sign angles translated",
+          "teaching_construction": "Explicit extraction and zero-entry branches"
+        }
+      ],
+      "source_uncertainties": [
+        "All four assigned caption texts read completely; truncated batch gaps read in follow-up calls.",
+        "No selected source frames for recordings5–8 were available in the supplied frame tree; no full audiovisual review claimed.",
+        "Captions contain uncertain axes/signs in the identity list; chapter derives every listed identity in a fixed active convention.",
+        "The five-factor lecture alignment identity and the primary-reference three-factor U2 decomposition are distinguished."
+      ]
+    },
+    {
+      "chapter": 5,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "GbsmGwAnbXM",
+          "start_seconds": 37,
+          "end_seconds": 910,
+          "lecture_material": "Pure and mixed states, ensemble populations, and coherences",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        },
+        {
+          "id": "positivity",
+          "video_id": "GbsmGwAnbXM",
+          "start_seconds": 910,
+          "end_seconds": 1415,
+          "lecture_material": "State properties, purity and Hermiticity",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        },
+        {
+          "id": "expectations",
+          "video_id": "Rb7HP05x0Vo",
+          "start_seconds": 54,
+          "end_seconds": 398,
+          "lecture_material": "Mixed-state trace expectation",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        },
+        {
+          "id": "bloch",
+          "video_id": "Rb7HP05x0Vo",
+          "start_seconds": 441,
+          "end_seconds": 1787,
+          "lecture_material": "Qubit parameters and eigenvalues",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        },
+        {
+          "id": "bloch",
+          "video_id": "387YoH3R0zo",
+          "start_seconds": 610,
+          "end_seconds": 1255,
+          "lecture_material": "Pauli expectations and mixed-state Bloch ball",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        },
+        {
+          "id": "dynamics",
+          "video_id": "387YoH3R0zo",
+          "start_seconds": 1255,
+          "end_seconds": 1754,
+          "lecture_material": "Schrodinger versus Heisenberg conjugation and Liouville evolution",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        },
+        {
+          "id": "classical",
+          "video_id": "387YoH3R0zo",
+          "start_seconds": 1758,
+          "end_seconds": 1852,
+          "lecture_material": "Classical Poisson-bracket comparison",
+          "research_extension": "Primary postulates and ensemble interpretation clarified; all mathematical consequences derived locally",
+          "teaching_construction": "Finite cases, full proofs, counterexamples, executed laboratory and exercises"
+        }
+      ],
+      "source_uncertainties": [
+        "All three assigned caption texts read completely.",
+        "Captions contain uncertain off-diagonal entry ordering and confuse Pauli tracelessness with density trace; the chapter derives fixed conventions explicitly.",
+        "The isolated Schrodinger state equation has the full ordinary derivative; no undefined extra partial derivative is appended.",
+        "No selected source frames9–11 available; no complete audiovisual transcription claimed."
+      ]
+    },
+    {
+      "chapter": 6,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "g7Qh9zeyDcw",
+          "start_seconds": 180,
+          "end_seconds": 1780,
+          "lecture_material": "Finite alphabets, source probabilities, self-information, rain example, Shannon average",
+          "research_extension": "Continuous additive surprisal argument",
+          "teaching_construction": "Explicit probability and coding contracts"
+        },
+        {
+          "id": "entropy",
+          "video_id": "P7bDc2fYa2A",
+          "start_seconds": 240,
+          "end_seconds": 1835,
+          "lecture_material": "Continuity, nonnegative entropy, maximum, independence, and string probability",
+          "research_extension": "Shannon grouping condition and counterexample to incomplete uniqueness assumptions",
+          "teaching_construction": "Relative-entropy proof and explicit chain rule"
+        },
+        {
+          "id": "typical",
+          "video_id": "98i3XZpEJso",
+          "start_seconds": 18,
+          "end_seconds": 1250,
+          "lecture_material": "Empirical frequencies and typical-string probability",
+          "research_extension": "Typical-set inequality instead of a universal equal-probability claim",
+          "teaching_construction": "Finite support and asymptotic qualifiers"
+        },
+        {
+          "id": "prefix",
+          "video_id": "98i3XZpEJso",
+          "start_seconds": 1260,
+          "end_seconds": 1840,
+          "lecture_material": "Four-symbol dyadic coding example",
+          "research_extension": "Prefix-code and Kraft assumptions",
+          "teaching_construction": "Complete finite prefix bounds proof"
+        },
+        {
+          "id": "blocks",
+          "video_id": "Wne_ycXqFuA",
+          "start_seconds": 18,
+          "end_seconds": 1130,
+          "lecture_material": "Eight-symbol code and biased-distribution examples",
+          "research_extension": "Finite-block redundancy guarantee",
+          "teaching_construction": "Huffman laboratory and non-dyadic comparison"
+        },
+        {
+          "id": "toffoli",
+          "video_id": "Wne_ycXqFuA",
+          "start_seconds": 1140,
+          "end_seconds": 1510,
+          "lecture_material": "Toffoli truth table and reversibility",
+          "research_extension": "Equal wire counts do not imply injectivity",
+          "teaching_construction": "Self-inverse proof and permutation lab"
+        }
+      ],
+      "source_uncertainties": [
+        "Auto-captions can garble codewords and equations; codes are independently reconstructed and checked.",
+        "W3L2 opening misstates the week; the official syllabus and content identify the recording.",
+        "No comprehensive slide/audio review is claimed."
+      ]
+    },
+    {
+      "chapter": 7,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "Z_KrcBOovjQ",
+          "start_seconds": 120,
+          "end_seconds": 1770,
+          "lecture_material": "Spectral entropy and finite pure/mixed examples",
+          "research_extension": "Singular logarithm defined through continuous spectral function",
+          "teaching_construction": "Explicit entropy invariance proof"
+        },
+        {
+          "id": "product",
+          "video_id": "Nxms9nDrC_4",
+          "start_seconds": 480,
+          "end_seconds": 1810,
+          "lecture_material": "Product vectors, Bell basis, and global purity",
+          "research_extension": "Coefficient-matrix factorization criterion",
+          "teaching_construction": "Determinant check rather than a sign-count rule"
+        },
+        {
+          "id": "partial",
+          "video_id": "6qJxrIf7KeA",
+          "start_seconds": 43,
+          "end_seconds": 1500,
+          "lecture_material": "Bell-state partial trace",
+          "research_extension": "Local-prediction characterization from Preskill equations2.62–2.67",
+          "teaching_construction": "Index proof, uniqueness, positivity, and trace proof"
+        },
+        {
+          "id": "local-entropy",
+          "video_id": "6qJxrIf7KeA",
+          "start_seconds": 1500,
+          "end_seconds": 1890,
+          "lecture_material": "Global purity and local mixedness",
+          "research_extension": "Conditioning versus unread measurement; no-signalling",
+          "teaching_construction": "Classical correlated counterexample and parameter family"
+        }
+      ],
+      "source_uncertainties": [
+        "Auto-captions garble some normalizing factors; all states are normalized and independently checked here.",
+        "W4L3 spoken opening mislabels the week; topic and official video-ID mapping agree.",
+        "No full slide/audio review is claimed."
+      ]
+    },
+    {
+      "chapter": 8,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "ST70zEz3Uug",
+          "start_seconds": 720,
+          "end_seconds": 1873,
+          "lecture_material": "Bipartite coefficient expansion and local Schmidt bases",
+          "research_extension": "Amplitude matrix differs from joint density matrix",
+          "teaching_construction": "Explicit complex reduced-matrix conventions"
+        },
+        {
+          "id": "construction",
+          "video_id": "MeGlNQyzLN4",
+          "start_seconds": 240,
+          "end_seconds": 1860,
+          "lecture_material": "Diagonalize one reduction and normalize conditional vectors",
+          "research_extension": "Treat zero support separately",
+          "teaching_construction": "Compact orthogonality proof"
+        },
+        {
+          "id": "worked",
+          "video_id": "kKPWIR9RMsk",
+          "start_seconds": 18,
+          "end_seconds": 780,
+          "lecture_material": "Three-term state and reduced spectrum",
+          "research_extension": "Complete normalization and paired phase choices",
+          "teaching_construction": "Exact golden-ratio Schmidt vectors"
+        },
+        {
+          "id": "svd",
+          "video_id": "kWIRBCvHfpw",
+          "start_seconds": 180,
+          "end_seconds": 1835,
+          "lecture_material": "Rectangular SVD algorithm and examples",
+          "research_extension": "Complex adjoint, conjugated B vectors, and equal nonzero spectra",
+          "teaching_construction": "Complex qubit-qutrit reconstruction test"
+        }
+      ],
+      "source_uncertainties": [
+        "Auto-captions conflate square roots, signs, transpose and adjoint in examples; the displayed examples are derived independently.",
+        "Some source wording appears to diagonalize the joint pure density matrix in a local product basis; the chapter explicitly retains its joint off-diagonal terms.",
+        "No full slide/audio review is claimed."
+      ]
+    },
+    {
+      "chapter": 9,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "LrYMvbuA20Q",
+          "start_seconds": 60,
+          "end_seconds": 1970,
+          "lecture_material": "Singlet, alternate spin measurements, and EPR premises",
+          "research_extension": "Distinguish cross-party commutation from local incompatible alternatives",
+          "teaching_construction": "Pauli correlator derivation"
+        },
+        {
+          "id": "local-model",
+          "video_id": "77esgRSwPps",
+          "start_seconds": 720,
+          "end_seconds": 1790,
+          "lecture_material": "Local-realist model and three-axis assignment",
+          "research_extension": "Separate local responses from setting-independent distribution",
+          "teaching_construction": "Precise deterministic/stochastic model"
+        },
+        {
+          "id": "three-setting",
+          "video_id": "2k_gYqzZueI",
+          "start_seconds": 720,
+          "end_seconds": 1830,
+          "lecture_material": "Event counting and joint plus-plus probability",
+          "research_extension": "Explicit event-inclusion proof",
+          "teaching_construction": "Conditional versus joint normalization"
+        },
+        {
+          "id": "chsh",
+          "video_id": "NpCk9p3BqRM",
+          "start_seconds": 18,
+          "end_seconds": 1130,
+          "lecture_material": "Half-angle overlaps and quantum violation",
+          "research_extension": "CHSH inequality and quantum operator bound",
+          "teaching_construction": "Spin-angle numerical comparison"
+        },
+        {
+          "id": "cnot",
+          "video_id": "NpCk9p3BqRM",
+          "start_seconds": 1440,
+          "end_seconds": 1770,
+          "lecture_material": "Controlled-NOT truth table and entangling capability",
+          "research_extension": "Correct norm and input-order qualification",
+          "teaching_construction": "Contrast |+0> with |0+>"
+        }
+      ],
+      "source_uncertainties": [
+        "No experimental Bell measurement is performed; all listed correlations are model expectations.",
+        "Machine captions garble some signs, half-angle factors, and the CNOT normalization; these are explicitly derived and checked.",
+        "No full slide/audio review is claimed."
+      ]
+    },
+    {
+      "chapter": 10,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "wn4MOUJ7HDI",
+          "start_seconds": 180,
+          "end_seconds": 900,
+          "lecture_material": "Bell preparation and inverse measurement circuit",
+          "research_extension": "Fixed phase/flip label and wire convention",
+          "teaching_construction": "Exact preparation identity"
+        },
+        {
+          "id": "dense",
+          "video_id": "fSNcnitGGyk",
+          "start_seconds": 180,
+          "end_seconds": 1822,
+          "lecture_material": "Dense coding and four encoding operations",
+          "research_extension": "Bennett-Wiesner resource accounting",
+          "teaching_construction": "Exact encoding/decoding and marginal argument"
+        },
+        {
+          "id": "teleport",
+          "video_id": "qaYIdWeBitA",
+          "start_seconds": 60,
+          "end_seconds": 1200,
+          "lecture_material": "Unknown input, Bell branches, classical message, corrections",
+          "research_extension": "Correct1993 protocol attribution and identity-channel extension",
+          "teaching_construction": "Fixed-convention branch proof and complex-input test"
+        },
+        {
+          "id": "photons",
+          "video_id": "qaYIdWeBitA",
+          "start_seconds": 1200,
+          "end_seconds": 1811,
+          "lecture_material": "Nonlinear susceptibility, BBO, and down-conversion introduction",
+          "research_extension": "Pair creation versus usable polarization-entangled resource",
+          "teaching_construction": "Boundary to apparatus chapter without efficiency claims"
+        }
+      ],
+      "source_uncertainties": [
+        "W6L4 incorrectly calls teleportation BB84 and dates it1984; the actual protocol is identified using the original1993 paper.",
+        "Machine captions garble several relative signs; the branch identity and full maps are derived and executed independently.",
+        "Optical resource discussion is introductory; apparatus efficiencies and full slide/audio review are not claimed."
+      ]
+    },
+    {
+      "chapter": 11,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "b_buCwPz5vE",
+          "start_seconds": 79,
+          "end_seconds": 1196,
+          "lecture_material": "nonlinear optics and type-II pair generation",
+          "research_extension": "Kwiat type-II source and distinguishability",
+          "teaching_construction": "environment-overlap reduced-state model"
+        },
+        {
+          "id": "bell-analysis",
+          "video_id": "v5shBFNplkI",
+          "start_seconds": 365,
+          "end_seconds": 1926,
+          "lecture_material": "balanced-splitter symmetry and output patterns",
+          "research_extension": "restricted passive-optics bound",
+          "teaching_construction": "creation-operator proof and normalized Fock calculation"
+        },
+        {
+          "id": "dense-coding-optics",
+          "video_id": "sPg5IlAo6Bw",
+          "start_seconds": 79,
+          "end_seconds": 1562,
+          "lecture_material": "dense-coding recap and optical apparatus",
+          "research_extension": "distinguish preparation from measurement capability",
+          "teaching_construction": "partial-versus-ideal Bell analyzer"
+        },
+        {
+          "id": "teleportation-optics",
+          "video_id": "sPg5IlAo6Bw",
+          "start_seconds": 1562,
+          "end_seconds": 2032,
+          "lecture_material": "teleportation and coincidence records",
+          "research_extension": "primary historical abstract",
+          "teaching_construction": "conditional probability and loss budget"
+        }
+      ],
+      "source_uncertainties": [
+        "Auto-captions contain technical errors; source slide layouts and detailed detector diagrams were not reviewed.",
+        "No apparatus-specific efficiency/fidelity number is asserted.",
+        "Corrected down-conversion/second-harmonic, same/different-port versus homodyne/heterodyne, and complete/partial Bell-measurement conflations."
+      ]
+    },
+    {
+      "chapter": 12,
+      "sections": [
+        {
+          "id": "arithmetic",
+          "video_id": "0bNjIOh6mKw",
+          "start_seconds": 397,
+          "end_seconds": 951,
+          "lecture_material": "modulo operations and modular-power cycles",
+          "research_extension": "elementary unit-group derivation",
+          "teaching_construction": "binary input-length and repeated-squaring analysis"
+        },
+        {
+          "id": "rsa",
+          "video_id": "VgNVfmBSJEg",
+          "start_seconds": 153,
+          "end_seconds": 891,
+          "lecture_material": "toy RSA example and factoring attack",
+          "research_extension": "RSA original paper and RFC8017 primitive/scheme distinction",
+          "teaching_construction": "correctness proof including nonunit message representatives"
+        },
+        {
+          "id": "factoring-reduction",
+          "video_id": "0bNjIOh6mKw",
+          "start_seconds": 951,
+          "end_seconds": 1221,
+          "lecture_material": "gcd extraction from an even period",
+          "research_extension": "Shor factoring reduction",
+          "teaching_construction": "minimal-order proof and full failure classification"
+        },
+        {
+          "id": "registers",
+          "video_id": "VgNVfmBSJEg",
+          "start_seconds": 1132,
+          "end_seconds": 1946,
+          "lecture_material": "two registers and coherent modular evaluation",
+          "research_extension": "explicit reversible extension",
+          "teaching_construction": "XOR oracle contract"
+        },
+        {
+          "id": "cosets",
+          "video_id": "dHlQTZiDDaw",
+          "start_seconds": 162,
+          "end_seconds": 478,
+          "lecture_material": "output-register measurement and periodic first-register state",
+          "research_extension": "normalized conditional probabilities",
+          "teaching_construction": "finite progression formula"
+        },
+        {
+          "id": "fourier-preview",
+          "video_id": "dHlQTZiDDaw",
+          "start_seconds": 689,
+          "end_seconds": 1787,
+          "lecture_material": "DFT and QFT introduction",
+          "research_extension": "unitary normalization convention",
+          "teaching_construction": "raw-data versus normalized-state example"
+        }
+      ],
+      "source_uncertainties": [
+        "All assigned caption text read; source whiteboard frames not reviewed.",
+        "Caption arithmetic/indexing errors repaired using exact calculations; no historical workstation runtime is repeated.",
+        "Factoring hardness, arbitrary RSA inversion equivalence, password-strength implications, and quantum-key-distribution claims are not inferred."
+      ]
+    },
+    {
+      "chapter": 13,
+      "sections": [
+        {
+          "id": "fourier-model",
+          "video_id": "8gNF9Gdf3-0",
+          "start_seconds": 183,
+          "end_seconds": 1124,
+          "lecture_material": "normalized coefficient transform and single-qubit limit",
+          "research_extension": "unitarity and normalization checked against Shor Section4",
+          "teaching_construction": "complete geometric-sum unitarity proof"
+        },
+        {
+          "id": "binary-labels",
+          "video_id": "Y3V1X-qTxgg",
+          "start_seconds": 730,
+          "end_seconds": 988,
+          "lecture_material": "integer labels and binary fractions",
+          "research_extension": "explicit most-significant-bit-first convention",
+          "teaching_construction": "finite input-label examples"
+        },
+        {
+          "id": "tensor-factorization",
+          "video_id": "Y3V1X-qTxgg",
+          "start_seconds": 988,
+          "end_seconds": 1750,
+          "lecture_material": "factorization into phase-bearing qubits",
+          "research_extension": "explicit binary-index derivation",
+          "teaching_construction": "complete x=5 example"
+        },
+        {
+          "id": "phase-gates",
+          "video_id": "Mb9cCQmMjUU",
+          "start_seconds": 198,
+          "end_seconds": 2073,
+          "lecture_material": "phase gates, controlled phases, circuit sequence, swaps",
+          "research_extension": "correct R1=Z rather than Hadamard",
+          "teaching_construction": "complex circuit-matrix equality lab"
+        },
+        {
+          "id": "periodic-interference",
+          "video_id": "G3joYDuEhf4",
+          "start_seconds": 151,
+          "end_seconds": 1839,
+          "lecture_material": "binary-suffix factorization and general circuit recap",
+          "research_extension": "Shor Section5 finite-register interference",
+          "teaching_construction": "dividing/nondividing period proofs and spectrum"
+        },
+        {
+          "id": "precision-cost",
+          "video_id": "TWuU4nFGzmk",
+          "start_seconds": 751,
+          "end_seconds": 1965,
+          "lecture_material": "general phase circuit and bit order",
+          "research_extension": "Shor Section4 approximate-phase discussion",
+          "teaching_construction": "telescoping operator-norm omission bound"
+        }
+      ],
+      "source_uncertainties": [
+        "All six assigned transcript texts read completely; no source whiteboard frame review performed.",
+        "Lectures39-41 use local faster-whisper small.en transcripts rather than publisher captions; mathematical expressions reconstructed and independently checked.",
+        "The spoken/caption identification of diagonal R1 as a Hadamard is mathematically incorrect; the chapter explicitly distinguishes R1=Z from H.",
+        "Exact-support statements require the period to divide register dimension; finite-window leakage is derived separately."
+      ]
+    },
+    {
+      "chapter": 14,
+      "sections": [
+        {
+          "id": "order-circuit",
+          "video_id": "1Wi2Ol3uUdM",
+          "start_seconds": 380,
+          "end_seconds": 1492,
+          "lecture_material": "register preparation and coherent modular exponentiation",
+          "research_extension": "Shor Section5 register precision and arithmetic contract",
+          "teaching_construction": "fully normalized XOR evaluation model"
+        },
+        {
+          "id": "conditional-cosets",
+          "video_id": "JGCZ7bXtIRc",
+          "start_seconds": 477,
+          "end_seconds": 1161,
+          "lecture_material": "function-register projection and Fourier probabilities",
+          "research_extension": "finite progressions instead of unjustified exact-zero claim",
+          "teaching_construction": "conditional counts, weights, and exact finite-window kernel"
+        },
+        {
+          "id": "discarded-register",
+          "video_id": "1Wi2Ol3uUdM",
+          "start_seconds": 1765,
+          "end_seconds": 2010,
+          "lecture_material": "measurement of function register",
+          "research_extension": "partial trace and unrecorded measurement equivalence",
+          "teaching_construction": "full density-matrix and marginal derivation"
+        },
+        {
+          "id": "rational-reconstruction",
+          "video_id": "iS5msxjFibM",
+          "start_seconds": 406,
+          "end_seconds": 735,
+          "lecture_material": "continued-fraction definition and finite example",
+          "research_extension": "sufficient approximation condition from Shor Section5",
+          "teaching_construction": "self-contained unimodular-lattice proof"
+        },
+        {
+          "id": "checked-factors",
+          "video_id": "iS5msxjFibM",
+          "start_seconds": 1158,
+          "end_seconds": 1807,
+          "lecture_material": "reduced denominators, testing multiples and gcd extraction",
+          "research_extension": "separation of verified return exponent from minimal order",
+          "teaching_construction": "bounded reconstruction and all rejection branches"
+        },
+        {
+          "id": "worked-example",
+          "video_id": "rlsM5Dqdh64",
+          "start_seconds": 268,
+          "end_seconds": 1630,
+          "lecture_material": "N15 a7 M256 numerical example",
+          "research_extension": "exact probabilities and rational arithmetic repair",
+          "teaching_construction": "zero-probability127 diagnosis; valid128 reduced-denominator example"
+        }
+      ],
+      "source_uncertainties": [
+        "All four assigned transcripts read completely; targeted lecture45 board frames at1100s and1500s inspected; no complete source-frame review.",
+        "Local faster-whisper small.en is not publisher captioning. Lecture45 has sparse segment boundaries; its entire available text was read and its numerical statements independently recomputed.",
+        "Lecture45 frame1100 explicitly writes127/256=[0,2,63,4] and infersorder4, while its nested expression ends1/2. The chapter corrects the board error and proves idealP127=0.",
+        "Frame1500 displaysapprox0.25 then2.5percent before starting128 example. Whisper later renders0.0625; this is not asserted to be a verified board value. Exact idealconditionalandmarginalP128=1/4.",
+        "Polynomial quantum implementation is described at the oracle/arithmetic-contract level; the dense classical lab is explicitly not scalable."
+      ]
+    },
+    {
+      "chapter": 15,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "o7aOXwvLHlk",
+          "start_seconds": 531,
+          "end_seconds": 1385,
+          "lecture_material": "Closed/open dynamics, partial trace, quantum nondemolition energy condition",
+          "research_extension": "Explicit qualification of the conserved-observable condition",
+          "teaching_construction": "Correlated-preparation boundary"
+        },
+        {
+          "id": "dilation",
+          "video_id": "VTOWAgZmDKU",
+          "start_seconds": 693,
+          "end_seconds": 1705,
+          "lecture_material": "Controlled-NOT environment circuit and reduced populations",
+          "research_extension": "Distinguish arbitrary diagonal output from maximally mixed state",
+          "teaching_construction": "Amplitude-damping unitary and finite complex input"
+        },
+        {
+          "id": "kraus",
+          "video_id": "WelzrFCFi58",
+          "start_seconds": 1123,
+          "end_seconds": 1365,
+          "lecture_material": "Operator sum and completeness",
+          "research_extension": "Nonuniqueness of Kraus labels",
+          "teaching_construction": "Explicit extracted matrices"
+        },
+        {
+          "id": "complete-positivity",
+          "video_id": "FCNrdpeOi_g",
+          "start_seconds": 112,
+          "end_seconds": 568,
+          "lecture_material": "Hermiticity, trace and positivity properties",
+          "research_extension": "Complete positivity and transpose counterexample from primary reference",
+          "teaching_construction": "Smallest explicit ancillary matrix"
+        },
+        {
+          "id": "converse",
+          "video_id": "FCNrdpeOi_g",
+          "start_seconds": 814,
+          "end_seconds": 1841,
+          "lecture_material": "Unitary representation and inner-product preservation",
+          "research_extension": "Orthogonal completion stated explicitly",
+          "teaching_construction": "Dilation construction and composition distinction"
+        }
+      ],
+      "source_uncertainties": [
+        "Local faster-whisper small.en transcripts are machine evidence; technical recognition errors are corrected using explicit derivation and the checked reference.",
+        "All assigned transcript text read sequentially; no full audiovisual review claimed.",
+        "Complete positivity and the correlated-input counterexample are extensions, not attributed verbatim to the recordings."
+      ]
+    },
+    {
+      "chapter": 16,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "8vwJDu-sbwE",
+          "course_order": 50,
+          "start_seconds": 571,
+          "end_seconds": 1123,
+          "lecture_material": "Dilation and the maximum Kraus count",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "depolarization",
+          "video_id": "8vwJDu-sbwE",
+          "course_order": 50,
+          "start_seconds": 1177,
+          "end_seconds": 1900,
+          "lecture_material": "Corrected depolarizing weights",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "pauli-flips",
+          "video_id": "X9gOaP_SrXk",
+          "course_order": 51,
+          "start_seconds": 1029,
+          "end_seconds": 2000,
+          "lecture_material": "Bit flip and environment control",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "pauli-flips",
+          "video_id": "aJrAP5SSoAw",
+          "course_order": 52,
+          "start_seconds": 356,
+          "end_seconds": 1535,
+          "lecture_material": "Bit/phase-flip Bloch maps",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "dephasing",
+          "video_id": "DsUMzjQTLwg",
+          "course_order": 53,
+          "start_seconds": 176,
+          "end_seconds": 661,
+          "lecture_material": "NMR transverse phase dispersion",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "amplitude-damping",
+          "video_id": "DsUMzjQTLwg",
+          "course_order": 53,
+          "start_seconds": 661,
+          "end_seconds": 1640,
+          "lecture_material": "Amplitude-damping Kraus and Bloch maps",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        }
+      ],
+      "source_uncertainties": [
+        "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+        "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+        "Depolarizing p/3 weights are corrected to p/4 in the recording itself; the later frame was checked.",
+        "The Kraus bound uses d squared for a d-dimensional input/output, not an arbitrary environment dimension.",
+        "Recording54 is moved to Chapter17 because its actual content is the master-equation derivation."
+      ]
+    },
+    {
+      "chapter": 17,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "tvlLNS8i-yY",
+          "course_order": 54,
+          "start_seconds": 351,
+          "end_seconds": 569,
+          "lecture_material": "Markov approximation",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "weak-step",
+          "video_id": "tvlLNS8i-yY",
+          "course_order": 54,
+          "start_seconds": 569,
+          "end_seconds": 1943,
+          "lecture_material": "Weak Kraus step and Lindblad generator",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "population-coherence",
+          "video_id": "_8RDDMOq6Is",
+          "course_order": 55,
+          "start_seconds": 205,
+          "end_seconds": 1192,
+          "lecture_material": "Spontaneous emission and scalar solutions",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "pure-dephasing",
+          "video_id": "3KF16kkbdbs",
+          "course_order": 56,
+          "start_seconds": 95,
+          "end_seconds": 823,
+          "lecture_material": "Additional spin-dephasing jump and its contribution to the T2 rate",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "thermal",
+          "video_id": "3KF16kkbdbs",
+          "course_order": 56,
+          "start_seconds": 33,
+          "end_seconds": 1096,
+          "lecture_material": "Thermal Bloch equations, detailed balance, and relaxation times",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        }
+      ],
+      "source_uncertainties": [
+        "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+        "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+        "Born approximation and Markov approximation are distinguished.",
+        "Frames56 at950/1010 seconds confirm a wrong-sign Bose denominator and an extra exponential in T1 inverse; the chapter derives the corrected nonnegative occupation and rate sum.",
+        "The ending generalized-measurement part of recording56 is covered in Chapter18 as a supporting span."
+      ]
+    },
+    {
+      "chapter": 18,
+      "sections": [
+        {
+          "id": "model",
+          "video_id": "At_pi7kjSC0",
+          "course_order": 57,
+          "start_seconds": 1383,
+          "end_seconds": 1579,
+          "lecture_material": "Effects, completeness, and probabilities",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "instruments",
+          "video_id": "3KF16kkbdbs",
+          "course_order": 56,
+          "start_seconds": 1188,
+          "end_seconds": 1487,
+          "lecture_material": "Generalized measurement operators and conditioning",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "instruments",
+          "video_id": "At_pi7kjSC0",
+          "course_order": 57,
+          "start_seconds": 1579,
+          "end_seconds": 1685,
+          "lecture_material": "Effects do not fix conditional outputs",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "realization",
+          "video_id": "At_pi7kjSC0",
+          "course_order": 57,
+          "start_seconds": 239,
+          "end_seconds": 1230,
+          "lecture_material": "Projective pointer realization",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "distinguishability",
+          "video_id": "At_pi7kjSC0",
+          "course_order": 57,
+          "start_seconds": 1685,
+          "end_seconds": 2016,
+          "lecture_material": "Unambiguous discrimination with an inconclusive label",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        }
+      ],
+      "source_uncertainties": [
+        "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+        "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+        "Unambiguous discrimination requires the exact scale bound a <= 1/(1+s); the lecture's generic restriction does not ensure positivity.",
+        "Mixed-state conditional update is M rho M dagger, with a positive branch denominator.",
+        "Trine and paired-instrument calculations are original worked extensions."
+      ]
+    },
+    {
+      "chapter": 19,
+      "sections": [
+        {
+          "id": "thermal",
+          "video_id": "LzHRsvVpYpg",
+          "course_order": 58,
+          "start_seconds": 36,
+          "end_seconds": 1853,
+          "lecture_material": "Heisenberg spin-pair Hamiltonian and thermal state",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "model",
+          "video_id": "LzHRsvVpYpg",
+          "course_order": 58,
+          "start_seconds": 1853,
+          "end_seconds": 2035,
+          "lecture_material": "Separable product mixtures",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "model",
+          "video_id": "ykHW2-iBznk",
+          "course_order": 59,
+          "start_seconds": 323,
+          "end_seconds": 1040,
+          "lecture_material": "Convex segments and filled sets",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "partial-transpose",
+          "video_id": "ykHW2-iBznk",
+          "course_order": 59,
+          "start_seconds": 1059,
+          "end_seconds": 1623,
+          "lecture_material": "Subsystem transpose, Bell and product examples",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "white-noise-family",
+          "video_id": "ykHW2-iBznk",
+          "course_order": 59,
+          "start_seconds": 1632,
+          "end_seconds": 1883,
+          "lecture_material": "Singlet/white-noise partial-transpose threshold",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        }
+      ],
+      "source_uncertainties": [
+        "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+        "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+        "The partition function traces the unnormalized Boltzmann operator, not the normalized density state.",
+        "The zero-temperature singlet conclusion is restricted by field strength.",
+        "Matrix change under partial transpose does not itself certify entanglement; positivity is the criterion.",
+        "A parallelogram needs independent parameters; weights constrained to sum one give a segment.",
+        "Bell partial-transpose eigenvalues retain the factor one half.",
+        "General low-dimensional sufficiency is cited, not proved; the noise-family boundary has an explicit product decomposition."
+      ]
+    },
+    {
+      "chapter": 20,
+      "sections": [
+        {
+          "id": "spin-flip",
+          "video_id": "7RMSjNKvAdw",
+          "course_order": 60,
+          "start_seconds": 66,
+          "end_seconds": 700,
+          "lecture_material": "Bell correlations and antipodal spin flip",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "spin-flip",
+          "video_id": "7RMSjNKvAdw",
+          "course_order": 60,
+          "start_seconds": 700,
+          "end_seconds": 1276,
+          "lecture_material": "Pure-state overlap and coefficient matrix",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "mixed-formula",
+          "video_id": "7RMSjNKvAdw",
+          "course_order": 60,
+          "start_seconds": 1276,
+          "end_seconds": 1499,
+          "lecture_material": "Mixed-state spin-flip spectrum",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        },
+        {
+          "id": "worked-family",
+          "video_id": "7RMSjNKvAdw",
+          "course_order": 60,
+          "start_seconds": 1506,
+          "end_seconds": 1777,
+          "lecture_material": "Singlet/white-noise concurrence",
+          "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+          "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+        }
+      ],
+      "source_uncertainties": [
+        "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+        "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+        "Complex conjugation is part of the spin flip; Y alone is not an antipodal map for arbitrary complex spinors.",
+        "Bell-state names are fixed by their explicit vectors and verified correlation signs.",
+        "Eigenvalues are sorted before subtracting smaller spin-flip spectral values.",
+        "Entanglement of formation and the Hermitian square-root implementation extend the lecture through the checked Wootters paper."
+      ]
+    }
+  ]
+}

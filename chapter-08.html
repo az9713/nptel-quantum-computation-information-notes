@@ -1,0 +1,227 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Schmidt decomposition through singular-value decomposition</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>8. Schmidt decomposition through singular-value decomposition</h1>
+<p class="lead">The state \((|00\rangle+|01\rangle+|10\rangle)/\sqrt3\) is pure, yet either qubit has reduced eigenvalues \((3+\sqrt5)/6\) and \((3-\sqrt5)/6\). Those two numbers determine its pure-state entanglement entropy. Schmidt decomposition identifies the local bases in which that structure becomes explicit. A reliable implementation must also handle complex amplitudes and unequal subsystem dimensions: examples with only real coefficients cannot expose a misplaced complex conjugation.</p>
+<p class="source-note"><strong>Lecture material:</strong> W4L4–W5L2 develop the pure-state Schmidt form, prove it by diagonalizing a reduction, work a three-term example, and connect it with rectangular SVD. <strong>Primary-reference clarification:</strong> <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Preskill §2.4, PDF pages 23–26</a>, establishes the shared nonzero spectra and the role of conjugated local bases. <strong>Original teaching constructions:</strong> the fully normalized example, complex qubit–qutrit check, explicit distinction between joint coherence and reduced diagonality, and all exercises. All numerical spectra below come from the executed laboratory.</p>
+
+<h2 id="model">8.1 A bipartite vector as a coefficient matrix <a class="timestamp" href="https://www.youtube.com/watch?v=ST70zEz3Uug&amp;t=720s">W4L4 12:00</a></h2>
+<p>Fix finite-dimensional Hilbert spaces \(\mathcal H_A,\mathcal H_B\) of dimensions \(d_A,d_B\), with ordered orthonormal bases \(\{|i\rangle_A\}\) and \(\{|\mu\rangle_B\}\). A normalized joint pure vector can be written
+\[
+|\psi\rangle=\sum_{i=0}^{d_A-1}\sum_{\mu=0}^{d_B-1}
+(C_{\rm coef})_{i\mu}|i\rangle_A|\mu\rangle_B,
+\qquad \sum_{i,\mu}|(C_{\rm coef})_{i\mu}|^2=1.
+\tag{8.1}
+\]
+The rectangular matrix \(C_{\rm coef}\) stores amplitudes. It is not a density matrix: it maps a \(d_B\)-component coefficient column to a \(d_A\)-component column, need not be Hermitian, and need not be square. Its squared Frobenius norm, the sum of the squared magnitudes of its entries, equals one.</p>
+<p>Expanding the outer product and taking the partial trace gives the reduced matrices in these fixed bases:
+\[
+\rho_A=C_{\rm coef}C_{\rm coef}^\dagger,\qquad
+\rho_B=C_{\rm coef}^{\,T}C_{\rm coef}^{\,*}.
+\tag{8.2}
+\]
+Here \(T\) is transpose and \(*\) is entrywise complex conjugation. For example,
+\((\rho_A)_{ij}=\sum_\mu(C_{\rm coef})_{i\mu}(C_{\rm coef})^*_{j\mu}\), while
+\((\rho_B)_{\mu\nu}=\sum_i(C_{\rm coef})_{i\mu}(C_{\rm coef})^*_{i\nu}\).
+The second expression is the transpose of \(C_{\rm coef}^\dagger C_{\rm coef}\), not generally the same matrix. Their eigenvalues agree, but their eigenvectors can be complex conjugates. Keeping that distinction prevents a wrong reconstructed state.</p>
+<p>A product vector has coefficients \((C_{\rm coef})_{i\mu}=a_i b_\mu\), or \(C_{\rm coef}=ab^T\), where \(a,b\) are the local ket columns. Such a nonzero matrix has rank one. Conversely, every rank-one coefficient matrix factors as an outer product, and the norm can be distributed between the two factors to make them normalized. Rank is therefore a first exact test of bipartite pure-state entanglement. In finite-precision arithmetic, deciding whether a very small singular value is physically zero requires a stated tolerance and error model.</p>
+
+<h2 id="construction">8.2 Constructing the Schmidt basis from a reduced state <a class="timestamp" href="https://www.youtube.com/watch?v=MeGlNQyzLN4&amp;t=240s">W4L5 4:00</a></h2>
+<div class="thm"><strong>Theorem 8.1 — Schmidt decomposition.</strong> Every normalized vector in \(\mathcal H_A\otimes\mathcal H_B\) can be written
+\[
+|\psi\rangle=\sum_{j=1}^{r}s_j|a_j\rangle_A|b_j\rangle_B,
+\quad s_j\gt 0,\quad \sum_js_j^2=1,
+\quad r\leq\min(d_A,d_B),
+\tag{8.3}
+\]
+where the displayed local vectors are orthonormal within each subsystem. The positive numbers \(s_j\) are Schmidt coefficients; \(r\) is the Schmidt rank.</div>
+<div class="proof"><p>Diagonalize the positive reduced operator:
+\(\rho_A=\sum_j\lambda_j|a_j\rangle\langle a_j|\), with \(\lambda_j\gt 0\) on its support. For each such eigenvector define an unnormalized vector of \(B\) by
+\[
+|w_j\rangle_B=(\langle a_j|_A\otimes I_B)|\psi\rangle.
+\]
+By the partial-trace identity,
+\[
+\langle w_k|w_j\rangle
+=\langle a_j|\rho_A|a_k\rangle
+=\lambda_j\delta_{jk}.
+\]
+Thus \(|b_j\rangle=|w_j\rangle/\sqrt{\lambda_j}\) is an orthonormal family. Zero-eigenvalue directions have \(w_j=0\) and need no division. Expand \(\psi\) in the complete \(A\) eigenbasis:
+\(|\psi\rangle=\sum_j|a_j\rangle|w_j\rangle
+=\sum_j\sqrt{\lambda_j}|a_j\rangle|b_j\rangle\).
+Set \(s_j=\sqrt{\lambda_j}\). Normalization gives \(\sum_js_j^2=1\), and an orthonormal family of size \(r\) must fit in both local spaces. <span class="qed">∎</span></p></div>
+<p>The construction leaves the physical vector unchanged. It changes the local coordinate systems so that one \(A\) basis vector pairs with exactly one \(B\) basis vector. A generic expansion has two independent indices and as many as \(d_Ad_B\) coefficients; the Schmidt expansion needs at most \(\min(d_A,d_B)\) nonzero coefficients. This reduction reflects the freedom to select state-dependent local bases, not a reduction in the Hilbert-space dimension.</p>
+<p>The construction also identifies its own boundary. Dividing by a coefficient is valid only on the nonzero support. Basis vectors in null spaces can be completed arbitrarily and do not enter (8.3). Degenerate positive eigenvalues allow further paired rotations within their eigenspaces, so the Schmidt basis is not always unique. The ordered list of coefficients remains unique.</p>
+
+<h3 id="joint-coherence">What becomes diagonal, and what does not</h3>
+<p>Tracing the Schmidt expansion over either subsystem yields
+\[
+\rho_A=\sum_js_j^2|a_j\rangle\langle a_j|,
+\qquad
+\rho_B=\sum_js_j^2|b_j\rangle\langle b_j|.
+\tag{8.4}
+\]
+The two reductions are diagonal in their corresponding Schmidt bases. Their positive eigenvalues are exactly the same \(s_j^2\). If \(d_A\ne d_B\), only the numbers of extra zero eigenvalues can differ. Unequal dimensions do not change the equality of the nonzero spectra.</p>
+<p>The joint pure density operator still has the double sum
+\[
+\rho_{AB}=\sum_{j,k}s_js_k
+|a_jb_j\rangle\langle a_kb_k|.
+\tag{8.5}
+\]
+Its terms with \(j\ne k\) retain joint coherence. Dropping them would create an incoherent mixture with a different joint entropy and different joint measurements. A diagonal amplitude matrix in (8.3) is not the same object as a diagonal joint density operator. For a Bell pair the amplitude matrix is diagonal, but its density operator still contains the coherence between 00 and 11 exhibited in <a href="chapter-07.html#bell">Chapter 7</a>.</p>
+<p>Equation (8.4) proves the equality of local entropies:
+\[
+E(|\psi\rangle):=S(\rho_A)=S(\rho_B)
+=-\sum_js_j^2\log_2s_j^2.
+\tag{8.6}
+\]
+Here \(E\) denotes the pure-state entanglement entropy in bits. The common value is zero exactly at Schmidt rank one. For a fixed allowed rank \(r\), it is at most \(\log_2r\), with equality when all nonzero coefficients are \(1/\sqrt r\). These are consequences of the classical entropy bounds applied to the common spectrum. They do not define a mixed-state entanglement measure by taking the entropy of an arbitrary marginal.</p>
+
+<h2 id="worked">8.3 A complete two-qubit example <a class="timestamp" href="https://www.youtube.com/watch?v=kKPWIR9RMsk&amp;t=18s">W5L1 0:18</a></h2>
+<p>For the three-term running vector, choose
+\[
+C_{\rm coef}=\frac1{\sqrt3}\begin{pmatrix}1&amp;1\\1&amp;0\end{pmatrix},
+\qquad
+\rho_A=\rho_B=\frac13\begin{pmatrix}2&amp;1\\1&amp;1\end{pmatrix}.
+\tag{8.7}
+\]
+The equality of the two matrices here follows from this particular real symmetric coefficient matrix. It is stronger than the general equal-spectrum statement and should not be generalized to every state.</p>
+<p>The characteristic polynomial is
+\[
+\det(\rho_A-\lambda I_2)
+=(2/3-\lambda)(1/3-\lambda)-1/9
+=\lambda^2-\lambda+1/9.
+\]
+Its roots are \(\lambda_\pm=(3\pm\sqrt5)/6\). Both are positive and sum to one, giving the two Schmidt coefficients
+\(s_\pm=\sqrt{(3\pm\sqrt5)/6}\). Numerically, the reduced eigenvalues are 0.872678 and 0.127322; the coefficients are 0.934172 and 0.356822. Substituting into (8.6) gives 0.550048 bits of entanglement entropy.</p>
+<p>To fix the basis phases explicitly, define the golden ratio
+\(\varphi=(1+\sqrt5)/2\), which satisfies \(\varphi^2=\varphi+1\).
+Let \(u_+=(\varphi,1)^T/\sqrt{\varphi^2+1}\) and
+\(u_-=(1,-\varphi)^T/\sqrt{\varphi^2+1}\).
+Their norms are one and their inner product is zero. Multiplication by the real symmetric \(C_{\rm coef}\) gives eigenvalues \(\varphi/\sqrt3=s_+\) on \(u_+\) and \(-1/(\varphi\sqrt3)=-s_-\) on \(u_-\). Consequently a Schmidt expansion with positive coefficients is
+\[
+|\psi\rangle=s_+|u_+\rangle_A|u_+\rangle_B
++s_-|u_-\rangle_A|-u_-\rangle_B.
+\tag{8.8}
+\]
+The minus sign belongs in one local vector, not in a negative Schmidt coefficient. Multiplying the second local vector by minus one preserves its norm and orthogonality while reconstructing the correct amplitudes. This step is why pairing independently computed eigenvectors without checking phases can fail.</p>
+
+<h2 id="svd">8.4 SVD and the complex-conjugation convention <a class="timestamp" href="https://www.youtube.com/watch?v=kWIRBCvHfpw&amp;t=180s">W5L2 3:00</a></h2>
+<p>A complex singular-value decomposition has the form
+\[
+C_{\rm coef}=U\Sigma V^\dagger,
+\tag{8.9}
+\]
+where \(U\) and \(V\) are unitary matrices of sizes \(d_A\) and \(d_B\), and \(\Sigma\) is rectangular with nonnegative entries \(s_j\) on its leading diagonal. In components,
+\((C_{\rm coef})_{i\mu}=\sum_jU_{ij}s_jV^*_{\mu j}\).
+Comparing this expression with (8.1) shows that the Schmidt vectors are the columns of \(U\) on \(A\) and the complex conjugates of the columns of \(V\) on \(B\). The conjugation follows from matching ket coefficients, not from a software convention chosen after the fact.</p>
+<p>Equivalently, let \(U_A,U_B\) contain the two local Schmidt ket bases as columns. Then
+\(C_{\rm coef}=U_A\Sigma U_B^T\).
+Comparison with (8.9) gives \(U_B=V^*\). For real matrices, transpose and adjoint agree, hiding this distinction. In a genuinely complex example, replacing \(V^*\) by \(V\) usually reconstructs another vector. A norm-preservation check on the individual columns will not catch that error: both candidate local bases can be orthonormal.</p>
+<h3 id="algorithm">Why the singular-value algorithm works</h3>
+<p>The square matrix \(C_{\rm coef}^\dagger C_{\rm coef}\) is Hermitian and positive semidefinite. Diagonalize it to find orthonormal eigenvectors \(v_j\) and nonnegative eigenvalues \(s_j^2\). For every \(s_j\gt 0\), define \(u_j=C_{\rm coef}v_j/s_j\). Then
+\[
+u_j^\dagger u_k=
+\frac{v_j^\dagger C_{\rm coef}^\dagger C_{\rm coef}v_k}{s_js_k}
+=\delta_{jk}.
+\]
+The positive-support relation \(C_{\rm coef}v_j=s_ju_j\) reconstructs the action of the matrix. Null-space vectors are mapped to zero. Complete the \(u_j\) to an orthonormal basis if a full square \(U\) is desired; the extra vectors multiply zero entries of \(\Sigma\). This supplies (8.9). For complex amplitudes one must use \(C_{\rm coef}^\dagger C_{\rm coef}\), not \(C_{\rm coef}^TC_{\rm coef}\).</p>
+<p>The rectangular matrix \(\begin{pmatrix}1&amp;1\\0&amp;1\\1&amp;0\end{pmatrix}\) illustrates the real procedure from the source lecture. Its column Gram matrix is \(\begin{pmatrix}2&amp;1\\1&amp;2\end{pmatrix}\), with eigenvalues three and one. Hence its nonzero singular values are \(\sqrt3,1\). It is not yet a normalized state coefficient matrix: its Frobenius norm is two, so a state interpretation divides every entry and singular value by two. Matrix factorization and quantum normalization are separate requirements.</p>
+
+<h2 id="lab">8.5 An unequal-dimension check that catches the wrong convention</h2>
+<p>The laboratory also uses
+\[
+C_{\rm coef}=\frac12\begin{pmatrix}1&amp;i&amp;0\\0&amp;1&amp;i\end{pmatrix}.
+\tag{8.10}
+\]
+It describes a qubit and a three-level system, with four amplitudes of magnitude \(1/2\). The smaller reduction is
+\(\rho_A=\begin{pmatrix}1/2&amp;i/4\\-i/4&amp;1/2\end{pmatrix}\),
+whose eigenvalues are \(3/4,1/4\). The larger reduction has the same two nonzero eigenvalues and one extra zero. Its apparent tiny positive eigenvalue in floating-point output is roundoff around that exact zero.</p>
+<p>NumPy returns \(U,s,V^\dagger\). The \(j\)-th Schmidt ket of \(B\) is therefore the transpose of row \(j\) of the returned \(V^\dagger\), without applying an additional conjugation to that row. The program reconstructs the coefficient matrix, compares both reduced spectra, and deliberately tries the wrong conjugation. The wrong reconstruction has norm error 1.414214 for (8.10), while it has zero error for the selected real examples. A real-only test suite would miss the bug.</p>
+<pre><code class="language-python" data-file="ch08_lab.py">"""Schmidt reconstruction in real and genuinely complex product bases."""
+import numpy as np
+
+
+def analyze(name, coefficients):
+    assert abs(np.linalg.norm(coefficients) - 1) &lt; 1e-12
+    dim_a, dim_b = coefficients.shape
+    left, singular, right_h = np.linalg.svd(coefficients, full_matrices=False)
+    reconstructed = sum(singular[j]*np.outer(left[:, j], right_h[j, :])
+                        for j in range(len(singular)))
+    assert np.allclose(reconstructed, coefficients)
+    rho_a = coefficients @ coefficients.conj().T
+    rho_b = coefficients.T @ coefficients.conj()
+    spectrum_a = np.linalg.eigvalsh(rho_a)[::-1]
+    spectrum_b = np.linalg.eigvalsh(rho_b)[::-1]
+    assert np.allclose(spectrum_a[:len(singular)], singular**2)
+    assert np.allclose(spectrum_b[:len(singular)], singular**2)
+    assert np.allclose(spectrum_b[len(singular):], 0)
+    positive = singular[singular &gt; 1e-12]**2
+    entropy = float(-np.sum(positive*np.log2(positive)))
+    rank = int(np.sum(singular &gt; 1e-12))
+    print(f"{name}: dimensions={dim_a}x{dim_b}, Schmidt rank={rank}")
+    print("  singular values:", np.array2string(singular, precision=6))
+    print("  rho_A spectrum:", np.array2string(spectrum_a, precision=6))
+    print("  rho_B spectrum:", np.array2string(spectrum_b, precision=6))
+    print(f"  entanglement entropy={max(0.0, entropy):.6f} bits")
+    wrong = sum(singular[j]*np.outer(left[:, j], right_h[j, :].conj())
+                for j in range(len(singular)))
+    print("  wrong-conjugation residual="
+          f"{np.linalg.norm(wrong - coefficients):.6f}")
+    return singular
+
+
+real = np.array([[1, 1], [1, 0]], dtype=complex)/np.sqrt(3)
+analyze("three-term state", real)
+complex_state = np.array([[1, 1j, 0], [0, 1, 1j]], dtype=complex)/2
+analyze("complex qubit-qutrit", complex_state)
+product = np.array([[1, 1], [1, 1]], dtype=complex)/2
+analyze("product state", product)
+bell = np.eye(2, dtype=complex)/np.sqrt(2)
+analyze("Bell state", bell)
+expected = np.array([(3 + np.sqrt(5))/6, (3 - np.sqrt(5))/6])
+assert np.allclose(np.linalg.eigvalsh(real @ real.conj().T)[::-1], expected)
+print("three-term reduced eigenvalues:",
+      np.array2string(expected, precision=6))
+</code></pre>
+<pre><code class="output">three-term state: dimensions=2x2, Schmidt rank=2
+  singular values: [0.934172 0.356822]
+  rho_A spectrum: [0.872678 0.127322]
+  rho_B spectrum: [0.872678 0.127322]
+  entanglement entropy=0.550048 bits
+  wrong-conjugation residual=0.000000
+complex qubit-qutrit: dimensions=2x3, Schmidt rank=2
+  singular values: [0.866025 0.5     ]
+  rho_A spectrum: [0.75 0.25]
+  rho_B spectrum: [7.500000e-01 2.500000e-01 9.812634e-18]
+  entanglement entropy=0.811278 bits
+  wrong-conjugation residual=1.414214
+product state: dimensions=2x2, Schmidt rank=1
+  singular values: [1. 0.]
+  rho_A spectrum: [1. 0.]
+  rho_B spectrum: [1. 0.]
+  entanglement entropy=0.000000 bits
+  wrong-conjugation residual=0.000000
+Bell state: dimensions=2x2, Schmidt rank=2
+  singular values: [0.707107 0.707107]
+  rho_A spectrum: [0.5 0.5]
+  rho_B spectrum: [0.5 0.5]
+  entanglement entropy=1.000000 bits
+  wrong-conjugation residual=0.000000
+three-term reduced eigenvalues: [0.872678 0.127322]
+</code></pre>
+<p>Singular values below \(10^{-12}\) are classified as zero for these exact finite examples. Their known algebraic ranks justify the tolerance check. For noisy estimated states, choosing a cutoff becomes an inference problem rather than a proof of exact separability. The printed residual checks reconstruction in the stated basis; entropy alone would not verify the reconstructed phases.</p>
+
+<h2 id="limits">8.6 Local transformations, degeneracy, and the boundary of the theorem</h2>
+<p>Under local unitary operations \(W_A\otimes W_B\), the coefficient matrix becomes \(W_AC_{\rm coef}W_B^T\). Left and right unitary factors preserve its singular values, so Schmidt rank and the pure-state entanglement entropy remain unchanged. A convenient local basis can simplify coefficients but cannot turn an entangled pure vector into a product vector.</p>
+<p>When several Schmidt coefficients are equal, a unitary mixing of their \(A\) basis vectors combined with the complex-conjugate mixing on \(B\) leaves the state unchanged. For a maximally entangled qubit pair, both coefficients equal \(1/\sqrt2\), so a particular displayed Schmidt basis carries no unique physical privilege. Nondegenerate coefficients still allow opposite local phase choices within each paired term.</p>
+<p>The theorem concerns a pure vector and a specified bipartition. A mixed density operator is not represented by one coefficient matrix of ket amplitudes, and decomposing one chosen ensemble does not establish separability of that density operator. A state of three parties can be Schmidt-decomposed across \(A|(BC)\), but that does not imply a three-factor orthonormal Schmidt expansion. The partition and purity assumptions are part of the result.</p>
+
+<h2 id="exercises">8.7 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex8-1">Exercise 8.1 — Keep the joint coherence</h3><p>Compare the Bell projector with the mixture \((|00\rangle\langle00|+|11\rangle\langle11|)/2\). Both have diagonal coefficient or population descriptions in related bases. Which matrix may be diagonalized without discarding coherence?</p><details><summary>Solution</summary><p>The Bell vector has coefficient matrix \(I_2/\sqrt2\), which is diagonal. Its projector contains both diagonal populations and off-diagonal terms \(|00\rangle\langle11|/2\) and its adjoint. The mixture lacks those terms. Both local reductions equal \(I_2/2\), but their joint entropies are zero and one. The Schmidt procedure diagonalizes the amplitude matrix by local basis changes and diagonalizes each reduction; it does not replace the joint projector by its diagonal populations.</p></details></article>
+<article class="exercise"><h3 id="ex8-2">Exercise 8.2 — Unequal dimensions</h3><p>A pure state on dimensions two and five has Schmidt rank two and coefficients \(\sqrt{3/4},\sqrt{1/4}\). Give both reduced spectra and their entropies.</p><details><summary>Solution</summary><p>The two-dimensional reduction has spectrum \(3/4,1/4\). The five-dimensional reduction has spectrum \(3/4,1/4,0,0,0\). Both entropies are the same binary entropy, 0.811278 bits, as reproduced in the laboratory. The count of nonzero eigenvalues is two in both; it is the count of zeros that differs.</p></details></article>
+<article class="exercise"><h3 id="ex8-3">Exercise 8.3 — Two-qubit factorization criterion</h3><p>For a normalized vector with coefficient matrix \(\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\), prove that it is a product exactly when \(ad-bc=0\).</p><details><summary>Solution</summary><p>A nonzero two-by-two matrix has rank one exactly when its determinant vanishes. Every product vector gives an outer-product matrix, hence rank one. Conversely, rank one permits an outer-product factorization, which can be normalized into local ket factors because the joint norm is one. Thus the determinant condition is both necessary and sufficient for pure two-qubit vectors. Here \(a,b,c,d\) are chapter-local amplitudes, not the integer base of a later factoring problem.</p></details></article>
+<article class="exercise"><h3 id="ex8-4">Exercise 8.4 — Fix paired phases</h3><p>If \(s_j|a_j\rangle|b_j\rangle\) is one Schmidt term, what changes to its local ket phases leave the term unchanged? Explain why diagonalizing the two reductions separately does not fix those phases.</p><details><summary>Solution</summary><p>Replace \(|a_j\rangle\) by \(e^{i\theta_j}|a_j\rangle\) and \(|b_j\rangle\) by \(e^{-i\theta_j}|b_j\rangle\). Their product phase is one. Each local projector is independently unchanged by an arbitrary phase, so independent eigensolvers can choose incompatible phases for the two sides. The original joint coefficient matrix or the conditional-vector construction fixes the relative pairing needed to reconstruct the original state.</p></details></article>
+<article class="exercise"><h3 id="ex8-5">Exercise 8.5 — Diagnose a mixed-state shortcut</h3><p>A density operator has a decomposition into entangled pure vectors. Does that establish that the density operator is entangled? Give a counterexample using Bell vectors.</p><details><summary>Solution</summary><p>No. The equal mixture of the four Bell projectors is \(I_4/4\) because the Bell vectors form an orthonormal basis. The same matrix is \((I_2/2)\otimes(I_2/2)\), a product density operator. Existence of an entangled ensemble does not rule out an alternative ensemble of product states. Schmidt rank is a criterion for an individual pure vector, not for an arbitrary decomposition of a mixed state.</p></details></article>
+<article class="exercise"><h3 id="ex8-6">Exercise 8.6 — Test a phase-dependent implementation</h3><p>Multiply each column of the complex matrix (8.10) by an independently chosen phase. Sweep one phase from zero to \(2\pi\); compare the correct reconstruction error, the wrong-conjugation error, and the reduced spectra.</p><details><summary>Solution</summary><p>Column phases correspond to a diagonal unitary on \(B\), so all singular values and both nonzero reduced spectra remain unchanged. A correct SVD-to-ket implementation reconstructs every matrix to floating-point accuracy. The deliberately wrong convention can have a varying nonzero residual because it changes phase information that the singular values do not record. At the original matrix its residual is 1.414214. The sweep tests the representation, not only its invariants; a spectrum-only comparison would accept the wrong state.</p></details></article>
+
+<h2 id="primary-sources">8.8 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=ST70zEz3Uug">W4L4 — Entanglement: Schmidt Decomposition</a>: state-dependent local bases, product example, and entropy motivation.</li><li><a href="https://www.youtube.com/watch?v=MeGlNQyzLN4">W4L5 — Schmidt Decomposition</a>: construction from eigenvectors of a reduced operator.</li><li><a href="https://www.youtube.com/watch?v=kKPWIR9RMsk">W5L1 — Schmidt Decomposition II</a>: three-term example and the matrix relation between local bases.</li><li><a href="https://www.youtube.com/watch?v=kWIRBCvHfpw">W5L2 — Singular Value Decomposition</a>: rectangular algorithm, basis completion, and a product example.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Quantum Information, Chapter 2</a>, §2.4, PDF pages 23–25, equations (2.79)–(2.93), and §2.4.1, pages 25–26: Schmidt construction, shared nonzero spectra, nonuniqueness, and the pure-state product criterion. The explicit complex numerical test and the normalized worked examples are original teaching calculations.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-07.html">Previous chapter</a> <a href="chapter-09.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

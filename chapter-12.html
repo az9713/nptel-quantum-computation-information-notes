@@ -1,0 +1,197 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Cryptographic motivation and the reduction to order finding</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>Cryptographic motivation and the reduction to order finding</h1>
+<p class="lead">A receiver publishes the toy RSA key \((N,e)=(21,5)\). The message representative \(4\) encrypts to \(16\), and the private exponent \(5\) recovers \(4\). An eavesdropper who factors \(21=3\cdot7\) can reconstruct that private exponent. The quantum task is to find useful arithmetic structure without enumerating every exponent. Before any quantum circuit is introduced, the classical reduction must explain exactly when a period yields factors and when it fails.</p>
+<p class="source-note"><strong>Lecture material:</strong> <a href="https://www.youtube.com/watch?v=0bNjIOh6mKw">W7L3</a> introduces modular powers, factoring, and RSA; <a href="https://www.youtube.com/watch?v=VgNVfmBSJEg">W7L4</a> works the RSA example and constructs the modular-exponentiation state; <a href="https://www.youtube.com/watch?v=dHlQTZiDDaw">W7L5</a> measures the output register and motivates the Fourier transform. <strong>Research extensions and corrections:</strong> the original RSA paper supplies the arithmetic construction, Shor's paper supplies the order-finding reduction, and RFC 8017 distinguishes a raw RSA primitive from a complete encoded encryption scheme. <strong>Original teaching constructions:</strong> the explicit unit-group and gcd proofs, failure classification, register contracts, exact enumeration lab, and exercises. No real cryptographic key or hardware factoring performance is evaluated.</p>
+
+<h2 id="arithmetic">12.1 Cryptography and modular arithmetic <a class="timestamp" href="https://www.youtube.com/watch?v=0bNjIOh6mKw&amp;t=397s">W7L3 6:37</a></h2>
+<p>Let \(N\) be a positive integer greater than one. Two integers \(u\) and \(v\) are congruent modulo \(N\), written \(u\equiv v\pmod N\), if \(N\) divides \(u-v\). A residue is represented here by its unique integer in \(\{0,1,\ldots,N-1\}\). Addition and multiplication are followed by taking the remainder. The greatest common divisor \(\gcd(u,v)\) is the largest positive integer dividing both arguments.</p>
+<p>An integer \(a\) is a <em>unit modulo \(N\)</em> if \(\gcd(a,N)=1\). A unit has a multiplicative inverse: an integer \(a^{-1}\) with \(aa^{-1}\equiv1\pmod N\). The inverse is not ordinary rational division. Bézout's identity gives integers \(s,t\) with \(sa+tN=\gcd(a,N)\); when the gcd is one, reduction modulo \(N\) makes \(s\) an inverse. The Euclidean algorithm computes the gcd and these coefficients by repeated division with remainder.</p>
+<p>For example, dividing \(12\) by \(5\) gives remainder \(2\), and dividing \(5\) by \(2\) gives remainder \(1\). Reversing these steps gives \(1=5-2\cdot2=5-2(12-2\cdot5)=5\cdot5-2\cdot12\). Thus the inverse of \(5\) modulo \(12\) is \(5\). The relation is \(5\cdot5\equiv1\pmod{12}\), not the real-number equation \(5=1/5\).</p>
+
+<h3 id="modular-cost">Input length and efficient modular powers</h3>
+<p>The size of a positive integer input is its binary length \(\ell=\lfloor\log_2N\rfloor+1\). An algorithm performing \(N\) operations may therefore require exponentially many operations in \(\ell\). The distinction matters because a displayed small integer can hide the cost of enumerating a modular sequence when the modulus is large. Finding a pattern in a short numerical table is not yet an efficient period-finding algorithm.</p>
+<p>Computing one modular power does not require constructing the full integer \(a^x\). Write the exponent in binary as \(x=\sum_{k=0}^{m-1}x_k2^k\), where each \(x_k\) is zero or one. Repeated squaring constructs \(a^{2^k}\bmod N\), and multiplying only the factors with \(x_k=1\) gives \(a^x\bmod N\). Every intermediate residue is reduced modulo \(N\). There are at most \(m\) squarings and \(m\) multiplications in this elementary count; the cost of each arithmetic operation still depends on \(\ell\). Efficient evaluation of a function at a selected exponent does not by itself make finding its period efficient.</p>
+
+<h3 id="rsa">The arithmetic of a toy RSA key <a class="timestamp" href="https://www.youtube.com/watch?v=VgNVfmBSJEg&amp;t=153s">W7L4 2:33</a></h3>
+<p>For the two-prime model, choose distinct primes \(p\) and \(q\), set \(N=pq\), and let \(\phi(N)\) count the units modulo \(N\). Among the \(pq\) residue classes, \(q\) are multiples of \(p\), \(p\) are multiples of \(q\), and zero is counted in both sets. The number coprime to \(pq\) is therefore
+\[
+ \phi(N)=pq-q-p+1=(p-1)(q-1).
+ \tag{12.1}
+\]
+Choose a positive public exponent \(e\) coprime to \(\phi(N)\). Choose the positive representative \(d\) of its inverse modulo \(\phi(N)\), so \(ed\equiv1\pmod{\phi(N)}\). The public key is \((N,e)\); the prime factors and private exponent are not published. A message representative \(m_{\mathrm{msg}}\) in \(\{0,\ldots,N-1\}\) is mapped to a ciphertext representative \(c_{\mathrm{txt}}=m_{\mathrm{msg}}^e\bmod N\). Decryption computes \(c_{\mathrm{txt}}^d\bmod N\). The subscripts distinguish the message from a register's qubit count and the ciphertext from the modulus or a phase.</p>
+<div class="prop"><b>Proposition 12.1 — arithmetic correctness, proved here.</b> With distinct prime factors and the stated exponent relation, decrypting the raw RSA representative recovers every \(m_{\mathrm{msg}}\in\{0,\ldots,N-1\}\), including representatives not coprime to \(N\).</div>
+<div class="proof"><p>Write \(ed=1+k(p-1)(q-1)\) for an integer \(k\). Work first modulo \(p\). If \(p\) divides the message, both the original and decrypted value are zero modulo \(p\). Otherwise multiplication by the message permutes the \(p-1\) nonzero residues. Taking the product of that permutation and canceling the nonzero-residue product yields Fermat's relation \(m_{\mathrm{msg}}^{p-1}\equiv1\pmod p\). Thus
+\[
+ m_{\mathrm{msg}}^{ed}=m_{\mathrm{msg}}
+ \left(m_{\mathrm{msg}}^{p-1}\right)^{k(q-1)}
+ \equiv m_{\mathrm{msg}}\pmod p.
+\]
+The same argument holds modulo \(q\). The difference between original and decrypted integers is divisible by both distinct primes, hence by \(pq=N\). Since both are represented in \(\{0,\ldots,N-1\}\), congruence implies equality. <span class="qed">∎</span></p></div>
+<p>For the opening example, take \(p=3,q=7\), so \(N=21\) and \(\phi(N)=12\). The public exponent \(e=5\) has inverse \(d=5\) modulo \(12\). Encryption of \(4\) gives \(4^5=1024=48\cdot21+16\), so the ciphertext is \(16\). Repeated reduction during decryption gives \(16^2\equiv4\), \(16^4\equiv16\), and \(16^5\equiv4\pmod{21}\). The lab checks all message representatives, including multiples of a prime factor; the proof above explains why this exhaustive toy check is not limited to coprime messages.</p>
+<p>The <a href="https://people.csail.mit.edu/rivest/Rsapaper.pdf">original paper of Rivest, Shamir, and Adleman</a> defines this modular-power construction and its correctness relation. It is important to keep arithmetic correctness separate from security. Factoring \(N\) supplies \(p,q\), hence \(\phi(N)\), and makes the private-exponent computation possible. This direction is sufficient to explain why an efficient factoring algorithm threatens this construction. It does not prove that every possible method of inverting an RSA instance must first factor its modulus.</p>
+<p>Raw deterministic exponentiation also is not a complete modern encryption scheme. For example, repeated equal message representatives produce repeated equal ciphertexts, and anyone with the public key can encrypt guesses for a small message set. <a href="https://www.rfc-editor.org/rfc/rfc8017#section-7.1">RFC 8017, Sections 7 and 7.1</a>, describes encryption schemes that combine the RSA primitives with encoding, including OAEP. The small exponentiation program here teaches the algebra; it is not an encryption library. Password length is a separate issue from the bit length of an RSA modulus, and neither should be inferred from this toy example.</p>
+
+<h3 id="orders">Modular powers and their least period <a class="timestamp" href="https://www.youtube.com/watch?v=0bNjIOh6mKw&amp;t=551s">W7L3 9:11</a></h3>
+<p>Fix a unit \(a\) modulo \(N\). Define \(f_a(x)=a^x\bmod N\) for nonnegative integers \(x\). There are finitely many unit residues, so some powers repeat. If \(a^u\equiv a^v\pmod N\) with \(v\gt u\), multiply by the inverse of \(a^u\) to obtain \(a^{v-u}\equiv1\pmod N\). Thus at least one positive exponent returns the sequence to one.</p>
+<div class="def"><b>Definition 12.2 — multiplicative order.</b> The multiplicative order \(r_{\mathrm{ord}}\) of \(a\) modulo \(N\) is the least positive integer such that \(a^{r_{\mathrm{ord}}}\equiv1\pmod N\). It is the least positive period of \(f_a\).</div>
+<p>Indeed, \(a^{x+r_{\mathrm{ord}}}\equiv a^x\) for every \(x\). Conversely, if \(a^t\equiv1\), divide \(t\) by \(r_{\mathrm{ord}}\) as \(t=qr_{\mathrm{ord}}+s\), where \(0\leq s\lt r_{\mathrm{ord}}\). Then \(a^s\equiv1\), forcing \(s=0\) by minimality. A return exponent is therefore a multiple of the order. Two powers have equal residues exactly when their exponent difference is a multiple of \(r_{\mathrm{ord}}\).</p>
+<p>For \(N=15,a=2\), the first eight residues are \(1,2,4,8,1,2,4,8\); the order is four. For \(a=7\), they are \(1,7,4,13,1,7,4,13\), again with order four. The repeated spacing is a period. In a Fourier description its reciprocal, and its integer harmonics, determine peak locations. Calling the integer period a frequency without specifying a convention would conceal that reciprocal relation.</p>
+
+<h2 id="factoring-reduction">12.2 Order finding as a factoring subroutine <a class="timestamp" href="https://www.youtube.com/watch?v=0bNjIOh6mKw&amp;t=951s">W7L3 15:51</a></h2>
+<p>Assume now that \(N\) is odd and composite. Choose \(a\) with \(1\lt a\lt N\). First compute \(\gcd(a,N)\). If the gcd exceeds one, a proper factor is already known and no quantum period finding is needed. Otherwise \(a\) is a unit, so its order exists. When the order is even, define \(b=a^{r_{\mathrm{ord}}/2}\bmod N\). It obeys \(b^2\equiv1\pmod N\).</p>
+<div class="thm"><b>Theorem 12.3 — R12, proved here.</b> Suppose \(N\) is odd composite, \(\gcd(a,N)=1\), and the least order \(r_{\mathrm{ord}}\) is even. If \(a^{r_{\mathrm{ord}}/2}\not\equiv-1\pmod N\), then
+\[
+ g_-=\gcd(a^{r_{\mathrm{ord}}/2}-1,N),\qquad
+ g_+=\gcd(a^{r_{\mathrm{ord}}/2}+1,N)
+ \tag{12.2}
+\]
+are both proper nontrivial divisors of \(N\).</div>
+<div class="proof"><p>Let \(b\) be the reduced half-order power. The order's minimality implies \(b\not\equiv1\pmod N\), since a smaller positive return exponent would otherwise exist. The additional hypothesis excludes \(b\equiv-1\pmod N\). Also \((b-1)(b+1)\equiv0\pmod N\).</p><p>If \(\gcd(b-1,N)=1\), then \(b-1\) has an inverse modulo \(N\). Multiplying the difference-of-squares relation by that inverse gives \(b+1\equiv0\pmod N\), contradicting the exclusion of \(-1\). Hence \(g_-\gt1\). It is smaller than \(N\), because \(b\not\equiv1\). Exchanging the plus and minus factors proves \(1\lt g_+\lt N\). Computing the gcd with the unreduced power or with its residue gives the same result because the two arguments differ by a multiple of \(N\). <span class="qed">∎</span></p></div>
+<p>The useful structure is a nontrivial square root of one modulo a composite integer. Over a field, the equation \(b^2=1\) has only the roots \(\pm1\), because a field has no zero divisors. A composite residue ring can have additional roots: modulo \(15\), \(4^2\equiv1\), although \(4\) is neither \(1\) nor \(-1\). Its two neighboring integers expose the factors through \(\gcd(3,15)=3\) and \(\gcd(5,15)=5\).</p>
+<p>The divisors in equation (12.2) need not be prime. For an odd modulus, each prime-power factor divides exactly one of \(b-1\) and \(b+1\), since any common divisor of these neighboring even integers divides two. Their gcds with odd \(N\) are therefore coprime and their product is \(N\). For a modulus with more than two prime factors, either gcd may collect several of them. A full factorization algorithm recursively factors composite outputs rather than labeling every output a prime automatically.</p>
+
+<h3 id="failures">Failures that the outer algorithm must recognize</h3>
+<p>An odd order gives no integer half-order exponent and fails this reduction. For \(N=21,a=4\), the cycle \(1,4,16,1\) has order three. An even order can also fail: \(a=14\) modulo \(15\) has order two, but its half-order power is \(-1\), giving gcds one and fifteen. Both cases call for another base or further processing, not a fabricated factor.</p>
+<p>A verified return exponent is not necessarily the least order. If the actual order is four, an exponent eight also satisfies \(a^8\equiv1\). Using eight as though it were minimal can give \(a^4\equiv1\), again yielding trivial gcds. This distinction becomes important when continued fractions return a denominator or a multiple that must be checked. A correct outer routine verifies powers, tests both gcds, and accepts only divisors strictly between one and \(N\).</p>
+<p>Even inputs can be divided by two immediately, and exact prime powers can be treated separately. A prime input cannot produce a nontrivial factor. The order-finding part should consequently be understood as one subroutine inside a classical control procedure. <a href="https://arxiv.org/pdf/quant-ph/9508027">Shor's paper</a> develops that reduction and the quantum Fourier stage. The finite success fractions in our small enumeration below are properties of the explicitly enumerated moduli and bases; they are not a derivation of the general randomized success bound.</p>
+
+<h3 id="registers">A reversible function evaluation <a class="timestamp" href="https://www.youtube.com/watch?v=VgNVfmBSJEg&amp;t=1132s">W7L4 18:52</a></h3>
+<p>Let the exponent register \(A\) contain \(m_A\) qubits, so its dimension is \(M=2^{m_A}\). Let register \(B\) contain enough qubits to represent every residue from zero to \(N-1\). A computational-basis label such as \(|7\rangle_B\) denotes a padded binary string; it is one basis vector, not seven qubits. The zero register is \(|0\rangle_B\), regardless of how many qubits represent that zero.</p>
+<p>An evaluation rule on a zero target can be extended to a full reversible operator by defining
+\[
+ U_f|x\rangle_A|y\rangle_B
+ =|x\rangle_A|y\mathbin{\oplus}f_a(x)\rangle_B,
+ \tag{12.3}
+\]
+where \(\oplus\) means bitwise exclusive OR on equal-length binary strings. For each fixed \(x\), XOR by a fixed string is its own inverse. Equation (12.3) is therefore a permutation of the complete basis, hence a unitary map. Merely writing an irreversible assignment “overwrite the target with \(f_a(x)\)” would not justify a quantum implementation for arbitrary target inputs.</p>
+<p>Applying Hadamard gates to an initially zero exponent register prepares a uniform superposition. Function evaluation gives
+\[
+ |\Omega\rangle=\frac1{\sqrt M}\sum_{x=0}^{M-1}
+ |x\rangle_A|a^x\bmod N\rangle_B.
+ \tag{12.4}
+\]
+Distinct \(x\) labels keep the joint terms orthogonal, even when their function values repeat, so the norm is one. Equation (12.4) specifies an exact state preparation in the ideal circuit model. The cost of implementing modular arithmetic coherently must still be counted; naming its implementation an oracle does not make that cost disappear.</p>
+
+<h3 id="cosets">Measuring the output register <a class="timestamp" href="https://www.youtube.com/watch?v=dHlQTZiDDaw&amp;t=162s">W7L5 2:42</a></h3>
+<p>Suppose measurement of \(B\) returns \(z=a^s\bmod N\), with \(0\leq s\lt r_{\mathrm{ord}}\) and \(s\lt M\). Equal modular powers occur precisely at exponent labels \(x=s+kr_{\mathrm{ord}}\). Let \(L_s\) count the nonnegative integers \(k\) satisfying \(s+kr_{\mathrm{ord}}\lt M\). Projecting equation (12.4) onto this outcome leaves \(L_s\) orthogonal terms. Its probability and normalized post-measurement state are therefore
+\[
+ \Pr(z)=\frac{L_s}{M},\qquad
+ |\Omega_z\rangle=
+ \left(\frac1{\sqrt{L_s}}\sum_{k=0}^{L_s-1}
+ |s+kr_{\mathrm{ord}}\rangle_A\right)\otimes|z\rangle_B.
+ \tag{12.5}
+\]
+The two registers are separable within this conditioned branch. Before measurement, equation (12.4) is generally entangled: the output label is correlated with which arithmetic progression the exponent belongs to. Measuring \(B\) is an explanatory route to the progression; it does not permit reading all its exponent labels from one sample of \(A\).</p>
+<p>For \(N=15,a=7,M=16\), the outcome \(z=7\) occurs at \(x=1,5,9,13\). Here \(L_s=4\), \(\Pr(z)=1/4\), and the normalized first-register vector is \((|1\rangle+|5\rangle+|9\rangle+|13\rangle)/2\). An immediate computational-basis measurement returns one of these integers; one returned number is not a list of successive spacings. A Fourier transform uses phase interference to make the period affect a distribution that repeated measurements can sample.</p>
+<p>The output register's size and the exponent register's precision are different requirements. Enough output qubits to hold a residue does not establish enough Fourier resolution to reconstruct an arbitrary order. In the usual factoring construction, an exponent-register dimension of order \(N^2\) supplies the rational-approximation precision used in the continued-fraction step. The \(M=16\) example works unusually cleanly because its period divides the register dimension; it is a demonstration of the mechanism, not the generic register-size prescription.</p>
+
+<h3 id="fourier-preview">A discrete Fourier transform becomes a state transformation <a class="timestamp" href="https://www.youtube.com/watch?v=dHlQTZiDDaw&amp;t=689s">W7L5 11:29</a></h3>
+<p>A discrete Fourier transform takes a finite complex data vector to a finite complex frequency vector. Its overall normalization and sign convention can be chosen in several compatible ways. A quantum implementation must preserve state norm, so our convention uses the unitary normalization:
+\[
+ \widetilde\alpha_y=\frac1{\sqrt M}
+ \sum_{x=0}^{M-1}\alpha_xe^{2\pi ixy/M},\qquad
+ y=0,\ldots,M-1.
+\]
+Here \(\alpha_x\) is an input amplitude and \(\widetilde\alpha_y\) an output amplitude. A convention using \(1/M\) instead changes the norm and needs a compensating inverse convention for classical data processing; it is not directly a normalized quantum gate. Chapter 13 derives the unitary Fourier matrix, its circuit factorization, and the geometric sum that determines the order-sensitive peaks.</p>
+<p>For two classical data entries \((1,1)\), the displayed unitary transform gives \((\sqrt2,0)\), whose squared norm is two, equal to the input norm. If the inputs instead describe a quantum state, first normalize them to \((1,1)/\sqrt2\); the output is then \((1,0)\). Confusing a raw data vector with a normalized state would make an otherwise correct transform appear to violate probability conservation.</p>
+
+<h2 id="lab">12.3 An exact arithmetic laboratory</h2>
+<p>The following program uses only exact Python integers and the standard library. It reproduces the toy RSA example and verifies every possible message representative for that modulus. Its deliberately small exhaustive order routine supplies a reference answer, not the proposed efficient quantum subroutine. For each tested base it distinguishes a direct gcd factor, odd order, the half-order \(-1\) failure, and a useful order. The moduli and the complete base ranges are printed or fixed visibly in the source.</p>
+<pre><code class="language-python" data-file="ch12_lab.py">&quot;&quot;&quot;Toy RSA and exhaustive small order-to-factor classifications.&quot;&quot;&quot;
+
+from collections import Counter
+from math import gcd
+
+
+def order(base, modulus):
+    &quot;&quot;&quot;Return the exact order of a unit, using a small exhaustive loop.&quot;&quot;&quot;
+    if gcd(base, modulus) != 1:
+        raise ValueError(&quot;Multiplicative order requires a unit&quot;)
+    value = 1
+    for exponent in range(1, modulus + 1):
+        value = value*base % modulus
+        if value == 1:
+            return exponent
+    raise AssertionError(&quot;Finite unit-group order was not found&quot;)
+
+
+def classify(base, modulus):
+    divisor = gcd(base, modulus)
+    if divisor != 1:
+        return &quot;direct-gcd&quot;, divisor, modulus//divisor
+    period = order(base, modulus)
+    if period % 2:
+        return &quot;odd-order&quot;, period, None
+    half_power = pow(base, period//2, modulus)
+    if half_power == modulus - 1:
+        return &quot;minus-one&quot;, period, None
+    left = gcd(half_power - 1, modulus)
+    right = gcd(half_power + 1, modulus)
+    assert 1 &lt; left &lt; modulus and 1 &lt; right &lt; modulus
+    return &quot;useful-order&quot;, period, tuple(sorted((left, right)))
+
+
+def main():
+    p, q, public_exponent, message = 3, 7, 5, 4
+    modulus = p*q
+    totient = (p - 1)*(q - 1)
+    private_exponent = pow(public_exponent, -1, totient)
+    cipher = pow(message, public_exponent, modulus)
+    recovered = pow(cipher, private_exponent, modulus)
+    assert recovered == message
+    assert all(pow(pow(m, public_exponent, modulus),
+                   private_exponent, modulus) == m
+               for m in range(modulus))
+    print(f&quot;Toy RSA: N={modulus}, phi={totient}, &quot;
+          f&quot;e={public_exponent}, d={private_exponent}&quot;)
+    print(f&quot;Message {message} -&gt; ciphertext {cipher} -&gt; {recovered}&quot;)
+    print(f&quot;All {modulus} message representatives decrypt correctly&quot;)
+    for base in [2, 7]:
+        values = [pow(base, x, 15) for x in range(8)]
+        print(f&quot;N=15, a={base}: powers={values}, order={order(base, 15)}&quot;)
+    for modulus in [15, 21, 33]:
+        counts = Counter(classify(base, modulus)[0]
+                         for base in range(2, modulus))
+        print(f&quot;N={modulus}: &quot; + &quot;, &quot;.join(
+            f&quot;{key}={counts[key]}&quot; for key in sorted(counts)))
+    for base in [2, 4, 14]:
+        print(f&quot;N=15, a={base}: {classify(base, 15)}&quot;)
+    print(f&quot;N=21, a=4: {classify(4, 21)}&quot;)
+    assert order(4, 21) == 3
+    print(&quot;Binary input lengths: &quot; + &quot;, &quot;.join(
+        f&quot;{n}:{n.bit_length()}&quot; for n in [15, 21, 33, 255, 256]))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<pre><code class="output">Toy RSA: N=21, phi=12, e=5, d=5
+Message 4 -&gt; ciphertext 16 -&gt; 4
+All 21 message representatives decrypt correctly
+N=15, a=2: powers=[1, 2, 4, 8, 1, 2, 4, 8], order=4
+N=15, a=7: powers=[1, 7, 4, 13, 1, 7, 4, 13], order=4
+N=15: direct-gcd=6, minus-one=1, useful-order=6
+N=21: direct-gcd=8, minus-one=3, odd-order=2, useful-order=6
+N=33: direct-gcd=12, minus-one=5, odd-order=4, useful-order=10
+N=15, a=2: (&#x27;useful-order&#x27;, 4, (3, 5))
+N=15, a=4: (&#x27;useful-order&#x27;, 2, (3, 5))
+N=15, a=14: (&#x27;minus-one&#x27;, 2, None)
+N=21, a=4: (&#x27;odd-order&#x27;, 3, None)
+Binary input lengths: 15:4, 21:5, 33:6, 255:8, 256:9
+</code></pre>
+<p>The cases \(a=2\) and \(a=4\) modulo \(15\) have different orders yet yield the same factors. The \(-1\) case and the odd-order case fail for different algebraic reasons. The exhaustive counts include bases that are not units, so those direct-gcd successes must not be attributed to order finding. None of these finite counts is a hardness result or a hardware timing measurement.</p>
+
+<h2 id="exercises">12.4 Exercises and worked solutions</h2>
+<article class="exercise"><h3 id="ex12-1">Exercise 1 — modular inversion</h3><p>Find the inverse of \(7\) modulo \(20\) by Bézout arithmetic. Explain why \(6\) has no inverse modulo \(20\).</p><details><summary>Solution</summary><p>Since \(20=2\cdot7+6\) and \(7=6+1\), subtraction gives \(1=7-(20-2\cdot7)=3\cdot7-20\). Thus the inverse of \(7\) is \(3\) modulo \(20\). If \(6u\equiv1\pmod{20}\), then an even integer \(6u-20v\) would equal one for some integer \(v\), which is impossible. Equivalently \(\gcd(6,20)=2\), so the required Bézout combination cannot equal one.</p></details></article>
+<article class="exercise"><h3 id="ex12-2">Exercise 2 — the secret totient</h3><p>For a two-distinct-prime modulus, derive \(p+q\) from \(N\) and \(\phi(N)\). Recover the factors when \(N=21\) and \(\phi(N)=12\).</p><details><summary>Solution</summary><p>Expanding equation (12.1) gives \(\phi(N)=N-(p+q)+1\), so \(p+q=N-\phi(N)+1\). Let \(s=N-\phi(N)+1\). The factors are roots of \(t^2-st+N=0\). Here \(s=10\), and the discriminant is \(100-84=16\). The two roots are \((10+4)/2=7\) and \((10-4)/2=3\). This calculation uses the assumption of two distinct prime factors; the same quadratic expression is not a general factoring formula for arbitrary composite structure.</p></details></article>
+<article class="exercise"><h3 id="ex12-3">Exercise 3 — a false order</h3><p>The true order of \(2\) modulo \(15\) is four. Verify that eight is a return exponent and show why using it directly in equation (12.2) fails.</p><details><summary>Solution</summary><p>Because \(2^4\equiv1\), also \(2^8\equiv1\pmod{15}\). The half of eight is four, so \(b=2^4\bmod15=1\). The gcds become \(\gcd(0,15)=15\) and \(\gcd(2,15)=1\), both trivial. The proof of Theorem 12.3 used minimality to exclude \(b=1\); a generic return exponent lacks that guarantee. A reconstruction routine may still reduce an even multiple or try other candidates, but it must check the resulting gcds.</p></details></article>
+<article class="exercise"><h3 id="ex12-4">Exercise 4 — nonprime factors</h3><p>For \(N=45,a=4\), verify the least order and perform the gcd extraction. Decide whether the outputs finish the prime factorization.</p><details><summary>Solution</summary><p>The residues are \(1,4,16,19,31,34,1\), giving least order six. The half-order power is \(19\), and \(\gcd(18,45)=9\), \(\gcd(20,45)=5\). Both are proper nontrivial divisors and their product is \(45\), but \(9\) is composite. Further factoring gives \(45=3^2\cdot5\). The theorem promises divisors, not that both outputs are prime.</p></details></article>
+<article class="exercise"><h3 id="ex12-5">Exercise 5 — a normalized arithmetic progression</h3><p>For \(N=15,a=7,M=16\), condition equation (12.4) on the output value four. Give the exponent-register state, its outcome probability, and the conditional probability of measuring exponent ten.</p><details><summary>Solution</summary><p>The value four appears at exponents \(2,6,10,14\), so the normalized vector is \((|2\rangle+|6\rangle+|10\rangle+|14\rangle)/2\). It contains four of the sixteen equally weighted joint basis terms, hence the output-register outcome has probability \(1/4\). Within that branch every listed exponent has probability \(1/4\); in particular exponent ten has conditional probability \(1/4\), and the joint probability of output four and exponent ten is \(1/16\).</p></details></article>
+<article class="exercise"><h3 id="ex12-6">Exercise 6 — exhaustive failure diagnosis</h3><p>Extend the lab to odd composite moduli below fifty. For every unit base in the declared range, verify that useful-order outputs are proper divisors and compare their counts with odd-order and \(-1\) failures. Explain why the loop is not an efficient factoring algorithm in the input length.</p><details><summary>Solution</summary><p>Use integer trial division only to select the small composite test moduli; then call the existing classifier for each base. For useful-order records assert each output is strictly between one and \(N\) and divides \(N\). If the order is even, also verify that the two gcds multiply to the odd modulus. Exclude direct-gcd records when reporting the conditional success fraction among units. The loop explicitly visits order exponents and almost all bases below \(N\). Its operation count grows at least proportionally to that range, which is exponential in a binary input length of order \(\log_2N\). The experiment tests the reduction's arithmetic and failure bookkeeping, not the asymptotic efficiency of a quantum period finder.</p></details></article>
+
+<h2 id="limits">12.5 Scope and limits of the reduction</h2>
+<p>We have proved the conditions under which a least order exposes nontrivial factors, and the arithmetic correctness of the two-prime RSA representative map. We have not proved that classical factoring requires superpolynomial time, that factoring is equivalent to every form of RSA inversion, or that all hard computational problems become easy on a quantum computer. A known algorithm's cost is not a lower bound on all possible algorithms.</p>
+<p>Nor does a no-cloning statement make this classical cryptographic construction immune to arithmetic attacks. Quantum factoring and quantum key distribution address different operational problems. The present bridge is narrow and concrete: a suitable period of modular exponentiation permits gcd factor extraction. Obtaining that period from a finite quantum measurement distribution requires Fourier interference, sufficient register precision, repeated trials, and verified classical reconstruction.</p>
+
+<h2 id="primary-sources">12.6 Primary sources and attribution</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=0bNjIOh6mKw">Mitra, W7L3: Classical Cryptography I</a> — modular-power cycles, gcd factoring steps, and RSA motivation.</li><li><a href="https://www.youtube.com/watch?v=VgNVfmBSJEg">Mitra, W7L4: Classical Cryptography II</a> — toy RSA example and the start of coherent function evaluation.</li><li><a href="https://www.youtube.com/watch?v=dHlQTZiDDaw">Mitra, W7L5: Quantum Version of the Factoring Algorithm</a> — output-register projection, arithmetic progressions, and DFT/QFT motivation.</li><li><a href="https://people.csail.mit.edu/rivest/Rsapaper.pdf">Rivest, Shamir, and Adleman, A Method for Obtaining Digital Signatures and Public-Key Cryptosystems</a> — the RSA modular-power construction and correctness relation; the derivation here is independently developed in the smallest two-prime setting.</li><li><a href="https://arxiv.org/pdf/quant-ph/9508027">Shor, Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer</a> — factoring through order finding and the Fourier-based quantum stage, particularly Section 5.</li><li><a href="https://www.rfc-editor.org/rfc/rfc8017#section-7">RFC 8017, PKCS #1 version 2.2, Sections 7–7.1</a> — the distinction between RSA primitives and an encoded encryption scheme. No deployment recommendation or current algorithm ranking is made.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-11.html">Previous chapter</a> <a href="chapter-13.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

@@ -1,0 +1,180 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Open systems, environment dilation, and Kraus operators</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>15. Open systems, environment dilation, and Kraus operators</h1>
+<p class="lead">A qubit starts with equal populations and a coherence magnitude of one half. After an interaction with another qubit, its populations become 0.68 and 0.32, and its coherence magnitude becomes 0.40. The joint evolution can still be unitary. To predict the qubit alone, we must account for correlations with the degrees of freedom that are discarded.</p>
+<p class="source-note"><strong>Lecture material:</strong> the assigned recordings are Decoherence 1–4, official lectures W10L1–W10L4. Their source reading and timestamp mapping are recorded in the chapter sidecar. <strong>Reference extension:</strong> Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Chapter 3, sections 3.2–3.3</a>, provides a primary author treatment of channels, complete positivity, and dilation. <strong>Original teaching constructions:</strong> the explicit two-qubit unitary, correlated-input counterexample, finite numerical checks, and exercises are developed here. A numerical check establishes the specified finite case, not the general theorem.</p>
+
+<h2 id="model">15.1 The system, its environment, and the information we retain <a class="timestamp" href="https://www.youtube.com/watch?v=o7aOXwvLHlk&amp;t=531s">W10L1 8:51</a></h2>
+<p>A <dfn>closed system</dfn> includes every degree of freedom participating in the modeled interaction. An <dfn>open system</dfn> is a selected part of that closed system. Let its finite-dimensional Hilbert space be \(\mathcal H\), of dimension \(d\), and let the environment have space \(\mathcal H_E\), of dimension \(d_E\). A density operator \(\rho\) on \(\mathcal H\) is a positive semidefinite, trace-one matrix. Positivity means \(\langle v|\rho|v\rangle\geq0\) for every vector \(|v\rangle\). The dagger denotes the conjugate transpose.</p>
+<p>We assume that the initial system state is freely selectable while the environment starts in one fixed pure state \(|0\rangle_E\). The initial joint state is therefore \(\rho\otimes|0\rangle\langle0|_E\). Let \(U\) be a unitary matrix on \(\mathcal H\otimes\mathcal H_E\), so \(U^\dagger U=UU^\dagger=I\). The tensor product orders the system index first and the environment index second. The joint output is</p>
+\[
+\rho'_{SE}=U(\rho\otimes|0\rangle\langle0|_E)U^\dagger.
+\tag{15.1}
+\]
+<p>Suppose the apparatus reads only system observables. An observable \(A\) is a Hermitian matrix on \(\mathcal H\); its joint version is \(A\otimes I_E\). The reduced state \(\rho'_S\) is defined by requiring</p>
+\[
+\operatorname{Tr}(A\rho'_S)=\operatorname{Tr}[(A\otimes I_E)\rho'_{SE}]
+\quad\text{for every }A.
+\tag{15.2}
+\]
+<p>This definition determines the partial trace \(\rho'_S=\operatorname{Tr}_E\rho'_{SE}\). In a chosen orthonormal environment basis \(\{|j\rangle_E\}_{j=0}^{d_E-1}\), its matrix elements are \((\rho'_S)_{ab}=\sum_j(\rho'_{SE})_{aj,bj}\). Each term retains the same environment label on the bra and ket. Summing over that label discards the distinctions that no system-only observable can resolve.</p>
+<p>The resulting transformation is a map on matrices, rather than a matrix on state vectors:</p>
+\[
+\Phi(\rho)=\operatorname{Tr}_E[U(\rho\otimes|0\rangle\langle0|_E)U^\dagger].
+\tag{15.3}
+\]
+<p>The environment preparation and \(U\) belong to the definition of \(\Phi\). They remain fixed while \(\rho\) varies. This restriction makes the map operationally meaningful: preparing different system inputs does not silently change the apparatus or introduce different initial correlations.</p>
+<p>A mixed environment state does not invalidate this construction. If \(\tau_E=\sum_kq_k|k\rangle\langle k|\), with nonnegative \(q_k\) summing to one, the same calculation uses \(\rho\otimes\tau_E\) and produces additional operator labels. A larger environment can also purify \(\tau_E\). The essential assumption is an initially uncorrelated system and fixed environment, rather than the purity of a particular physical bath.</p>
+<p>A physical Hamiltonian model can further distinguish changes in phase from energy exchange. Write \(H_{\mathrm{tot}}=H_S\otimes I_E+I\otimes H_E+H_{\mathrm{int}}\), where the first two terms describe the isolated parts and the last describes their interaction, all in joules. If \([H_S\otimes I_E,H_{\mathrm{int}}]=0\), the system energy operator commutes with the full Hamiltonian. For a time-independent model, its expectation is conserved because \(d\langle H_S\rangle/dt=(i/\hbar)\langle[H_{\mathrm{tot}},H_S\otimes I_E]\rangle=0\). In a nondegenerate energy basis the spectral projectors are also conserved, although off-diagonal coherence can change. This is a useful quantum non-demolition model for system energy, rather than a universal two-category classification of every open-system process. When the commutator is nonzero, energy exchange is allowed; its amount and direction still require the initial state and dynamics.</p>
+
+<h2 id="dilation">15.2 A unitary interaction that reduces local coherence <a class="timestamp" href="https://www.youtube.com/watch?v=VTOWAgZmDKU&amp;t=693s">W10L2 11:33</a></h2>
+<p>The simplest circuit example uses a controlled-NOT with the system as control and an environment qubit as target. It maps \((\alpha|0\rangle+\beta|1\rangle)|0\rangle_E\) to \(\alpha|00\rangle+\beta|11\rangle\). The two environment labels are orthogonal, so the reduced system output is \(\operatorname{diag}(|\alpha|^2,|\beta|^2)\). Only when the initial populations are equal is that output \(I_2/2\). Partial trace does not create the entanglement: the joint unitary creates correlations, and partial trace suppresses their contribution to system-only predictions. If one input coefficient is zero, this example produces no entanglement at all.</p>
+<p>The following different unitary is an original example that also changes population. It will connect the general formalism to amplitude damping in Chapter 16; it is not the controlled-NOT circuit just analyzed.</p>
+<p>Consider one system qubit and one environment qubit, each with basis \(|0\rangle,|1\rangle\). Let \(\gamma\) be a real parameter in \([0,1]\), and define \(c=\sqrt{1-\gamma}\), \(s=\sqrt\gamma\). In the ordered joint basis \((|00\rangle,|01\rangle,|10\rangle,|11\rangle)\), choose</p>
+\[
+U=\begin{pmatrix}
+1&amp;0&amp;0&amp;0\\
+0&amp;c&amp;s&amp;0\\
+0&amp;-s&amp;c&amp;0\\
+0&amp;0&amp;0&amp;1
+\end{pmatrix}.
+\tag{15.4}
+\]
+<p>The central two-by-two block has orthonormal columns because \(c^2+s^2=1\) and \(cs-sc=0\). The other two columns are unchanged basis vectors orthogonal to that block. Thus \(U^\dagger U=I_4\). For an environment initialized in \(|0\rangle_E\), the only relevant columns give</p>
+\[
+U|00\rangle=|00\rangle,\qquad
+U|10\rangle=c|10\rangle+s|01\rangle.
+\tag{15.5}
+\]
+<p>Take the normalized system vector \(|\psi\rangle=(|0\rangle+i|1\rangle)/\sqrt2\). Its initial density matrix is \(\tfrac12\begin{pmatrix}1&amp;-i\\i&amp;1\end{pmatrix}\). After the interaction the joint vector is \((|00\rangle+ic|10\rangle+is|01\rangle)/\sqrt2\). Group its terms by environment outcome: the \(E=0\) component has system vector \((|0\rangle+ic|1\rangle)/\sqrt2\); the \(E=1\) component has vector \(is|0\rangle/\sqrt2\).</p>
+<p>The partial trace sums the outer products of those two unnormalized vectors. Cross terms between different environment labels vanish because \(\langle0|1\rangle_E=0\). The result is</p>
+\[
+\rho'_S=\frac12\begin{pmatrix}1+\gamma&amp;-ic\\ic&amp;1-\gamma\end{pmatrix}.
+\tag{15.6}
+\]
+<p>For \(\gamma=0.36\), the square roots are \(s=0.6\) and \(c=0.8\), giving the opening populations and coherence. The full joint vector remains normalized and pure. Local loss of purity is compatible with this global purity because the interaction correlates system and environment. Reversing the evolution would require coherent access to the environment as well as the system.</p>
+<p>At \(\gamma=0\), the interaction leaves the prepared subspace unchanged and \(\rho'_S=\rho\). At \(\gamma=1\), every system input is mapped to \(|0\rangle\langle0|\). The environment then carries the information needed to reverse the joint operation, but the reduced output alone has lost it. These endpoint cases constrain the algebra before any numerical test is run.</p>
+
+<h2 id="kraus">15.3 Deriving the operator-sum representation <a class="timestamp" href="https://www.youtube.com/watch?v=WelzrFCFi58&amp;t=1123s">W10L3 18:43</a></h2>
+<p>The partial trace can be evaluated without storing the joint density matrix for each input. For each environment basis vector, define a system operator</p>
+\[
+K_j=(I\otimes{}_E\langle j|)U(I\otimes|0\rangle_E).
+\tag{15.7}
+\]
+<p>Each \(K_j\) is a \(d\)-by-\(d\) matrix. Applied to \(|\psi\rangle\), it gives the unnormalized system vector associated with environment label \(j\). Substituting the environment resolution of identity into equation (15.3) yields the following result.</p>
+<div class="prop"><strong>Proposition 15.1 — reduced unitary evolution.</strong> Under the product-initialization and finite-dimensional unitary assumptions in <a href="#model">section 15.1</a>, the reduced map is
+\[
+\Phi(\rho)=\sum_{j=0}^{d_E-1}K_j\rho K_j^\dagger,
+\qquad\sum_jK_j^\dagger K_j=I.
+\tag{15.8}
+\]
+</div>
+<div class="proof"><p>For a pure input, expand \(U(|\psi\rangle\otimes|0\rangle_E)=\sum_jK_j|\psi\rangle\otimes|j\rangle_E\). Its outer product contains terms \(K_j|\psi\rangle\langle\psi|K_k^\dagger\otimes|j\rangle\langle k|\). Partial trace replaces \(|j\rangle\langle k|\) by \(\delta_{jk}\), leaving the sum in (15.8). Every density matrix is a convex sum of pure-state projectors; linearity gives the same formula for mixed inputs.</p><p>For normalization, insert \(\sum_j|j\rangle\langle j|=I_E\) between \(U^\dagger\) and \(U\):
+\[
+\sum_jK_j^\dagger K_j
+=(I\otimes\langle0|)U^\dagger(I\otimes I_E)U(I\otimes|0\rangle)=I.
+\]
+The last equality uses unitarity and \(\langle0|0\rangle_E=1\). <span class="qed">∎</span></p></div>
+<p>A linear map on matrices with the normalized operator-sum form (15.8) is a <dfn>quantum channel</dfn>. The matrices \(K_j\) are called <dfn>Kraus operators</dfn>. Their sum is generally not an operator to apply to a state vector: \((\sum_jK_j)\rho(\sum_kK_k)^\dagger\) would retain unwanted cross terms. The sum in (15.8) adds alternative density-operator contributions after the environment has been discarded. It does not add their amplitudes coherently.</p>
+<p>For the explicit unitary, extracting the indicated rows and columns gives \(K_0=\operatorname{diag}(1,c)\) and \(K_1=s|0\rangle\langle1|\). The normalization relation is \(\operatorname{diag}(1,c^2)+\operatorname{diag}(0,s^2)=I_2\). Direct multiplication gives \(\Phi(\rho)_{11}=(1-\gamma)\rho_{11}\) and \(\Phi(\rho)_{01}=c\rho_{01}\), including equation (15.6).</p>
+<p>The representation is not unique. If \(V\) is a unitary matrix acting on the Kraus labels and \(L_\mu=\sum_jV_{\mu j}K_j\), then</p>
+\[
+\sum_\mu L_\mu\rho L_\mu^\dagger
+=\sum_{j,k}\left(\sum_\mu V_{\mu j}V_{\mu k}^*\right)K_j\rho K_k^\dagger
+=\sum_jK_j\rho K_j^\dagger.
+\tag{15.9}
+\]
+<p>The channel therefore need not identify a unique physical story about which error occurred. A particular monitored environment can select a particular decomposition, but changing the environment basis changes its labels without changing the unobserved system output. The operator-sum representation and this freedom are discussed in Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">section 3.2.1, PDF pages 11–13</a>.</p>
+
+<h2 id="complete-positivity">15.4 Why positivity must survive an untouched reference system <a class="timestamp" href="https://www.youtube.com/watch?v=FCNrdpeOi_g&amp;t=112s">W10L4 1:52</a></h2>
+<p>A linear map is <dfn>positive</dfn> if it maps every positive semidefinite input matrix to a positive semidefinite output. A map \(\Phi\) is <dfn>completely positive</dfn> if \(\Phi\otimes\operatorname{id}_R\) is positive for every finite-dimensional auxiliary space \(\mathcal H_R\), where \(\operatorname{id}_R\) is the identity map on its matrices. The reference system need not interact with the device; it may already be entangled with its input. An acceptable local device must still produce a valid joint output in that situation.</p>
+<div class="prop"><strong>Proposition 15.2 — Kraus maps are completely positive and trace preserving.</strong> A finite operator sum obeying the normalization in (15.8) maps density operators to density operators, including when extended by an identity map on any reference system.</div>
+<div class="proof"><p>Let \(X\geq0\) be any joint matrix. For any vector \(|v\rangle\),
+\[
+\langle v|\sum_j(K_j\otimes I_R)X(K_j^\dagger\otimes I_R)|v\rangle
+=\sum_j\langle w_j|X|w_j\rangle\geq0,
+\]
+where \(|w_j\rangle=(K_j^\dagger\otimes I_R)|v\rangle\). This proves positivity for every reference dimension. Trace cyclicity gives \(\operatorname{Tr}\Phi(\rho)=\operatorname{Tr}[\rho\sum_jK_j^\dagger K_j]=\operatorname{Tr}\rho\). Hermiticity follows by taking the adjoint term by term. Linearity follows from matrix multiplication and summation. <span class="qed">∎</span></p></div>
+<p>The transpose map gives a concrete distinction between positive and completely positive. Fix a basis and let \(T(\rho)=\rho^{\mathsf T}\). Transpose preserves the eigenvalues of a Hermitian matrix, so it is positive and trace preserving. Apply it to the second half of \(|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2\). The result is</p>
+\[
+(\operatorname{id}\otimes T)(|\Phi^+\rangle\langle\Phi^+|)
+=\frac12\begin{pmatrix}1&amp;0&amp;0&amp;0\\0&amp;0&amp;1&amp;0\\0&amp;1&amp;0&amp;0\\0&amp;0&amp;0&amp;1\end{pmatrix}.
+\tag{15.10}
+\]
+<p>The middle block has eigenvectors \((|01\rangle\pm|10\rangle)/\sqrt2\), with eigenvalues \(\pm1/2\). The other two eigenvalues are \(1/2\). The negative eigenvalue rules out a physical density operator. A test restricted to unentangled one-qubit inputs would miss this failure. Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">section 3.2.6, PDF pages 18–19</a>, gives the general swap-operator argument; equation (15.10) supplies the smallest explicit matrix.</p>
+
+<h2 id="converse">15.5 Building an environment from a channel description <a class="timestamp" href="https://www.youtube.com/watch?v=FCNrdpeOi_g&amp;t=814s">W10L4 13:34</a></h2>
+<p>The construction also runs in the other direction. Suppose matrices \(K_j\) satisfy \(\sum_jK_j^\dagger K_j=I\). Introduce an environment with one orthonormal vector \(|j\rangle_E\) per operator and define an <dfn>isometry</dfn> \(W\), a linear map preserving inner products, by</p>
+\[
+W|\psi\rangle=\sum_jK_j|\psi\rangle\otimes|j\rangle_E.
+\tag{15.11}
+\]
+<p>For any \(|\phi\rangle,|\psi\rangle\), the output inner product is \(\sum_j\langle\phi|K_j^\dagger K_j|\psi\rangle=\langle\phi|\psi\rangle\). Thus the images of a system orthonormal basis are orthonormal. Regard them as the images of the joint basis vectors \(|a\rangle\otimes|0\rangle_E\). Complete these images to an orthonormal basis of the joint output space and assign the remaining joint input basis vectors to the completion. The resulting square matrix \(U\) is unitary and agrees with \(W\) on the initialized subspace. Taking its environment partial trace gives the original operator sum.</p>
+<p>This finite-dimensional construction establishes existence, not uniqueness or an experimentally available implementation. Different orthonormal completions give different joint unitaries outside the initialized subspace. A compact mathematical dilation can omit restrictions such as locality, interaction strengths, energy conservation, and allowed controls. Those additional physical constraints require a separate model.</p>
+<p>Channels compose without changing their defining class. If \(\Phi\) has Kraus operators \(K_j\) and \(\Psi\) has operators \(L_k\), then \((\Psi\circ\Phi)(\rho)=\sum_{k,j}L_kK_j\rho K_j^\dagger L_k^\dagger\). Its normalization is \(\sum_jK_j^\dagger(\sum_kL_k^\dagger L_k)K_j=I\). Composition alone does not establish that a time-dependent physical process has a memoryless semigroup law. That further assumption belongs to the continuous-time model in Chapter 17.</p>
+
+<h2 id="lab">15.6 A finite check with an entangled reference</h2>
+<p>The program implements equation (15.4), extracts the Kraus matrices using system-first index ordering, and evaluates both routes to the reduced output. It also applies the Kraus map to one half of a Bell pair and checks positivity of the joint output. Finally it computes the eigenvalues of the partial-transpose counterexample. Its inputs are fixed matrices and \(\gamma=0.36\); its outputs are the opening numerical values and assertions for the stated finite cases.</p>
+<!-- LAB_SOURCE_START -->
+<div class="codewrap"><pre><code class="language-python" data-file="ch15_lab.py">"""Compare a unitary dilation, its Kraus map, and ancillary positivity."""
+import numpy as np
+
+
+def partial_trace_environment(rho):
+    return np.trace(rho.reshape(2, 2, 2, 2), axis1=1, axis2=3)
+
+
+gamma = 0.36
+c = np.sqrt(1 - gamma)
+s = np.sqrt(gamma)
+unitary = np.array([[1, 0, 0, 0], [0, c, s, 0],
+                    [0, -s, c, 0], [0, 0, 0, 1]], complex)
+kraus = [unitary.reshape(2, 2, 2, 2)[:, j, :, 0] for j in range(2)]
+identity = np.eye(2)
+assert np.allclose(unitary.conj().T @ unitary, np.eye(4))
+assert np.allclose(sum(k.conj().T @ k for k in kraus), identity)
+psi = np.array([1, 1j]) / np.sqrt(2)
+rho = np.outer(psi, psi.conj())
+joint = np.kron(rho, np.diag([1, 0]))
+reduced = partial_trace_environment(unitary @ joint @ unitary.conj().T)
+mapped = sum(k @ rho @ k.conj().T for k in kraus)
+assert np.allclose(reduced, mapped)
+bell = np.array([1, 0, 0, 1]) / np.sqrt(2)
+bell_rho = np.outer(bell, bell)
+enlarged = sum(np.kron(k, identity) @ bell_rho
+               @ np.kron(k, identity).conj().T for k in kraus)
+assert np.linalg.eigvalsh(enlarged).min() &gt; -1e-12
+transposed = bell_rho.reshape(2, 2, 2, 2).transpose(0, 3, 2, 1)
+pt_eigenvalues = np.linalg.eigvalsh(transposed.reshape(4, 4))
+assert np.allclose(pt_eigenvalues, [-0.5, 0.5, 0.5, 0.5])
+print("Dilation and Kraus outputs agree: True")
+print("Output populations:", np.diag(mapped).real.round(6).tolist())
+print("Output coherence magnitude:", f"{abs(mapped[0, 1]):.6f}")
+print("Ancillary Kraus output is positive: True")
+print("Partial-transpose eigenvalues:", pt_eigenvalues.round(6).tolist())
+</code></pre></div>
+<!-- LAB_SOURCE_END -->
+<!-- LAB_OUTPUT_START -->
+<pre><code class="output">Dilation and Kraus outputs agree: True
+Output populations: [0.68, 0.32]
+Output coherence magnitude: 0.400000
+Ancillary Kraus output is positive: True
+Partial-transpose eigenvalues: [-0.5, 0.5, 0.5, 0.5]
+</code></pre>
+<!-- LAB_OUTPUT_END -->
+<p>The output populations sum to one. The coherence is reduced from 0.50 to 0.40, while the auxiliary-system positivity check succeeds. The negative eigenvalue from transpose illustrates a different map that would pass a one-system positivity test and fail on an entangled input. Floating-point assertions use a small tolerance; the algebra above establishes the corresponding exact statements.</p>
+
+<h2 id="limits">15.7 What the channel model assumes</h2>
+<p>The initial product assumption cannot be dropped without reconsidering the input-output description. As a counterexample, take two different joint preparations, each with both local marginals \(I_2/2\): the equal mixture of \(|00\rangle,|11\rangle\), and the equal mixture of \(|01\rangle,|10\rangle\). Apply the fixed permutation \(|s,e\rangle\mapsto|s\mathbin{\oplus}e,e\rangle\), where \(\oplus\) denotes addition modulo two. The first preparation gives system output \(|0\rangle\langle0|\); the second gives \(|1\rangle\langle1|\). Identical system inputs and identical environment marginals have produced different outputs because their initial correlations differ.</p>
+<p>There is therefore no single map on the system marginal alone that describes both preparations under this unspecified correlation rule. This observation does not make channels defective; it identifies which preparation data the channel model assumes. A fixed, independent environment state removes this ambiguity. For a correlated experimental preparation, a larger description or an explicitly restricted preparation domain may be needed.</p>
+<p>A trace-preserving channel describes an unconditioned output. Selecting one measurement record generally gives a trace-decreasing operation whose trace is the selection probability. Normalizing that selected output is a separate, nonlinear conditioning step, developed in Chapter 18. A channel also supplies no universal recovery operation: the reset limit of the running example sends distinct inputs to the same reduced output, so no function of that output alone can reconstruct both inputs.</p>
+
+<h2 id="exercises">15.8 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex15-1">1. Trace preservation from completeness</h3><p>Let \(K_0=\operatorname{diag}(1,\sqrt{1-\gamma})\) and \(K_1=\sqrt\gamma|0\rangle\langle1|\), for \(0\leq\gamma\leq1\). Derive the output of \(\rho=\begin{pmatrix}a&amp;b\\b^*&amp;1-a\end{pmatrix}\), and verify its trace.</p><details><summary>Solution</summary><p>The first term is \(\begin{pmatrix}a&amp;\sqrt{1-\gamma}b\\\sqrt{1-\gamma}b^*&amp;(1-\gamma)(1-a)\end{pmatrix}\). The second has only top-left entry \(\gamma(1-a)\). The total trace is \(a+\gamma(1-a)+(1-\gamma)(1-a)=1\). The coherence is multiplied by \(\sqrt{1-\gamma}\), not by \(1-\gamma\).</p></details></article>
+<article class="exercise"><h3 id="ex15-2">2. Kraus labels are not unique</h3><p>Replace two Kraus matrices by \(L_0=(K_0+K_1)/\sqrt2\) and \(L_1=(K_0-K_1)/\sqrt2\). Show that the channel is unchanged and explain why this does not mean the two monitored environment experiments have identical records.</p><details><summary>Solution</summary><p>Expanding \(L_0\rho L_0^\dagger+L_1\rho L_1^\dagger\) cancels the two cross terms, leaving \(K_0\rho K_0^\dagger+K_1\rho K_1^\dagger\). The labels correspond to a Hadamard rotation of the environment basis. Discarding either record gives the same output. Conditioning on individual outcomes uses different operators and generally prepares different conditional states.</p></details></article>
+<article class="exercise"><h3 id="ex15-3">3. A positive map with an invalid extension</h3><p>Verify directly that \((|01\rangle-|10\rangle)/\sqrt2\) has expectation value \(-1/2\) in equation (15.10). Which definition does transpose violate?</p><details><summary>Solution</summary><p>The middle block exchanges \(|01\rangle\) and \(|10\rangle\), each with factor \(1/2\). It sends their antisymmetric combination to minus one half of itself. Its expectation is therefore \(-1/2\). Transpose remains positive on single-system matrices; it violates complete positivity because its identity extension is not positive on this joint state.</p></details></article>
+<article class="exercise"><h3 id="ex15-4">4. Diagnose the missing preparation assumption</h3><p>Work through the two correlated mixtures in <a href="#limits">section 15.7</a>. Compute their initial system marginals and their final system states under the environment-controlled permutation.</p><details><summary>Solution</summary><p>Tracing either mixture over the environment gives \((|0\rangle\langle0|+|1\rangle\langle1|)/2\). The correlated basis states \(00,11\) become \(00,01\), so their system output is always zero. The anticorrelated basis states \(01,10\) become \(11,10\), so their system output is always one. Specifying only the system density matrix and the environment marginal omits the correlation data that affect the interaction.</p></details></article>
+<article class="exercise"><h3 id="ex15-5">5. Design a dilation</h3><p>A channel has one Kraus matrix \(K\) and acts on a fixed finite-dimensional system with equal input and output dimensions. Show that it is unitary and explain why two nonzero Kraus matrices do not by themselves prove nonunitarity.</p><details><summary>Solution</summary><p>Completeness gives \(K^\dagger K=I\). A square matrix with orthonormal columns is invertible, so \(KK^\dagger=I\) and \(K\) is unitary. Conversely, \(K_0=U/\sqrt2\), \(K_1=U/\sqrt2\) represent the same unitary channel as \(U\) alone. The count in a nonminimal representation can include redundant operators. Properties of the resulting map, rather than the displayed count, determine reversibility.</p></details></article>
+<article class="exercise"><h3 id="ex15-6">6. Implementation and a failed recovery test</h3><p>Modify the lab to sweep \(\gamma\) from zero to one and compare the outputs of \(|0\rangle\) and \(|1\rangle\). Derive their trace distance for this family and locate the reset endpoint.</p><details><summary>Solution</summary><p>The outputs are \(\operatorname{diag}(1,0)\) and \(\operatorname{diag}(\gamma,1-\gamma)\). Their difference has eigenvalues \(1-\gamma\) and \(-(1-\gamma)\). The trace norm, the sum of singular values, is \(2(1-\gamma)\), so trace distance, defined as half that norm, is \(1-\gamma\). A numerical sweep should reproduce this straight line. At \(\gamma=1\), the outputs coincide and recovery of both distinct inputs from the system output is impossible. At zero, the two outputs remain perfectly distinguishable.</p></details></article>
+
+<h2 id="primary-sources">15.9 Primary sources and attribution</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra: <a href="https://www.youtube.com/watch?v=o7aOXwvLHlk">Decoherence 1</a>, <a href="https://www.youtube.com/watch?v=VTOWAgZmDKU">Decoherence 2</a>, <a href="https://www.youtube.com/watch?v=WelzrFCFi58">Decoherence 3</a>, and <a href="https://www.youtube.com/watch?v=FCNrdpeOi_g">Decoherence 4</a>. Source modality and reviewed spans are recorded in the sidecar.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Quantum Information, Chapter 3</a>, updated October 2018: section 3.2.1, PDF pages 11–13, for operator sums and representation freedom; section 3.2.6, pages 18–19, for complete positivity; section 3.3.2, page 22, for dilation. The proofs and finite examples presented here are independently developed teaching constructions.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-14.html">Previous chapter</a> <a href="chapter-16.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

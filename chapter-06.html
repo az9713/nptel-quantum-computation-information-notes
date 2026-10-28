@@ -1,0 +1,202 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Classical information and lossless coding</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>6. Classical information and lossless coding</h1>
+<p class="lead">A source emits four symbols with probabilities \(1/2,1/4,1/8,1/8\). A fixed-width representation spends two bits on every symbol. A prefix code spends an average of \(7/4\) bits and still decodes every message exactly. The saving is an average over a specified source, not permission to shorten every possible string. The distinction between an outcome, its probability, a codeword, and an average rate is the foundation of information theory.</p>
+<p class="source-note"><strong>Lecture material:</strong> W3L2–W3L5 develop surprise, Shannon entropy, typical strings, coding examples, and a final discussion of the Toffoli gate. <strong>Primary-reference clarification:</strong> Shannon's <a href="https://home.csulb.edu/~cwallis/382/readings/482/shannon.mathematical.theory.communication.1948.pdf">original paper, §§6 and 9–10</a>, supplies the grouping assumption and the noiseless-coding setting. <strong>Original teaching constructions:</strong> the finite prefix-code proofs, the counterexample to an incomplete uniqueness argument, the block-code laboratory, and the exercises. Timestamped machine captions ground the topic sequence; slide equations have not been transcribed verbatim.</p>
+
+<h2 id="model">6.1 A source, its outcomes, and the unit bit <a class="timestamp" href="https://www.youtube.com/watch?v=g7Qh9zeyDcw&amp;t=180s">W3L2 3:00</a></h2>
+<p>A finite source is a random symbol \(\mathsf J\) taking values in an alphabet \(\mathcal A=\{a_1,\ldots,a_q\}\). Here \(q\) is the number of possible symbols, and \(p_j=\Pr(\mathsf J=a_j)\) is their probability distribution: \(p_j\geq0\) and \(\sum_jp_j=1\). The symbols need not be numbers. A renaming of letters changes no probability and should change no statistical information measure.</p>
+<p>A binary string of length \(\ell\) has \(2^\ell\) possible values. An injective fixed-width code for all \(q\) symbols therefore requires \(2^\ell\geq q\), or \(\ell\geq\lceil\log_2q\rceil\). The logarithm is a count of binary choices. Its base specifies the information unit; base two gives bits. This counting statement does not use the probabilities. It is a worst-case statement about how many distinct labels must be represented.</p>
+<p>For eight equally possible labels, three bits suffice because the eight strings from 000 to 111 are distinct. For the four-symbol source in the opening, two bits also suffice regardless of the bias. Probabilities become useful when short codewords can be reserved for common symbols and longer codewords used for uncommon ones. Such variable lengths require a decoding rule: concatenation must not destroy symbol boundaries.</p>
+
+<h3 id="surprise">Surprise is a property of an outcome</h3>
+<p>Define the self-information of an outcome with positive probability \(p\) by \(I(p)=-\log_2p\). An event of probability one gives zero bits of surprise. Independent events of probabilities \(p\) and \(r\) have joint probability \(pr\), and their self-information adds because \(-\log_2(pr)=-\log_2p-\log_2r\). A rare outcome has a large self-information, but it is observed rarely. Its contribution to an average must include that rarity.</p>
+<p>The logarithmic form can be justified under explicit assumptions. Suppose \(I\) is continuous, satisfies \(I(pr)=I(p)+I(r)\), and is normalized by \(I(1/2)=1\). Put \(g(t)=I(2^{-t})\) for real \(t\geq0\). Then \(g(t+s)=g(t)+g(s)\). Repeated addition gives \(g(k)=k\) for nonnegative integers \(k\), and \(n g(k/n)=g(k)=k\) gives \(g(k/n)=k/n\). Continuity extends the identity from nonnegative rationals to all nonnegative reals. Since \(t=-\log_2p\), the proposed self-information follows. The continuity assumption rules out pathological additive functions.</p>
+<p>The lecture's rain example gives \(I(0.005)=7.643856\) bits, while \(I(0.995)=0.007232\) bits. These numbers quantify surprise relative to the stated probability model. They do not measure a report's usefulness, its truth, or the work required to predict the weather. A completely specified deterministic sequence can be computationally difficult to generate even though its entropy under that deterministic source model is zero.</p>
+
+<h2 id="entropy">6.2 Entropy is an expectation over the source <a class="timestamp" href="https://www.youtube.com/watch?v=P7bDc2fYa2A&amp;t=840s">W3L3 14:00</a></h2>
+<div class="def"><strong>Definition 6.1 — Shannon entropy.</strong> For the finite distribution \(p=(p_1,\ldots,p_q)\), define
+\[
+H_{\rm Sh}(p)=-\sum_{j=1}^{q}p_j\log_2p_j,\qquad 0\log_20:=0.\tag{6.1}
+\]
+The convention follows the continuous limit \(p\log p\to0\) as \(p\to0^+\). Entropy is measured in bits per source symbol.</div>
+<p>Equation (6.1) averages the outcome self-information. The distinction matters for a biased coin: an unlikely tail can be surprising although the average surprise is low. Relabeling the outcomes leaves entropy unchanged. Adding an impossible outcome also leaves it unchanged, because its summand is zero.</p>
+<div class="prop"><strong>Proposition 6.1 — Range and equality cases.</strong> A distribution on \(q\) symbols satisfies \(0\leq H_{\rm Sh}(p)\leq\log_2q\). The lower endpoint occurs exactly when one outcome has probability one. The upper endpoint occurs exactly at the uniform distribution \(p_j=1/q\).</div>
+<div class="proof"><p>Every nonzero probability lies in \((0,1]\), so each summand \(-p_j\log_2p_j\) is nonnegative. It vanishes only when \(p_j=1\); normalization then makes all other probabilities zero. To prove the upper bound, use \(\ln z\leq z-1\) for \(z\gt 0\). For a distribution \(r_j\gt 0\), this gives
+\[
+\sum_{j:p_j\gt 0}p_j\ln\frac{r_j}{p_j}
+\leq\sum_{j:p_j\gt 0}(r_j-p_j)\leq0.
+\]
+Hence the relative entropy \(D(p\Vert r)=\sum_{p_j\gt 0}p_j\log_2(p_j/r_j)\) is nonnegative. Set \(r_j=1/q\). Then \(D(p\Vert r)=\log_2q-H_{\rm Sh}(p)\). Equality requires every positive-probability ratio \(r_j/p_j\) to equal one and no omitted positive \(r_j\); consequently \(p_j=1/q\) for every \(j\). <span class="qed">∎</span></p></div>
+<p>A fair die has entropy \(\log_26=2.584963\) bits. If one face has probability \(1/2\) and each other face probability \(1/10\), the entropy becomes \(2.160964\) bits. The alphabet is unchanged, so a fixed-width code still needs three bits per throw. The source bias changes the achievable average variable-length rate.</p>
+
+<h3 id="joint">Joint and conditional descriptions</h3>
+<p>For another finite random variable \(\mathsf K\), let \(p_{jk}=\Pr(\mathsf J=a_j,\mathsf K=b_k)\). The conditional probability is \(p_{k|j}=p_{jk}/p_j\) whenever \(p_j\gt 0\). Taking the logarithm of \(p_{jk}=p_jp_{k|j}\), multiplying by \(-p_{jk}\), and summing yields the chain rule
+\[
+H_{\rm Sh}(\mathsf J,\mathsf K)=H_{\rm Sh}(\mathsf J)
++\sum_jp_jH_{\rm Sh}(\mathsf K\mid\mathsf J=a_j).\tag{6.2}
+\]
+The last sum is conditional entropy: the average uncertainty remaining about \(\mathsf K\) after \(\mathsf J\) is known. If the variables are independent, \(p_{k|j}\) does not depend on \(j\), so the entropies add. If they are equal copies of the same bit, the second term is zero. Two stored bits then need not carry two independent bits of uncertainty.</p>
+<p>Continuity, nonnegativity, a uniform maximum, and additivity for independent variables do not, by themselves, uniquely characterize Shannon entropy. For example, \(H_2(p)=-\log_2\sum_jp_j^2\) has all these properties but generally differs from \(H_{\rm Sh}\). Its independent-product additivity follows from \(\sum_{j,k}(p_jr_k)^2=(\sum_jp_j^2)(\sum_kr_k^2)\). Shannon's uniqueness theorem also imposes a weighted grouping rule, illustrated in §6 of his paper. Equation (6.2) shows the weighted grouping that the Shannon definition actually satisfies. An outcome's logarithmic surprise and an entropy functional on whole distributions require different uniqueness arguments.</p>
+
+<h2 id="typical">6.3 Typical strings and the meaning of an asymptotic rate <a class="timestamp" href="https://www.youtube.com/watch?v=98i3XZpEJso&amp;t=200s">W3L4 3:20</a></h2>
+<p>Suppose the source emits \(m\) independent, identically distributed symbols. Write the string as \(w=(a_{j_1},\ldots,a_{j_m})\). Independence gives \(P(w)=\prod_{t=1}^mp_{j_t}\). If symbol \(a_j\) occurs \(n_j(w)\) times, then
+\[
+-\frac1m\log_2P(w)=-\sum_j\frac{n_j(w)}m\log_2p_j.\tag{6.3}
+\]
+</p>
+<p>Restrict the alphabet to its positive-probability symbols. For source use
+\(t\), define \(Z_t=-\log_2p_{j_t}\). These independent random variables have
+mean \(H_{\rm Sh}(p)\) and finite variance
+\(V=\sum_jp_j[-\log_2p_j-H_{\rm Sh}(p)]^2\).
+Independence makes the variance of their average \(V/m\), because all
+unequal-index covariances vanish. On the event that this average differs
+from its mean by more than \(\epsilon\), its squared deviation exceeds
+\(\epsilon^2\). Taking expectations therefore gives
+\[
+\Pr\!\left(\left|-\frac1m\log_2P(w)-H_{\rm Sh}(p)\right|\gt\epsilon\right)
+\leq\frac{V}{m\epsilon^2}.
+\]
+This bound tends to zero for every fixed positive \(\epsilon\), proving the
+required concentration. It concerns source-generated strings, not an equality
+for every possible string.</p>
+<p>For a positive tolerance \(\epsilon\), call a string typical when its left-hand side in (6.3) differs from \(H_{\rm Sh}(p)\) by at most \(\epsilon\). Each typical string then has probability between \(2^{-m(H_{\rm Sh}+\epsilon)}\) and \(2^{-m(H_{\rm Sh}-\epsilon)}\). Their total probability approaches one. Because their probabilities sum to at most one, there are at most \(2^{m(H_{\rm Sh}+\epsilon)}\) typical strings. A set carrying almost all the probability can therefore be exponentially smaller than the set of all \(q^m\) strings.</p>
+<p>The phrase “all long strings have probability \(2^{-mH}\)” would be false. A biased binary source assigns very different probabilities to an all-zero string and an all-one string. Typicality describes the concentration of probability mass, not uniform probability over the full alphabet. A fixed-rate code can encode a typical set and declare failure outside it; its error probability can tend to zero. A variable-length prefix code instead retains exact decoding for every string in the support. We prove the latter guarantee next, so that “lossless” has an unambiguous finite meaning.</p>
+
+<h2 id="prefix">6.4 Prefix codes and the entropy lower bound <a class="timestamp" href="https://www.youtube.com/watch?v=98i3XZpEJso&amp;t=1260s">W3L4 21:00</a></h2>
+<p>A binary prefix code assigns symbol \(a_j\) a finite bit string \(c_j\) such that no complete codeword is the beginning of another. Its length is the nonnegative integer \(\ell_j\). Decode by following a binary tree from its root until a leaf is reached, output its symbol, and restart. The prefix property makes the first leaf boundary unique; repeating this argument decodes every concatenation uniquely. For an alphabet with more than one positive-probability symbol, every codeword must have positive length.</p>
+<p>The expected code length is \(L=\sum_jp_j\ell_j\). It is an average in bits per original symbol. A code can have a rare codeword longer than a fixed-width label while having a smaller \(L\). The opening code is \(a_1\mapsto0,a_2\mapsto10,a_3\mapsto110,a_4\mapsto111\). Its tree has four leaves and no ambiguous boundary. Its mean length is
+\[
+L=\tfrac12(1)+\tfrac14(2)+\tfrac18(3)+\tfrac18(3)=\tfrac74.
+\]
+Each length equals \(-\log_2p_j\), so \(L=H_{\rm Sh}(p)\). The equality comes from the dyadic probabilities; it is not typical for an arbitrary single-symbol distribution.</p>
+<div class="lem"><strong>Lemma 6.1 — Kraft inequality and construction.</strong> Prefix-code lengths obey \(K=\sum_j2^{-\ell_j}\leq1\). Conversely, a finite set of nonnegative integer lengths satisfying this inequality can be realized by a binary prefix code.</div>
+<div class="proof"><p>Let \(\ell_{\max}\) be the largest length. A leaf at depth \(\ell_j\) excludes \(2^{\ell_{\max}-\ell_j}\) terminal nodes at depth \(\ell_{\max}\). These excluded sets are disjoint, so their total is at most \(2^{\ell_{\max}}\). Dividing proves the inequality. Conversely, sort the prescribed lengths increasingly and assign a still-available node at each requested depth. Before placing a node of depth \(\ell\), previously placed leaves occupy \(\sum_{i\lt j}2^{\ell-\ell_i}\) depth-\(\ell\) nodes. The Kraft inequality including the current leaf ensures this integer is at most \(2^\ell-1\), leaving a node available. Never assign descendants of an existing leaf. The resulting finite tree has the requested lengths. <span class="qed">∎</span></p></div>
+<div class="thm"><strong>Theorem 6.1 — Finite prefix-code bounds.</strong> For positive-probability symbols of a finite source, every binary prefix code has \(L\geq H_{\rm Sh}(p)\), and some prefix code has \(L\lt H_{\rm Sh}(p)+1\).</div>
+<div class="proof"><p>For any existing code, normalize its Kraft weights to \(r_j=2^{-\ell_j}/K\). Then \(r\) is a probability distribution, and
+\[
+D(p\Vert r)=\sum_jp_j\log_2p_j+\sum_jp_j\ell_j+\log_2K
+=L-H_{\rm Sh}(p)+\log_2K.
+\]
+Relative-entropy nonnegativity and \(K\leq1\) imply \(L\geq H_{\rm Sh}(p)-\log_2K\geq H_{\rm Sh}(p)\). For existence, choose \(\ell_j=\lceil-\log_2p_j\rceil\). Then \(2^{-\ell_j}\leq p_j\), so Kraft's construction applies. Also \(\ell_j\lt -\log_2p_j+1\); multiplying by \(p_j\) and summing proves the upper bound. A source with one certain symbol may use the empty codeword if the number of source uses is known separately. <span class="qed">∎</span></p></div>
+<p>The lower-bound proof identifies its assumptions. We minimized an average under a prefix constraint and retained exact decoding. We did not prove that every individual message needs at least its self-information in bits. We did not include a codebook description or a stopping marker in \(L\). If those overheads matter, they must be counted separately.</p>
+
+<h2 id="blocks">6.5 Block coding and a constructive finite comparison <a class="timestamp" href="https://www.youtube.com/watch?v=Wne_ycXqFuA&amp;t=480s">W3L5 8:00</a></h2>
+<p>Independence and the chain rule give \(H_{\rm Sh}(\mathsf J_1,\ldots,\mathsf J_m)=mH_{\rm Sh}(p)\). Apply Theorem 6.1 to the alphabet of length-\(m\) strings. If \(L_m\) is the expected number of encoded bits per block, then
+\[
+H_{\rm Sh}(p)\leq\frac{L_m}{m}\lt H_{\rm Sh}(p)+\frac1m.\tag{6.4}
+\]
+The redundancy per source symbol can approach zero although a codeword length is always an integer. The price is a larger codebook, storage and computation for it, and the delay of collecting a block. Equation (6.4) states an existence result; it does not claim a practically manageable codebook at every block length.</p>
+<p>The eight-symbol lecture example has probabilities \(1/2,1/4,1/8,1/16,1/64,1/64,1/64,1/64\). Assign lengths \(1,2,3,4,6,6,6,6\). For example, after codewords 0, 10, 110, and 1110, use the four six-bit extensions 111100, 111101, 111110, and 111111. Their Kraft sum is one. Both the entropy and expected length are exactly two bits, compared with three bits for a fixed-width code. Compression preserves the message; it changes the representation and therefore the average number of physical binary symbols used.</p>
+<p>The laboratory implements Huffman's finite construction: repeatedly merge the two least-probable items in a binary tree. Merging adds one bit to every codeword below either item. An optimal tree can place two least-probable symbols as deepest siblings by exchanging labels; merging those siblings reduces the problem to a smaller alphabet. Reversing this reduction proves optimality by induction. The code checks the entropy and Kraft inequalities independently of that optimality argument. For the non-dyadic binary source \(p=(0.9,0.1)\), a one-symbol prefix code spends one bit, while blocks of five lower the mean to 0.480194 bits per symbol. The entropy is 0.468996 bits per symbol, so the remaining excess is 0.011198.</p>
+<h3 id="lab">Executable laboratory</h3>
+<p>The program accepts no external input. It enumerates finite block distributions, builds codeword lengths, and checks normalization, Kraft's inequality, and the entropy bounds. It also reproduces the stated surprise and die-entropy examples. Its deterministic output is a finite numerical check of the constructions, not a proof for all alphabets or block lengths.</p>
+<pre><code class="language-python" data-file="ch06_lab.py">"""Exact small prefix-code checks and a finite-block compression comparison."""
+import heapq
+import itertools
+import math
+
+
+def entropy(probabilities):
+    return -sum(p*math.log2(p) for p in probabilities if p &gt; 0)
+
+
+def huffman_lengths(probabilities):
+    heap = [(p, i, {i: 0}) for i, p in enumerate(probabilities) if p &gt; 0]
+    heapq.heapify(heap)
+    serial = 1 + max((item[1] for item in heap), default=-1)
+    if len(heap) == 1:
+        return {heap[0][1]: 0}
+    while len(heap) &gt; 1:
+        p, _, left = heapq.heappop(heap)
+        q, _, right = heapq.heappop(heap)
+        depths = {i: length + 1 for i, length in left.items()}
+        depths.update({i: length + 1 for i, length in right.items()})
+        heapq.heappush(heap, (p + q, serial, depths))
+        serial += 1
+    return heap[0][2]
+
+
+def inspect(probabilities):
+    lengths = huffman_lengths(probabilities)
+    mean = sum(probabilities[i]*length for i, length in lengths.items())
+    kraft = sum(2.0**(-length) for length in lengths.values())
+    h = entropy(probabilities)
+    assert abs(sum(probabilities) - 1) &lt; 1e-12
+    assert kraft &lt;= 1 + 1e-12
+    assert h &lt;= mean + 1e-12
+    assert mean &lt; h + 1 + 1e-12
+    return h, mean, kraft
+
+
+assert huffman_lengths([0, 0.25, 0.25, 0.5]) == {3: 1, 1: 2, 2: 2}
+assert abs(inspect([0, 0.25, 0.25, 0.5])[1] - 1.5) &lt; 1e-12
+
+for name, p in [
+    ("four-symbol", [1/2, 1/4, 1/8, 1/8]),
+    ("eight-symbol", [1/2, 1/4, 1/8, 1/16] + [1/64]*4),
+]:
+    h, mean, kraft = inspect(p)
+    print(f"{name}: H={h:.6f}, L={mean:.6f}, Kraft={kraft:.6f}")
+
+print("iid binary source p=(0.9, 0.1)")
+base = [0.9, 0.1]
+for block in range(1, 6):
+    p = [math.prod(base[j] for j in word)
+         for word in itertools.product(range(2), repeat=block)]
+    h, mean, _ = inspect(p)
+    assert abs(h/block - entropy(base)) &lt; 1e-12
+    print(f"m={block}: H/m={h/block:.6f}, L/m={mean/block:.6f}, "
+          f"excess={mean/block - entropy(base):.6f}")
+
+print(f"rain surprise={-math.log2(0.005):.6f} bits")
+print(f"no-rain surprise={-math.log2(0.995):.6f} bits")
+print(f"fair die H={entropy([1/6]*6):.6f} bits")
+print(f"biased die H={entropy([0.1]*5 + [0.5]):.6f} bits")
+
+permutation = []
+for a, b, c in itertools.product(range(2), repeat=3):
+    index = 4*a + 2*b + c
+    result = 4*a + 2*b + (c ^ (a &amp; b))
+    permutation.append(result)
+    assert (c ^ (a &amp; b)) ^ (a &amp; b) == c
+assert sorted(permutation) == list(range(8))
+print("Toffoli permutation:", permutation)
+</code></pre>
+<pre><code class="output">four-symbol: H=1.750000, L=1.750000, Kraft=1.000000
+eight-symbol: H=2.000000, L=2.000000, Kraft=1.000000
+iid binary source p=(0.9, 0.1)
+m=1: H/m=0.468996, L/m=1.000000, excess=0.531004
+m=2: H/m=0.468996, L/m=0.645000, excess=0.176004
+m=3: H/m=0.468996, L/m=0.532667, excess=0.063671
+m=4: H/m=0.468996, L/m=0.492550, excess=0.023554
+m=5: H/m=0.468996, L/m=0.480194, excess=0.011198
+rain surprise=7.643856 bits
+no-rain surprise=0.007232 bits
+fair die H=2.584963 bits
+biased die H=2.160964 bits
+Toffoli permutation: [0, 1, 2, 3, 4, 5, 7, 6]
+</code></pre>
+
+<h2 id="toffoli">6.6 Reversible logic: the Toffoli gate <a class="timestamp" href="https://www.youtube.com/watch?v=Wne_ycXqFuA&amp;t=1140s">W3L5 19:00</a></h2>
+<p>The final source lecture returns from coding to reversible computation. For bits \(a,b,c\in\{0,1\}\), let \(a\land b=ab\) be AND and let \(\oplus\) denote addition modulo two. Define the Toffoli map by
+\[
+(a,b,c)\longmapsto(a,b,c\oplus(a\land b)).\tag{6.5}
+\]
+The two control bits \(a,b\) are retained, and the target \(c\) flips only when both controls are one. Applying the map twice adds the same bit \(ab\) twice modulo two, returning \(c\). The map is therefore its own inverse. In the lexicographic three-bit basis it swaps 110 and 111 and fixes the other six strings.</p>
+<p>Extend this permutation linearly to state vectors. Its matrix has one unit entry in each row and column, so its columns are an orthonormal basis and \(U^\dagger U=I_8\). This supplies an ideal unitary gate. Merely having the same number of input and output wires does not prove reversibility: a map that sends every three-bit input to 000 has three input and three output bits but is many-to-one. The inverse, or equivalently injectivity, is the required property.</p>
+<p>Setting \(c=0\) computes \(ab\) in the target while preserving the inputs. Throwing away the controls would restore a logically irreversible AND operation. The information accounting therefore concerns the full set of wires, including any supposedly unused output. This is the same discipline used in coding: identify which information is retained and which resource is being counted.</p>
+
+<h2 id="limits">6.7 Scope of the coding model</h2>
+<p>The finite prefix-code bounds require a known source distribution and an agreed code. The block-rate statement additionally assumes independent, identically distributed symbols. Memory in a real source changes the joint distribution; its entropy per symbol can be lower than the one-symbol entropy. A mismatched code pays a penalty related to the difference between its design distribution and the actual source. Noise in a physical channel requires error-control coding, which is a different problem from the noiseless source coding proved here.</p>
+<p>Statistical entropy does not measure semantic value, logical truth, computational complexity, or thermodynamic heat without an additional physical model. A rare message can be surprising and useless. A deterministic result can be hard to calculate. The next chapter replaces a classical probability distribution by the spectrum of a density operator, while retaining this insistence on naming the object and the operational task.</p>
+
+<h2 id="exercises">6.8 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex6-1">Exercise 6.1 — Diagnose a false uniqueness proof</h3><p>Show that \(H_2(p)=-\log_2\sum_jp_j^2\) is nonnegative, vanishes only for a point mass, reaches \(\log_2q\) at the uniform distribution, and adds on independent products. Explain why those properties cannot establish Shannon entropy's uniqueness.</p><details><summary>Solution</summary><p>Since \(\sum p_j^2\leq\sum p_j=1\), its negative logarithm is nonnegative, with equality only when every nonzero \(p_j\) is one. Cauchy–Schwarz gives \(1=(\sum p_j)^2\leq q\sum p_j^2\), so \(H_2\leq\log_2q\), with equality only for equal probabilities. Product distributions give \(\sum_{j,k}p_j^2r_k^2=(\sum_jp_j^2)(\sum_kr_k^2)\), and logarithms add. Continuity also holds on the probability simplex. This is a distinct functional for a generic nonuniform distribution, so the listed properties are insufficient. Shannon's weighted grouping condition supplies additional structure.</p></details></article>
+<article class="exercise"><h3 id="ex6-2">Exercise 6.2 — Derive a mismatch penalty</h3><p>A code is designed using strictly positive probabilities \(r_j\), with lengths \(\ell_j=\lceil-\log_2r_j\rceil\), but the actual source has probabilities \(p_j\). Bound its expected length in terms of \(H_{\rm Sh}(p)\) and \(D(p\Vert r)\).</p><details><summary>Solution</summary><p>The ceiling inequality gives \(-\log_2r_j\leq\ell_j\lt -\log_2r_j+1\). Average using \(p_j\). The cross-entropy is \(-\sum_jp_j\log_2r_j=H_{\rm Sh}(p)+D(p\Vert r)\), so this quantity is at most \(L\), and \(L\) is strictly below it plus one. Kraft existence follows from \(\sum_j2^{-\ell_j}\leq\sum_jr_j=1\). A zero design probability for an actually possible outcome makes this construction undefined rather than producing a finite penalty.</p></details></article>
+<article class="exercise"><h3 id="ex6-3">Exercise 6.3 — Decode and compare</h3><p>Decode 010110111 using the four-symbol code in the opening. Compare its realized length with fixed-width encoding, and explain why a realized comparison differs from the average saving.</p><details><summary>Solution</summary><p>Prefix parsing gives \(0|10|110|111\), hence \(a_1,a_2,a_3,a_4\). It used nine bits; four fixed-width labels use eight. The variable code is longer for this particular message. Under the specified source, its expected length for four iid symbols is \(4(7/4)=7\) bits. Expectation weights messages by their source probabilities, so it permits some longer messages. The lower bound constrains an average, not every realization.</p></details></article>
+<article class="exercise"><h3 id="ex6-4">Exercise 6.4 — Remove the independence assumption</h3><p>A fair bit is generated once and repeated \(m\) times. Find the entropy of the whole string and compare it with the sum of the individual-bit entropies.</p><details><summary>Solution</summary><p>Only \(00\cdots0\) and \(11\cdots1\) can occur, each with probability \(1/2\), so the joint entropy is one bit. Each position individually has entropy one bit, giving a sum of \(m\). The joint entropy equals that sum only under independence. If the block length is known, transmitting the initial bit exactly represents the full repeated string. Its rate is \(1/m\) bits per symbol.</p></details></article>
+<article class="exercise"><h3 id="ex6-5">Exercise 6.5 — Design a fair comparison</h3><p>A report claims that a compressor beats entropy because its output is shorter than \(mH_{\rm Sh}(p)\) for a selected test file. State the missing experimental and mathematical information needed to assess the claim.</p><details><summary>Solution</summary><p>Specify the source model, whether the file was selected after seeing compression results, whether decoding is exact, the class of admissible codes, and which costs are counted. Include the codebook or model description when it is not pre-shared, the output-length or stopping convention, and every exceptional/error path. Measure expected length over the stated source or a justified statistical estimate rather than one chosen realization. A short individual output is compatible with the theorem; systematic average improvement under the theorem's assumptions is not.</p></details></article>
+<article class="exercise"><h3 id="ex6-6">Exercise 6.6 — Compare finite-block regimes</h3><p>Run the laboratory and modify the binary source to probabilities \(1/2,1/2\). Compare block lengths one through five. Explain both the original biased-source convergence and the fair-source result without inferring monotonic convergence for every possible source from this experiment.</p><details><summary>Solution</summary><p>For a fair source, every length-\(m\) string has probability \(2^{-m}\); a fixed \(m\)-bit label has both entropy and mean code length \(m\). Huffman coding therefore gives one bit per original symbol at every tested block length. The biased source has entropy 0.468996 bits per symbol and the saved output shows mean rates 1.000000, 0.645000, 0.532667, 0.492550, and 0.480194. Grouping permits integer block lengths to approximate noninteger self-information more closely. Equation (6.4) guarantees an excess below \(1/m\) for an appropriate code; these finite results do not prove that every code family or every source has a strictly decreasing rate at each successive block size.</p></details></article>
+
+<h2 id="primary-sources">6.9 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=g7Qh9zeyDcw">W3L2 — Classical Information theory I</a>: source alphabets, surprise, logarithmic information, and a channel model.</li><li><a href="https://www.youtube.com/watch?v=P7bDc2fYa2A">W3L3 — Clssical Information theory II</a>: proposed entropy properties and independent-string probability.</li><li><a href="https://www.youtube.com/watch?v=98i3XZpEJso">W3L4 — Classical Information theory III</a>: frequency argument, typical probability, and the four-symbol code.</li><li><a href="https://www.youtube.com/watch?v=Wne_ycXqFuA">W3L5 — Classical Information theory IV</a>: eight-symbol code, biased examples, and Toffoli logic.</li><li>C. E. Shannon, <a href="https://home.csulb.edu/~cwallis/382/readings/482/shannon.mathematical.theory.communication.1948.pdf">A Mathematical Theory of Communication</a>, corrected reprint of the 1948 paper: §6, PDF pages 10–11, gives the weighted grouping assumption and Theorem 2; §9, PDF pages 16–17, states the noiseless-channel theorem; §10, PDF page 18, gives the dyadic four-symbol example. The finite prefix-code argument and its explicit decoding model are derived here.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-05.html">Previous chapter</a> <a href="chapter-07.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

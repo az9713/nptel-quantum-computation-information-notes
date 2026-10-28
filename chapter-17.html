@@ -1,0 +1,217 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Master equations and relaxation times</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>17. Master equations and relaxation times</h1>
+<p class="lead">An excited-state population decays with a time constant of 0.50 seconds, while an off-diagonal coherence decays with a time constant of about 0.67 seconds. These values are compatible with the same qubit model. Population loss alone damps coherence at half the population-decay rate; additional pure dephasing increases that coherence-decay rate. The time constants follow from the generator and its conventions.</p>
+<p class="source-note"><strong>Lecture material:</strong> Decoherence 9–11, official W11L4–W11L5 and W12L1. The first of these recordings develops the master equation, despite a syllabus summary suggesting more damping examples. <strong>Reference extension:</strong> Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Chapter 3, sections 3.4.3 and 3.5</a>, for weak-step amplitude damping and the Lindblad generator. <strong>Original teaching constructions:</strong> the explicit rate convention, matrix-element derivation, finite Liouvillian calculation, boundary examples, and exercises. Numerical time constants describe the chosen model, not measured properties of a device.</p>
+
+<h2 id="model">17.1 A continuous-time model and its assumptions <a class="timestamp" href="https://www.youtube.com/watch?v=tvlLNS8i-yY&amp;t=351s">[05:51]</a></h2>
+<p>Let \(\rho(t)\) be a qubit density matrix at time \(t\geq0\), measured in seconds. The basis vectors \(|0\rangle,|1\rangle\) represent ground and excited levels. We assume no external drive, an environment that supplies no thermal excitation, and constant nonnegative rates. The evolution is described by a time-homogeneous quantum dynamical semigroup: a family of channels \(\Phi_t\) obeying \(\Phi_0=\operatorname{id}\) and \(\Phi_{t+s}=\Phi_t\circ\Phi_s\) for nonnegative times. This composition law is an assumption about the model of time evolution, beyond the existence of a channel for each individual duration.</p>
+<p>For differentiable evolution, define the linear generator \(\mathcal L\) through \(d\rho/dt=\mathcal L(\rho)\). This is a <dfn>master equation</dfn> for the reduced density operator. If \(\mathcal L\) is constant, \(\Phi_t=\exp(t\mathcal L)\), where the exponential acts on the vector space of matrices. The generator has units of inverse seconds, while \(t\mathcal L\) is dimensionless.</p>
+<p>The semigroup approximation discards memory capable of influencing subsequent evolution. A useful physical regime has an environment correlation time much shorter than the timescale resolved in the reduced model, which is itself shorter than the relaxation time. This separation is a modeling justification, not a consequence of tracing out an environment. A finite environment can exchange information with the system repeatedly, producing revivals that violate a simple exponential decay law.</p>
+<p>A time-local differential equation alone does not certify memoryless quantum evolution. Some non-Markovian dynamics admit time-local equations with coefficients that change sign or become singular. We use the more specific constant-rate completely positive semigroup model throughout this chapter. This distinction keeps the relaxation inequality below tied to a defined physical and mathematical setting.</p>
+<p>The Born approximation is a separate ingredient in some microscopic derivations: weak coupling permits the joint state to be approximated by \(\rho_S(t)\otimes\tau_E\), with an effectively unchanged reservoir state \(\tau_E\), to the perturbative order retained. A large bath can help justify limited reservoir disturbance, but size alone does not imply absence of memory or exact factorization. Here we prescribe a consistent generator instead of claiming a microscopic Born–Markov derivation for an unspecified bath.</p>
+
+<h2 id="weak-step">17.2 From weak Kraus steps to a dissipator <a class="timestamp" href="https://www.youtube.com/watch?v=tvlLNS8i-yY&amp;t=569s">[09:29]</a></h2>
+<p>Let \(H_{\mathrm{phys}}\) be a Hermitian Hamiltonian in joules and \(\hbar\) the reduced Planck constant in joule seconds. Let \(L_j\) be jump matrices with units \(\mathrm{s}^{-1/2}\). For a small positive duration \(\Delta t\), consider a channel approximation with operators</p>
+\[
+K_0=I-\left(\frac{iH_{\mathrm{phys}}}{\hbar}+
+\frac12\sum_jL_j^\dagger L_j\right)\Delta t,
+\qquad K_j=\sqrt{\Delta t}\,L_j\quad(j\geq1).
+\tag{17.1}
+\]
+<p>The \(\sqrt{\Delta t}\) scaling makes each jump probability proportional to duration. Multiplying the operators gives \(K_0^\dagger K_0=I-\Delta t\sum_jL_j^\dagger L_j+O(\Delta t^2)\); the remaining operators contribute \(\Delta t\sum_jL_j^\dagger L_j\). Completeness holds through first order. The displayed truncated operators need not define an exactly trace-preserving finite-step integrator for arbitrary \(\Delta t\).</p>
+<p>Now expand the state update. The first operator contributes the original state, its Hamiltonian commutator, and two normalization terms. The jump operators contribute \(\Delta t\sum_jL_j\rho L_j^\dagger\). Subtract \(\rho\), divide by \(\Delta t\), and take the limit:</p>
+\[
+\frac{d\rho}{dt}=-\frac{i}{\hbar}[H_{\mathrm{phys}},\rho]
++\sum_j\left(L_j\rho L_j^\dagger-
+\frac12L_j^\dagger L_j\rho-
+\frac12\rho L_j^\dagger L_j\right).
+\tag{17.2}
+\]
+<p>This is the <dfn>Lindblad form</dfn> used here. The bracket \([A,B]=AB-BA\) is the commutator. The dissipator for one matrix is abbreviated \(\mathcal D[L](\rho)=L\rho L^\dagger-\{L^\dagger L,\rho\}/2\), where \(\{A,B\}=AB+BA\) is the anticommutator. Jump gain and normalization loss must be retained together. The trace of one dissipator is zero because trace cyclicity gives \(\operatorname{Tr}(L\rho L^\dagger)=\operatorname{Tr}(L^\dagger L\rho)\).</p>
+<p>The weak-step argument derives equation (17.2) from the stated scaling ansatz. It is not a microscopic derivation of the rates from a particular reservoir, and it is not a proof of the full classification theorem for all quantum dynamical semigroups. Those are separate mathematical or physical results. Preskill develops the same generator structure in <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">section 3.5.2, PDF pages 35–38</a>.</p>
+
+<h2 id="population-coherence">17.3 Population relaxation and the factor of one half <a class="timestamp" href="https://www.youtube.com/watch?v=_8RDDMOq6Is&amp;t=205s">[03:25]</a></h2>
+<p>Set the Hamiltonian contribution aside by working in a frame that removes the known coherent phase. Define the lowering matrix \(S_- = |0\rangle\langle1|=\begin{pmatrix}0&amp;1\\0&amp;0\end{pmatrix}\). The symbol is a chapter-local name for a matrix, not a state. Let \(\Gamma_1\geq0\) be the population-relaxation rate in inverse seconds. Choose \(L_1=\sqrt{\Gamma_1}S_-\). Since \(S_-^\dagger S_-=|1\rangle\langle1|\), direct multiplication for \(\rho=\begin{pmatrix}\rho_{00}&amp;\rho_{01}\\\rho_{10}&amp;\rho_{11}\end{pmatrix}\) gives</p>
+\[
+S_-\rho S_-^\dagger=\begin{pmatrix}\rho_{11}&amp;0\\0&amp;0\end{pmatrix},
+\qquad
+\frac12\{|1\rangle\langle1|,\rho\}
+=\begin{pmatrix}0&amp;\rho_{01}/2\\\rho_{10}/2&amp;\rho_{11}\end{pmatrix}.
+\tag{17.3}
+\]
+<p>Subtracting the second matrix from the first yields the separate equations</p>
+\[
+\dot\rho_{11}=-\Gamma_1\rho_{11},\quad
+\dot\rho_{00}=\Gamma_1\rho_{11},\quad
+\dot\rho_{01}=-\frac{\Gamma_1}{2}\rho_{01}.
+\tag{17.4}
+\]
+<p>The dot denotes a time derivative. The population equation transfers probability from the excited level to the ground level; it does not remove trace from the two-state model. The coherence equation has one half of the population rate because the anticommutator touches only one of the two indices of \(\rho_{01}\). Both normalization terms touch \(\rho_{11}\), supplying the full rate there.</p>
+<p>Solving these first-order scalar equations for an arbitrary initial density matrix gives \(\rho_{11}(t)=e^{-\Gamma_1t}\rho_{11}(0)\), \(\rho_{00}(t)=\rho_{00}(0)+(1-e^{-\Gamma_1t})\rho_{11}(0)\), and \(\rho_{01}(t)=e^{-\Gamma_1t/2}\rho_{01}(0)\). The result agrees with the amplitude-damping channel of Chapter 16 when \(\gamma(t)=1-e^{-\Gamma_1t}\). Thus the discrete and continuous descriptions agree over every duration within this constant-rate model.</p>
+<p>The same limit follows by composing many weak amplitude-damping channels. If each of \(m\) steps has decay probability \(\Gamma_1t/m\), the population survival factor is \((1-\Gamma_1t/m)^m\), tending to \(e^{-\Gamma_1t}\). The coherence survival factor is its square root, tending to \(e^{-\Gamma_1t/2}\). The parameter \(m\) is taken large enough that every step probability lies in \([0,1]\).</p>
+
+<h2 id="pure-dephasing">17.4 Adding a separately defined coherence-decay rate <a class="timestamp" href="https://www.youtube.com/watch?v=3KF16kkbdbs&amp;t=777s">[12:57]</a></h2>
+<p>Let \(Z=\operatorname{diag}(1,-1)\) and introduce a nonnegative rate \(\Gamma_\phi\), defined specifically as the additional exponential decay rate of \(\rho_{01}\). To realize that convention, use the jump matrix \(L_\phi=\sqrt{\Gamma_\phi/2}\,Z\). Since \(Z^2=I_2\), its dissipator is \((\Gamma_\phi/2)(Z\rho Z-\rho)\). Diagonal entries cancel; off-diagonal entries change sign under \(Z\rho Z\), giving a multiplier \(-\Gamma_\phi\) in their differential equations.</p>
+<p>With both jumps present, the population equation remains unchanged and coherence obeys</p>
+\[
+\dot\rho_{01}=-(\Gamma_1/2+\Gamma_\phi)\rho_{01},\qquad
+\rho_{01}(t)=e^{-(\Gamma_1/2+\Gamma_\phi)t}\rho_{01}(0).
+\tag{17.5}
+\]
+<p>Some sources place \(\Gamma_\phi\) in front of \(\mathcal D[Z]\) instead of \(\mathcal D[Z]/2\). That symbol then represents half the additional coherence-decay rate. A factor-of-two disagreement cannot be diagnosed until the master equation itself is compared. The convention in (17.5) is the one used in the code and time constants below.</p>
+<div class="prop"><strong>Proposition 17.1 — relaxation times in the specified model.</strong> If \(\Gamma_1\gt0\) and \(\Gamma_\phi\geq0\), define \(T_1\) as the excited-population exponential decay time and \(T_2\) as the coherence-magnitude exponential decay time. Then
+\[
+T_1=\frac1{\Gamma_1},\qquad
+\frac1{T_2}=\frac1{2T_1}+\Gamma_\phi,
+\qquad T_2\leq2T_1.
+\tag{17.6}
+\]
+</div>
+<div class="proof"><p>Equations (17.4) and (17.5) define the exponential rates. Taking their reciprocals gives the first two statements. Nonnegative \(\Gamma_\phi\) makes \(1/T_2\geq1/(2T_1)\). Both times are positive, so inversion gives the inequality. Equality holds exactly when \(\Gamma_\phi=0\). <span class="qed">∎</span></p></div>
+<p>For \(\Gamma_1=2\,\mathrm{s}^{-1}\) and \(\Gamma_\phi=0.5\,\mathrm{s}^{-1}\), \(T_1=0.5\,\mathrm s\) and \(T_2=2/3\,\mathrm s\). An initially equal superposition has \(\rho_{11}(0)=\rho_{01}(0)=1/2\). At one second, its excited population is \(e^{-2}/2\) and coherence magnitude is \(e^{-1.5}/2\), reproduced numerically below. The different decay constants describe different matrix elements, so there is no requirement that they coincide.</p>
+<p>If \(\Gamma_1=0\), the population does not relax in this model. One may denote \(T_1=\infty\), while \(T_2=1/\Gamma_\phi\) when \(\Gamma_\phi\gt0\). If both rates vanish, both quantities have no finite decay time. The finite inequality in Proposition 17.1 deliberately assumes \(\Gamma_1\gt0\) to avoid treating infinity as an ordinary fitted number.</p>
+
+<h2 id="thermal">17.5 Thermal excitation and the Bloch equations <a class="timestamp" href="https://www.youtube.com/watch?v=3KF16kkbdbs&amp;t=33s">[00:33]</a></h2>
+<p>The zero-temperature model excludes upward transitions. To include them, let \(\Gamma_\downarrow\) and \(\Gamma_\uparrow\) be nonnegative downward and upward rates in inverse seconds, with positive sum \(G=\Gamma_\downarrow+\Gamma_\uparrow\). Use jumps \(L_\downarrow=\sqrt{\Gamma_\downarrow}|0\rangle\langle1|\), \(L_\uparrow=\sqrt{\Gamma_\uparrow}|1\rangle\langle0|\), and the same \(L_\phi=\sqrt{\Gamma_\phi/2}Z\) as before. The arrows refer to energy, independent of the various plus/minus names used for spin operators.</p>
+<p>Restore a physical Hamiltonian \(H_{\mathrm{phys}}=-\hbar\omega_0 Z/2\), with angular frequency \(\omega_0\gt0\). Its ground and excited energies are \(-\hbar\omega_0/2\) and \(+\hbar\omega_0/2\). The downward dissipator gives the entries in (17.4); interchanging basis labels gives the upward contribution. The Hamiltonian adds \(+i\omega_0\rho_{01}\) to the top-right derivative. Combining the three jumps yields</p>
+\[
+\dot\rho_{11}=\Gamma_\uparrow-G\rho_{11},\qquad
+\dot\rho_{01}=\left(i\omega_0-\frac G2-\Gamma_\phi\right)\rho_{01}.
+\tag{17.7}
+\]
+<p>Define \(p_{\mathrm{eq}}=\Gamma_\uparrow/G\). Subtracting this constant turns the population equation into \(d(\rho_{11}-p_{\mathrm{eq}})/dt=-G(\rho_{11}-p_{\mathrm{eq}})\). Thus</p>
+\[
+\rho_{11}(t)=p_{\mathrm{eq}}+[\rho_{11}(0)-p_{\mathrm{eq}}]e^{-Gt},\qquad
+\rho_{01}(t)=\rho_{01}(0)e^{i\omega_0t}e^{-(G/2+\Gamma_\phi)t}.
+\tag{17.8}
+\]
+<p>At positive temperature, \(T_1=1/G\) describes decay of a population's deviation from equilibrium. It does not mean that the population itself vanishes. Coherence magnitude still decays with \(1/T_2=G/2+\Gamma_\phi\), so the same relation \(1/T_2=1/(2T_1)+\Gamma_\phi\) holds for this extended generator. A spin-dephasing jump written instead as \(\sqrt{\gamma_z}Z\), as in the lecture, corresponds to \(\Gamma_\phi=2\gamma_z\).</p>
+<p>Write \(\rho=(I+xX+yY+zZ)/2\), so \(\rho_{01}=(x-iy)/2\) and \(z=1-2\rho_{11}\). The real and imaginary parts of (17.7) give the undriven <dfn>Bloch equations</dfn> in this convention:</p>
+\[
+\dot x=\omega_0 y-\frac{x}{T_2},\qquad
+\dot y=-\omega_0 x-\frac{y}{T_2},\qquad
+\dot z=-\frac{z-z_{\mathrm{eq}}}{T_1},\quad
+z_{\mathrm{eq}}=\frac{\Gamma_\downarrow-\Gamma_\uparrow}{G}.
+\tag{17.9}
+\]
+<p>The opposite signs in the transverse rotation follow from the declared negative-Z Hamiltonian; changing its sign reverses that rotation. They do not change either decay envelope. At equilibrium, upward and downward probability currents balance: \(\Gamma_\uparrow\rho_{00}^{\mathrm{eq}}=\Gamma_\downarrow\rho_{11}^{\mathrm{eq}}\). A bath at absolute temperature \(\Theta\gt0\) gives the Gibbs ratio when its rates satisfy detailed balance,</p>
+\[
+\frac{\Gamma_\uparrow}{\Gamma_\downarrow}
+=e^{-\beta\hbar\omega_0},\qquad
+\beta=\frac1{k_B\Theta},\qquad
+p_{\mathrm{eq}}=\frac1{1+e^{\beta\hbar\omega_0}},\qquad
+z_{\mathrm{eq}}=\tanh\frac{\beta\hbar\omega_0}{2}.
+\tag{17.10}
+\]
+<p>Here \(k_B\) is Boltzmann's constant and \(\beta\) has units of inverse energy. Detailed balance is extra physical input; arbitrary nonnegative jump rates need not represent a thermal bath. In a commonly used bosonic reservoir model, \(\Gamma_\downarrow=\kappa(\bar n+1)\), \(\Gamma_\uparrow=\kappa\bar n\), and \(\bar n=[e^{\beta\hbar\omega_0}-1]^{-1}\), where \(\kappa\) is a spontaneous-emission rate. Their ratio is \(\bar n/(\bar n+1)=e^{-\beta\hbar\omega_0}\), verifying detailed balance. Their sum is \(G=\kappa(2\bar n+1)=\kappa\coth(\beta\hbar\omega_0/2)\). This algebra fixes the exponential denominator and all factors without relying on ambiguous machine recognition of the lecture's thermal formulas.</p>
+<p>As \(\Theta\) tends to zero, \(\bar n\) tends to zero and the downward-only model returns. As \(\beta\hbar\omega_0\) tends to zero from above, the equilibrium approaches equal populations and \(z_{\mathrm{eq}}\) tends to zero. The rate formula then grows as \(2\kappa/(\beta\hbar\omega_0)\); extrapolating it indefinitely requires the reservoir and weak-coupling assumptions to remain valid. For a finite worked case, choose \(\Gamma_\downarrow=3\), \(\Gamma_\uparrow=1\), and \(\Gamma_\phi=0.5\), all in inverse seconds. Then \(p_{\mathrm{eq}}=1/4\), \(z_{\mathrm{eq}}=1/2\), \(T_1=1/4\) second, and \(T_2=2/5\) second. The thermal rate ratio corresponds to \(\beta\hbar\omega_0=\ln3\).</p>
+<p class="source-note"><strong>Equation correction:</strong> selected frames at 15:50 and 16:50 of recording 56 show a Bose denominator \(1-e^{\beta\hbar\omega_0}\) and an additional exponential in the displayed longitudinal rate. For positive temperature and positive frequency the former would make an occupation negative. Equations (17.10) and the derived rate sum above use the consistent denominator \(e^{\beta\hbar\omega_0}-1\) and \(G=\kappa\coth(\beta\hbar\omega_0/2)\). The correction follows directly from nonnegative occupation and detailed balance, rather than treating the board expression as authoritative.</p>
+
+<h2 id="liouvillian">17.6 Implementing the generator as a matrix</h2>
+<p>Numerical integration is simplest here after writing the density matrix as a four-component vector. Let \(\operatorname{vec}(\rho)\) stack its columns in order. The identity \(\operatorname{vec}(A\rho B)=(B^{\mathsf T}\otimes A)\operatorname{vec}(\rho)\) follows by expanding the two matrix indices. For each jump matrix \(L\), the corresponding four-by-four generator matrix is</p>
+\[
+\mathsf L_L=L^*\otimes L-
+\frac12\left[I_2\otimes(L^\dagger L)+(L^\dagger L)^{\mathsf T}\otimes I_2\right].
+\tag{17.11}
+\]
+<p>The star denotes entrywise complex conjugation. The transpose in the second normalization term is required by column stacking. Replacing it by an adjoint or changing stacking conventions without changing the formula can produce an incorrect generator while leaving some real-valued examples unaffected.</p>
+<p>The lab constructs the two jump matrices, adds their generator matrices, and computes \(\exp(t\mathsf L)\operatorname{vec}(\rho(0))\) with SciPy. It compares the result at 31 durations with the analytical solution, checking trace and eigenvalue positivity. A matrix exponential evaluates the finite-dimensional generator directly; it avoids the finite-step trace error of using the truncated Kraus approximation as though it were exact.</p>
+<p>A second 31-duration comparison adds upward transitions and the negative-Z Hamiltonian. It checks the thermal fixed point and the complex coherence phase against (17.8), using the finite rate example in section 17.5. The direct matrix-basis check also compares the vectorized generator with the dissipator before time evolution.</p>
+<!-- LAB_SOURCE_START -->
+<div class="codewrap"><pre><code class="language-python" data-file="ch17_lab.py">"""Compare a Lindblad matrix exponential with analytical decay laws."""
+import numpy as np
+from scipy.linalg import expm
+
+identity = np.eye(2)
+z = np.diag([1, -1])
+lower = np.array([[0, 1], [0, 0]], complex)
+gamma_one = 2.0
+gamma_phi = 0.5
+jumps = [np.sqrt(gamma_one) * lower, np.sqrt(gamma_phi / 2) * z]
+generator = np.zeros((4, 4), complex)
+for jump in jumps:
+    norm = jump.conj().T @ jump
+    generator += np.kron(jump.conj(), jump)
+    generator -= (np.kron(identity, norm) + np.kron(norm.T, identity)) / 2
+for row in range(2):
+    for column in range(2):
+        basis = np.zeros((2, 2), complex)
+        basis[row, column] = 1
+        direct = np.zeros((2, 2), complex)
+        for jump in jumps:
+            norm = jump.conj().T @ jump
+            direct += jump @ basis @ jump.conj().T
+            direct -= (norm @ basis + basis @ norm) / 2
+        assert np.allclose(generator @ basis.ravel(order="F"),
+                           direct.ravel(order="F"))
+rho_initial = np.ones((2, 2)) / 2
+for t in np.linspace(0, 3, 31):
+    state = (expm(t * generator) @ rho_initial.ravel(order="F"))
+    state = state.reshape(2, 2, order="F")
+    population = 0.5 * np.exp(-gamma_one * t)
+    coherence = 0.5 * np.exp(-(gamma_one / 2 + gamma_phi) * t)
+    expected = np.array([[1 - population, coherence],
+                         [coherence, population]])
+    assert np.allclose(state, expected, atol=1e-12)
+    assert np.isclose(np.trace(state), 1)
+    assert np.linalg.eigvalsh(state).min() &gt; -1e-12
+t_one = 1 / gamma_one
+t_two = 1 / (gamma_one / 2 + gamma_phi)
+print(f"T1 = {t_one:.6f} s; T2 = {t_two:.6f} s")
+print(f"At t=1 s: excited population = {0.5*np.exp(-2):.6f}")
+print(f"At t=1 s: coherence magnitude = {0.5*np.exp(-1.5):.6f}")
+print("Thirty-one-point exponential comparison passed: True")
+
+# A second generator tests the finite-temperature solution including its phase.
+gamma_down, gamma_up, omega = 3.0, 1.0, 0.7
+thermal_jumps = [np.sqrt(gamma_down) * lower,
+                 np.sqrt(gamma_up) * lower.conj().T,
+                 np.sqrt(gamma_phi / 2) * z]
+hamiltonian = -omega * z / 2  # H_phys/hbar, in inverse seconds.
+thermal_generator = -1j * (np.kron(identity, hamiltonian)
+                           - np.kron(hamiltonian.T, identity))
+for jump in thermal_jumps:
+    norm = jump.conj().T @ jump
+    thermal_generator += np.kron(jump.conj(), jump)
+    thermal_generator -= (np.kron(identity, norm)
+                          + np.kron(norm.T, identity)) / 2
+rate = gamma_down + gamma_up
+equilibrium = gamma_up / rate
+for t in np.linspace(0, 3, 31):
+    state = expm(t * thermal_generator) @ rho_initial.ravel(order="F")
+    state = state.reshape(2, 2, order="F")
+    pop = equilibrium + (0.5 - equilibrium) * np.exp(-rate * t)
+    coh = 0.5 * np.exp((1j * omega - rate / 2 - gamma_phi) * t)
+    expected = np.array([[1 - pop, coh], [coh.conjugate(), pop]])
+    assert np.allclose(state, expected, atol=1e-12)
+    assert np.isclose(np.trace(state), 1)
+    assert np.linalg.eigvalsh(state).min() &gt; -1e-12
+print(f"Thermal equilibrium excited population = {equilibrium:.6f}")
+print("Thermal population, phase, and coherence grid passed: True")
+</code></pre></div>
+<!-- LAB_SOURCE_END -->
+<!-- LAB_OUTPUT_START -->
+<pre><code class="output">T1 = 0.500000 s; T2 = 0.666667 s
+At t=1 s: excited population = 0.067668
+At t=1 s: coherence magnitude = 0.111565
+Thirty-one-point exponential comparison passed: True
+Thermal equilibrium excited population = 0.250000
+Thermal population, phase, and coherence grid passed: True
+</code></pre>
+<!-- LAB_OUTPUT_END -->
+<p>The population and coherence at one second are about 0.067668 and 0.111565. The reported agreement verifies both the vectorization convention and the analytical solution on this grid. It does not measure a relaxation rate, establish a Markov approximation for a device, or replace the derivation of the scalar equations.</p>
+
+<h2 id="limits">17.7 Which conclusions survive outside the model?</h2>
+<p>Static frequency uncertainty can produce a nonexponential ensemble coherence envelope without exchanging energy. If an ensemble has two equally likely detunings \(+\omega\) and \(-\omega\), its coherence is multiplied by \((e^{i\omega t}+e^{-i\omega t})/2=\cos(\omega t)\). It can vanish and revive. No fixed positive exponential rate reproduces that entire time dependence. This example shows why a fitted decay time must be accompanied by a stated fitting model and experimental protocol.</p>
+<p>Likewise, external driving can mix populations and coherences, and leakage changes the state dimension. The bound \(T_2\leq2T_1\) proven here is a property of the specified relaxation-plus-dephasing generator. It should not be exported unchanged to arbitrary nonstationary, non-Markovian, or differently defined decay parameters. A discrepancy first calls for checking definitions and model assumptions.</p>
+
+<h2 id="exercises">17.8 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex17-1">1. Recover the coherence factor</h3><p>Starting from \(\mathcal D[S_-](\rho)\), derive both off-diagonal entries and explain why their evolution preserves Hermiticity.</p><details><summary>Solution</summary><p>The gain matrix has no off-diagonal entries. The anticommutator gives \(\rho_{01}/2\) in the top-right and \(\rho_{10}/2\) in the bottom-left. Thus \(\dot\rho_{01}=-\Gamma_1\rho_{01}/2\) and \(\dot\rho_{10}=-\Gamma_1\rho_{10}/2\). Their rates are the same real number. If \(\rho_{10}(0)=\rho_{01}(0)^*\), that conjugation relation remains true at every time.</p></details></article>
+<article class="exercise"><h3 id="ex17-2">2. Infer an additional dephasing rate</h3><p>Suppose the stated model gives \(T_1=1\,\mathrm s\) and \(T_2=1\,\mathrm s\). Find \(\Gamma_1\), \(\Gamma_\phi\), and the two jump matrices.</p><details><summary>Solution</summary><p>The population rate is \(\Gamma_1=1\,\mathrm{s}^{-1}\). Equation (17.6) gives \(\Gamma_\phi=1/T_2-1/(2T_1)=0.5\,\mathrm{s}^{-1}\). The matrices are \(L_1=\sqrt{1\,\mathrm{s}^{-1}}S_-\) and \(L_\phi=\sqrt{0.25\,\mathrm{s}^{-1}}Z\). The factor one half inside the square root implements the declared additional coherence-decay rate.</p></details></article>
+<article class="exercise"><h3 id="ex17-3">3. Diagnose an incompatible parameter pair</h3><p>A fit reports \(T_1=1\,\mathrm s\), \(T_2=3\,\mathrm s\). Can the no-drive constant-rate model in this chapter produce those values with nonnegative rates?</p><details><summary>Solution</summary><p>The inferred pure-dephasing rate would be \(1/3-1/2=-1/6\,\mathrm{s}^{-1}\), contrary to the model assumption. Equivalently, the pair violates \(T_2\leq2T_1\). This does not by itself identify an experimental error or prove a failure of quantum theory. Rate conventions, fit definitions, uncertainty, additional dynamics, and the model assumptions must be checked.</p></details></article>
+<article class="exercise"><h3 id="ex17-4">4. A nonexponential counterexample</h3><p>For the two-detuning model, compute the coherence at \(t=0\), \(t=\pi/(2\omega)\), and \(t=\pi/\omega\), with \(\omega\gt0\). Explain why a positive constant-rate decay cannot match it.</p><details><summary>Solution</summary><p>The coherence multipliers are 1, 0, and \(-1\). Its magnitude returns to its initial value at the third duration after vanishing at the second. A factor \(e^{-\Gamma t}\) for constant \(\Gamma\geq0\) is nonincreasing in magnitude and never reaches zero at a finite time when \(\Gamma\) is finite. The revival excludes that simple decay model.</p></details></article>
+<article class="exercise"><h3 id="ex17-5">5. Retain the thermal fixed point</h3><p>Derive the population solution with upward and downward rates, assuming their sum is positive. Identify the quantity whose decay time is the inverse sum of rates.</p><details><summary>Solution</summary><p>Let \(G=\Gamma_\uparrow+\Gamma_\downarrow\) and \(p_{\mathrm{eq}}=\Gamma_\uparrow/G\). The equation is \(d(\rho_{11}-p_{\mathrm{eq}})/dt=-G(\rho_{11}-p_{\mathrm{eq}})\), so \(\rho_{11}(t)=p_{\mathrm{eq}}+[\rho_{11}(0)-p_{\mathrm{eq}}]e^{-Gt}\). The deviation from equilibrium, not necessarily the population itself, has exponential decay time \(1/G\).</p></details></article>
+<article class="exercise"><h3 id="ex17-6">6. Check the vectorization convention</h3><p>Modify the lab to use an initial state with imaginary coherence. Compare column-stacked evolution with the direct analytical solution, then intentionally use row stacking with equation (17.11) unchanged. Explain why a real initial state is a weak test of conjugation and stacking conventions.</p><details><summary>Solution</summary><p>Choose \((|0\rangle+i|1\rangle)/\sqrt2\), whose top-right entry is \(-i/2\). Its coherence becomes \(-ie^{-(\Gamma_1/2+\Gamma_\phi)t}/2\). Column stacking with (17.11) must reproduce this along with the populations. Row stacking requires a correspondingly transposed Kronecker identity; reusing the old convention is unjustified. For this particular real jump set some symmetry can hide a mistake even on that state, so a stronger check adds a specified nonreal Hamiltonian or jump matrix and compares \(\operatorname{vec}(\mathcal L(\rho))\) with \(\mathsf L\operatorname{vec}(\rho)\) directly. The key test is the defining matrix identity on a full matrix basis, not agreement on one symmetric input.</p></details></article>
+
+<h2 id="primary-sources">17.9 Primary sources and attribution</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra: <a href="https://www.youtube.com/watch?v=tvlLNS8i-yY">Decoherence 9</a>, <a href="https://www.youtube.com/watch?v=_8RDDMOq6Is">Decoherence 10</a>, and <a href="https://www.youtube.com/watch?v=3KF16kkbdbs">Decoherence 11</a>.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap3_15.pdf">Quantum Information, Chapter 3</a>, October 2018: section 3.4.3, PDF page 32, for the amplitude-damping time dependence; sections 3.5.1–3.5.2, pages 34–38, for the approximation and generator structure. The scalar qubit derivation, rate convention, numerical experiment, and counterexamples here are teaching constructions.</li><li>V. Gorini, A. Kossakowski, and E. C. G. Sudarshan, <a href="https://doi.org/10.1063/1.522979">Completely positive dynamical semigroups of N-level systems</a>, Journal of Mathematical Physics 17, 821–825 (1976). Publisher abstract checked for the scope of the finite-dimensional generator classification; its full proof is not claimed to be reproduced here.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-16.html">Previous chapter</a> <a href="chapter-18.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

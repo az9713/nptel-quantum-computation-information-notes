@@ -1,0 +1,6 @@
+Complex-state Bloch vector: [0.0, 0.866025, 0.5]
+Ninety-six complex rotation/Euler checks passed: True
+Euler endpoint branches passed: True
+Hadamard equals i Rx(pi) Ry(pi/2): True
+A 2pi spinor rotation is -I; its Bloch action is identity: True
+Largest reconstruction residual below 1e-12: True

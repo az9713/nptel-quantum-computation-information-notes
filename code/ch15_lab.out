@@ -1,0 +1,5 @@
+Dilation and Kraus outputs agree: True
+Output populations: [0.68, 0.32]
+Output coherence magnitude: 0.400000
+Ancillary Kraus output is positive: True
+Partial-transpose eigenvalues: [-0.5, 0.5, 0.5, 0.5]

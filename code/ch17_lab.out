@@ -1,0 +1,6 @@
+T1 = 0.500000 s; T2 = 0.666667 s
+At t=1 s: excited population = 0.067668
+At t=1 s: coherence magnitude = 0.111565
+Thirty-one-point exponential comparison passed: True
+Thermal equilibrium excited population = 0.250000
+Thermal population, phase, and coherence grid passed: True

@@ -1,0 +1,5 @@
+POVM probabilities: [0.333333, 0.333333, 0.333333]
+Same effects for both instruments: True
+Conditional coherence, first instrument: -0.250000-0.433013j
+Conditional coherence, second instrument: -0.250000+0.433013j
+Unambiguous conclusive probability = 0.292893

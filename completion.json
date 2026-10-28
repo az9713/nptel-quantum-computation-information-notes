@@ -1,0 +1,38 @@
+{
+  "planned_chapters": 20,
+  "drafted_chapters": 20,
+  "chapter_numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "worked_exercises": 120,
+  "approximate_prose_words": 68785,
+  "laboratories": 20,
+  "recordings": 60,
+  "independent_reviews_recorded": 40,
+  "independently_accepted_chapters": 20,
+  "scientific_acceptance": "20 current canonical chapters independently accepted",
+  "publication": {
+    "repository": "https://github.com/az9713/nptel-quantum-computation-information-notes",
+    "pages_url": "https://az9713.github.io/nptel-quantum-computation-information-notes/",
+    "verification": "See publication-validation.json after deployment"
+  }
+}

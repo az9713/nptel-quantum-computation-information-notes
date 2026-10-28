@@ -1,0 +1,147 @@
+{
+  "chapter": 4,
+  "title": "Bloch geometry, spin rotations, and Euler decomposition",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "fbK5QYKHtXs",
+      "course_label": "W1L5",
+      "course_order": 5,
+      "duration_seconds": 1715
+    },
+    {
+      "video_id": "hrkmrOR0cCs",
+      "course_label": "W2L1",
+      "course_order": 6,
+      "duration_seconds": 1787
+    },
+    {
+      "video_id": "TtJjIJmIOfY",
+      "course_label": "W2L2",
+      "course_order": 7,
+      "duration_seconds": 2003
+    },
+    {
+      "video_id": "XhI45Ob4Ikc",
+      "course_label": "W2L3",
+      "course_order": 8,
+      "duration_seconds": 1803
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "fbK5QYKHtXs",
+      "start_seconds": 33,
+      "end_seconds": 1708,
+      "lecture_material": "Pure Bloch spinors, poles, equator, and Pauli expectations",
+      "research_extension": "Explicit outcome projectors for an arbitrary axis",
+      "teaching_construction": "Complex generic finite example"
+    },
+    {
+      "id": "convention",
+      "video_id": "hrkmrOR0cCs",
+      "start_seconds": 78,
+      "end_seconds": 1782,
+      "lecture_material": "Active/passive rotations, orbital generators and spin generators",
+      "research_extension": "Fixed active right-handed sign convention",
+      "teaching_construction": "Taylor expansion with a declared inverse coordinate map"
+    },
+    {
+      "id": "exponential",
+      "video_id": "TtJjIJmIOfY",
+      "start_seconds": 275,
+      "end_seconds": 733,
+      "lecture_material": "Pauli product identity and exponentiation",
+      "research_extension": "Full Rodrigues derivation",
+      "teaching_construction": "Conjugated pure projector calculation"
+    },
+    {
+      "id": "gates",
+      "video_id": "TtJjIJmIOfY",
+      "start_seconds": 733,
+      "end_seconds": 1456,
+      "lecture_material": "Hadamard construction using two rotations",
+      "research_extension": "Global versus controlled phase accounting",
+      "teaching_construction": "Full gate comparison on superpositions"
+    },
+    {
+      "id": "alignment",
+      "video_id": "XhI45Ob4Ikc",
+      "start_seconds": 544,
+      "end_seconds": 1795,
+      "lecture_material": "Five-factor axis-alignment rotation",
+      "research_extension": "Separate from three-factor Euler existence",
+      "teaching_construction": "Axis-coefficient and zero-angle checks"
+    },
+    {
+      "id": "euler",
+      "video_id": "XhI45Ob4Ikc",
+      "start_seconds": 497,
+      "end_seconds": 1795,
+      "lecture_material": "Motivation for gate decomposition",
+      "research_extension": "Barenco Lemma4.1 with opposite-sign angles translated",
+      "teaching_construction": "Explicit extraction and zero-entry branches"
+    }
+  ],
+  "references": [
+    {
+      "title": "Preskill Quantum Information Chapter2",
+      "url": "https://www.preskill.caltech.edu/ph219/chap2_15.pdf",
+      "supports": "Spin representation, Bloch coordinates, spinor sign",
+      "locator_checked": "Section2.2.1 PDFpp8–14;eq2.25–2.43"
+    },
+    {
+      "title": "Barenco etal Elementary gates for quantum computation",
+      "url": "https://arxiv.org/pdf/quant-ph/9503016",
+      "supports": "General U2 Euler existence with phase",
+      "locator_checked": "Lemmas4.1–4.2 PDFpp8–9; opposite angle signs explicitly translated"
+    }
+  ],
+  "source_uncertainties": [
+    "All four assigned caption texts read completely; truncated batch gaps read in follow-up calls.",
+    "No selected source frames for recordings5–8 were available in the supplied frame tree; no full audiovisual review claimed.",
+    "Captions contain uncertain axes/signs in the identity list; chapter derives every listed identity in a fixed active convention.",
+    "The five-factor lecture alignment identity and the primary-reference three-factor U2 decomposition are distinguished."
+  ],
+  "symbols": [
+    "r",
+    "u",
+    "X",
+    "Y",
+    "Z",
+    "theta",
+    "phi",
+    "vartheta",
+    "U",
+    "alpha",
+    "beta",
+    "gamma",
+    "delta"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch04_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch04_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch04-r1.md",
+      "report_sha256": "0bb8c0a828fba019a18f7c87220f5b2a5cc07b611faf925b0a0162b07d797fcd",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch04-r2.md",
+      "report_sha256": "2d010fb1bafc8ae94d5eadff7d04500f58a17bae5bbd5ed2e19583e7075a7c60",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "6f7ec588a487631d4fdb1a284acdd7f5cb0cf0dae3afcef42168f76e41096aa9",
+  "canonical_body_sha256": "6f7ec588a487631d4fdb1a284acdd7f5cb0cf0dae3afcef42168f76e41096aa9",
+  "body_sha256": "6f7ec588a487631d4fdb1a284acdd7f5cb0cf0dae3afcef42168f76e41096aa9"
+}

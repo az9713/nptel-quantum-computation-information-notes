@@ -1,0 +1,156 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Information erasure and thermodynamic bookkeeping</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>3. Information erasure and thermodynamic bookkeeping</h1>
+<p class="lead">Reset an unknown, unbiased memory bit to zero while returning the apparatus to its original operating condition. In an ideal isothermal model, the reservoir must receive mean heat of at least \(k_{\rm B}T\ln2\), where \(T\) is its positive absolute temperature and \(k_{\rm B}\) is Boltzmann's constant. The memory loses entropy; the reservoir gains entropy. In a reversible limiting implementation the total entropy change is zero. The bound concerns an ensemble average, rather than a deterministic heat minimum on every individual trial. Tracking whose entropy changes fixes the physical interpretation of the result.</p>
+<p class="source-note"><strong>Lecture material:</strong> <a href="https://www.youtube.com/watch?v=XEZ7bH11Hds">W1L4</a> connects irreversible logical gates to erasure, illustrates the bound with compression of an ideal gas, and discusses Maxwell's demon. <strong>Primary-reference clarifications:</strong> <a href="https://arxiv.org/pdf/physics/0210005">Bennett, pages 1–3</a>, separates logical irreversibility from total thermodynamic irreversibility and includes the controller in the accounting; <a href="https://arxiv.org/pdf/1306.4352">Reeb and Wolf, §§2–3 and 6</a>, make reservoir and correlation assumptions explicit. <strong>Original teaching constructions:</strong> the entropy sign ledger, biased and imperfect reset bounds, dimensionless work calculation, laboratory, and exercises. The chapter derives a thermodynamic bound under stated assumptions; it does not measure the energy consumption of a processor.</p>
+
+<h2 id="model">3.1 Logical states, physical memory, and reset <a class="timestamp" href="https://www.youtube.com/watch?v=XEZ7bH11Hds&amp;t=101s">W1L4 1:41</a></h2>
+<p>A logical bit is a label \(b\in\{0,1\}\) encoded in distinguishable physical states of a memory. A physical implementation must specify which states carry those labels, how they are prepared, how the apparatus changes them, and which environment receives heat or information. Logical reset is the map \(R(0)=0\), \(R(1)=0\). It is many-to-one: its output does not determine which input occurred.</p>
+<p>By contrast, a NOT operation \(b\mapsto1-b\) is one-to-one and its own inverse. In a two-bit register, the XOR transformation \((x,y)\mapsto(x,y\oplus f(x))\) from Chapter 2 is also one-to-one. Preserving auxiliary inputs can therefore make a larger logical operation reversible even when the desired single output is a many-to-one function. Reversibility of the enlarged map is an information statement, not a guarantee that a particular transistor circuit dissipates little heat.</p>
+<p>The erasure model here uses two energetically degenerate, physically symmetric memory states with the same internal thermodynamic entropy. The bit is initially independent of the reservoir and has no usable correlated side memory. A reservoir is an environment so large, or idealized in a limit, that exchanging heat does not appreciably change its temperature \(T\), measured in kelvin. We take \(T\gt0\), and write \(k_{\rm B}\) for Boltzmann's constant, with units joule per kelvin.</p>
+<p>A protocol may be controlled by an external work source. At the end, the memory has been reset, the memory Hamiltonian and other apparatus settings return to their original values, and the reservoir receives mean heat \(Q_{\rm bath}\), defined positive into the reservoir. Heat and work throughout this chapter denote ensemble averages over the specified preparation and thermal fluctuations. The thermodynamic bounds do not prohibit an individual trial from transferring less heat. Returning the other apparatus settings matters: leaving the input value stored in a controller, a moving partition, or a discarded register transfers the information rather than completing the stated reset cycle.</p>
+
+<h3 id="entropy">The entropy associated with an unknown logical value</h3>
+<p>Let \(p=\Pr(b=1)\), so that \(\Pr(b=0)=1-p\). Define the dimensionless binary entropy in natural-log units by
+\[
+h_{\rm e}(p)=-p\ln p-(1-p)\ln(1-p),\qquad
+0\ln0:=0.
+\tag{3.1}
+\]
+The endpoint convention is the limit \(x\ln x\to0\) as \(x\to0^+\). This quantity describes uncertainty in the bit under its specified preparation distribution. With symmetric internal memory states, its contribution to the memory's thermodynamic entropy is \(S_{\rm logical}=k_{\rm B}h_{\rm e}(p)\). The internal entropy common to both logical states cancels from the reset difference.</p>
+<p>Natural logarithms are used because thermodynamic entropy is expressed with \(k_{\rm B}\). If entropy is measured in bits instead, the conversion is \(h_{\rm e}(p)=(\ln2)H_{\rm Sh}(p,1-p)\). Chapter 6 develops the coding interpretation of Shannon entropy. The thermodynamic model already needs a specified distribution: a physical memory known to be zero and an unbiased unknown memory are different resources, even if the device has the same two nominal states.</p>
+<p>For an unbiased bit, \(p=1/2\), and (3.1) gives \(h_{\rm e}=\ln2\). A perfect reset leaves \(p=0\), giving zero logical entropy. The change of the memory's logical entropy is therefore
+\[
+\Delta S_{\rm mem}
+=S_{\rm mem,final}-S_{\rm mem,initial}
+=-k_{\rm B}\ln2.
+\tag{3.2}
+\]
+This does not mean the entire physical memory has zero entropy after reset. It means that the entropy contribution associated with its logical alternatives has been removed in the stated symmetric model.</p>
+<p>Logical NOT merely exchanges \(p\) and \(1-p\), leaving (3.1) unchanged. More generally, a permutation of logical labels permutes the terms in \(-k_{\rm B}\sum_jp_j\ln p_j\) and preserves their sum. Reset removes alternatives from the logical description. A microscopic reversible description of the apparatus and environment must account for where their distinguishing information went.</p>
+
+<h2 id="bound">3.2 Entropy balance gives the erasure bound <a class="timestamp" href="https://www.youtube.com/watch?v=XEZ7bH11Hds&amp;t=284s">W1L4 4:44</a></h2>
+<p>Take the second law as the physical premise: the entropy production of the complete memory–reservoir–apparatus process is nonnegative. In the ideal fixed-temperature reservoir, receiving heat \(Q_{\rm bath}\) changes its entropy by \(Q_{\rm bath}/T\). Assume that the other apparatus components return to their initial entropy and no uncounted information store remains. Then
+\[
+\Delta S_{\rm total}
+=\Delta S_{\rm mem}+\frac{Q_{\rm bath}}T\geq0.
+\tag{3.3}
+\]
+The equality is the bookkeeping relation for this model. The inequality is the second-law assumption, not a theorem about Boolean truth tables alone.</p>
+<div class="prop"><strong>Proposition 3.1 — Thermodynamic reset bound under the stated model.</strong> Resetting an initially unbiased symmetric bit to a known logical state, with no usable side information and the ideal reservoir described above, requires
+\[
+Q_{\rm bath}\geq k_{\rm B}T\ln2.
+\tag{3.4}
+\]
+This is derived here from the entropy balance and the specified memory model.</div>
+<div class="proof"><p>Insert (3.2) into (3.3). Rearranging gives \(Q_{\rm bath}/T\geq k_{\rm B}\ln2\). Multiplication by the positive temperature \(T\) preserves the inequality and yields (3.4). The entropy change of the memory is negative, the entropy change of the bath is at least its positive magnitude, and the total is nonnegative. <span class="qed">∎</span></p></div>
+<p>The lower bound is compatible with thermodynamic reversibility in an ideal limiting protocol. At equality the reservoir gains \(k_{\rm B}\ln2\), the memory loses the same amount, and total entropy production is zero. A protocol with \(Q_{\rm bath}=k_{\rm B}T(\ln2+\delta)\), where \(\delta\geq0\) is a dimensionless excess, produces total entropy \(k_{\rm B}\delta\). The extra heat measures irreversibility of the stated cycle; the baseline heat export is not itself proof that total entropy increased by \(k_{\rm B}\ln2\).</p>
+<p>These sign and scope distinctions agree with <a href="https://arxiv.org/pdf/physics/0210005">Bennett's discussion, page 1</a>: logically irreversible erasure of unknown data can, in a suitable ideal implementation, transfer entropy reversibly to its environment. Conversely, a logically reversible gate may dissipate substantial energy when implemented by an ordinary lossy device. Logical and thermodynamic reversibility describe different properties.</p>
+<p>A heat bound is not automatically a work bound for every memory. In the stated symmetric degenerate memory and cyclic apparatus, the memory's average internal energy has no net change. With no other net energy storage, the first law then gives \(W_{\rm on}=Q_{\rm bath}\), where \(W_{\rm on}\) is work supplied to the apparatus–memory process. If the logical levels have different energies or other components end in changed energetic states, the first-law balance includes those changes. The same formula cannot be transplanted without that accounting.</p>
+
+<h3 id="biased">Bias and imperfect reset change the entropy budget</h3>
+<p>For a biased initial distribution the same calculation gives \(\Delta S_{\rm mem}=-k_{\rm B}h_{\rm e}(p)\) under perfect reset. Thus the bound becomes
+\[
+Q_{\rm bath}\geq k_{\rm B}T h_{\rm e}(p).
+\tag{3.5}
+\]
+It reduces to (3.4) at \(p=1/2\), and to zero at \(p=0\) or \(p=1\). A known one can be mapped to a known zero by a reversible NOT operation tailored to that known preparation. The fact that the physical cell can store either value does not force every use of it to begin with one bit of uncertainty.</p>
+<p>The unbiased distribution maximizes this entropy. To check the claim without importing a coding theorem, differentiate (3.1) on \(0\lt p\lt1\):
+\[
+h_{\rm e}'(p)=\ln\frac{1-p}{p},\qquad
+h_{\rm e}''(p)=-\frac1p-\frac1{1-p}\lt0.
+\]
+The sole stationary point is \(p=1/2\), and strict concavity makes it the maximum. The endpoint values are zero. This derivation also explains why reset costs should be averaged over a specified source distribution rather than assigned from the number of physical cells alone.</p>
+<p>Suppose instead that an initially unbiased bit is only reset to a distribution with residual error probability \(\varepsilon\), where \(0\leq\varepsilon\leq1/2\) is the final probability of logical one. The final memory retains logical entropy \(k_{\rm B}h_{\rm e}(\varepsilon)\). Equations (3.1) and (3.3) imply
+\[
+Q_{\rm bath}\geq k_{\rm B}T
+\bigl[\ln2-h_{\rm e}(\varepsilon)\bigr].
+\tag{3.6}
+\]
+At \(\varepsilon=0\) the ideal perfect-reset bound returns. At \(\varepsilon=1/2\), no reduction of logical uncertainty is demanded and this entropy-difference lower bound is zero. A one-percent residual error gives the dimensionless bound 0.637146, compared with 0.693147 for a perfect reset. This is an accounting bound; it does not construct a practical device that saturates it.</p>
+
+<h2 id="compression">3.3 Ideal-gas compression makes the signs explicit <a class="timestamp" href="https://www.youtube.com/watch?v=XEZ7bH11Hds&amp;t=387s">W1L4 6:27</a></h2>
+<p>Consider one classical ideal-gas particle initially able to occupy a box of volume \(V\), in equilibrium with a reservoir at temperature \(T\). Partitioning the available position into left and right halves gives two equally likely coarse-grained logical alternatives. A quasistatic isothermal compression reduces the accessible volume from \(V\) to \(V/2\). “Quasistatic” means the process passes through equilibrium states slowly enough for the equilibrium pressure relation to apply; it describes an ideal limit, not a finite-speed specification.</p>
+<p>Write \(V'\) for the instantaneous volume and \(P(V')\) for pressure. For one ideal particle, \(P(V')V'=k_{\rm B}T\). The reversible work done <em>on</em> the gas is
+\[
+W_{\rm on}
+=-\int_V^{V/2}P(V')\,dV'
+=-k_{\rm B}T\int_V^{V/2}\frac{dV'}{V'}
+=k_{\rm B}T\ln2.
+\tag{3.7}
+\]
+The integral of pressure over the shrinking volume is negative; the leading minus sign makes the supplied compression work positive. An ideal gas's internal energy depends only on temperature. Since temperature is unchanged, this work leaves as heat into the bath.</p>
+<p>The particle's positional entropy changes by \(k_{\rm B}\ln[(V/2)/V]=-k_{\rm B}\ln2\); the bath receives \(+k_{\rm B}\ln2\). Their total change is zero in the reversible limit. Describing the compressed state as one logical alternative does not remove its continuum of microscopic positions and momenta. Only the change in accessible phase-space volume is relevant to the entropy difference.</p>
+<p>For \(N_{\rm gas}\) independent ideal particles the equation of state is \(PV'=N_{\rm gas}k_{\rm B}T\), so the work is \(N_{\rm gas}k_{\rm B}T\ln2\). If particle amount is instead specified in moles \(\nu\), the relation is \(PV'=\nu RT\), with gas constant \(R\) satisfying \(\nu R=N_{\rm gas}k_{\rm B}\). Mixing a particle count with the molar gas constant would give the wrong normalization. The one-particle result provides the simplest connection to one unbiased binary positional alternative.</p>
+<p>A compression picture is a model of the entropy transfer. A complete reusable memory implementation must additionally restore its hardware settings while retaining the desired logical value; a changed partition position cannot be treated as a free hidden controller. Different physical memory designs supply that control in different ways. Equation (3.7) establishes the reversible isothermal compression work, while (3.3) specifies the reset cycle's bookkeeping conditions.</p>
+
+<h2 id="demon">3.4 Maxwell's demon and the missing part of a cycle <a class="timestamp" href="https://www.youtube.com/watch?v=XEZ7bH11Hds&amp;t=1114s">W1L4 18:34</a></h2>
+<p>Maxwell's demon is a hypothetical controller that observes approaching gas particles and conditionally opens a door, sorting fast and slow particles. If the gas alone is counted, sorting appears to create a temperature difference from equilibrium without paying the associated cost. A frictionless door removes one proposed mechanical cost, but it does not specify the controller's memory or show that the combined cycle returns to its initial state.</p>
+<p>A one-particle feedback engine makes the accounting concrete. Insert a partition that confines an equilibrium particle to one of two halves, measure which half contains it, and store that result in a memory. Conditional on the stored result, allow isothermal expansion from \(V/2\) to \(V\). Reversing the work integral in (3.7) shows that an ideal expansion can extract \(k_{\rm B}T\ln2\) of work from the reservoir. At that point the particle has recovered its original available volume, but the controller has a random record. It has not returned to its initial ready state.</p>
+<p>If the controller must reset that unbiased record with no remaining usable side information, the bound (3.4) requires a heat export at least equal to the ideal engine's extracted work. Combining expansion and reset therefore does not produce positive net work from a single reservoir in a completely restored reversible cycle. In less ideal processes extra entropy production reduces the net gain further. This argument identifies the previously omitted subsystem instead of charging an unspecified universal cost to every observation.</p>
+<p>Observation need not always cost \(k_{\rm B}T\ln2\). A known blank memory can record a bit reversibly through \((x,m)\mapsto(x,m\oplus x)\). This map is a permutation and is its own inverse. After recording, the memory and observed system are correlated. Restoring a complete cyclic controller requires tracking those correlations, any retained measurement record, and any conditional branch of the control program. If an auxiliary copy of \(x\) is available, the same XOR can clear the record without destroying the information held in that copy. The cost has changed because the task and available resources changed.</p>
+<p><a href="https://arxiv.org/pdf/physics/0210005">Bennett, pages 2–3</a>, emphasizes that the controller's program flow must also be included: a logical history cannot be merged for free merely by omitting an explicit “erase” instruction from a diagram. We do not claim that the simple one-bit engine exhausts all feedback thermodynamics. It provides one cycle whose information and energy stores can be named and balanced.</p>
+
+<h3 id="reservoir-limit">Why the reservoir assumption must remain visible</h3>
+<p>An ideal constant-temperature reservoir is a limiting description. A finite environment may heat up appreciably, develop correlations with the memory, or cease to be thermal during the operation. The thermodynamic derivation should not be presented as a proof that a small quantum bath can erase a bit perfectly at exactly the ideal heat cost.</p>
+<p>For comparison, <a href="https://arxiv.org/pdf/1306.4352">Reeb and Wolf's Theorem 3, PDF page 9</a>, treats a finite-dimensional memory and an initially thermal, initially uncorrelated reservoir evolving jointly by a unitary. In their dimensionless entropy convention the heat divided by \(k_{\rm B}T\) equals the memory's entropy decrease plus two nonnegative terms: final memory–reservoir mutual information and the reservoir's relative entropy from its initial thermal state. Mutual information measures correlations; relative entropy measures a distinguishability of distributions or states. Their definitions and the general quantum proof require tools developed later in this book, so this result is cited here rather than claimed as a local proof.</p>
+<p>The cited equality explains why finite-size and correlation corrections matter. We use only its stated consequence: the simple heat bound requires specific initial and dynamical assumptions, and saturation is a limiting idealization for nonzero erasure. Chapters 7 and 15 supply the state and environment machinery needed to revisit the quantum formulation. The present chapter's own derivation is the thermodynamic entropy balance (3.3), with its assumptions visible.</p>
+
+<h2 id="lab">3.5 Laboratory: bias, residual error, and a work integral</h2>
+<p>The program evaluates the natural-log entropy, checks its symmetry and endpoint bounds, numerically integrates the reversible one-particle compression work, and compares perfect with one-percent-error reset. All energies are divided by \(k_{\rm B}T\), so no numerical value of a physical constant is required. The gas integral is a numerical approximation to the analytic integral in (3.7), not a molecular-dynamics simulation or an experimental measurement. Assertions check the finite parameter values and a stated quadrature tolerance.</p>
+<pre><code class="language-python" data-file="ch03_lab.py">"""Dimensionless entropy and reversible ideal-gas work calculations."""
+import numpy as np
+
+
+def entropy(p):
+    probabilities = np.array([p, 1 - p], dtype=float)
+    positive = probabilities[probabilities &gt; 0]
+    return -np.sum(positive * np.log(positive))
+
+
+for p in [0.0, 0.1, 0.25, 0.5, 1.0]:
+    value = entropy(p)
+    assert value &gt;= -1e-14 and value &lt;= np.log(2) + 1e-14
+    assert np.isclose(value, entropy(1 - p))
+    print(f"P(bit=1)={p:.2f}: reset bound Q/(k_B*T)&gt;={value:.6f}")
+volume = np.linspace(1.0, 0.5, 10001)
+work = -np.trapezoid(1 / volume, volume)
+assert np.isclose(work, np.log(2), atol=1e-8)
+print(f"one-particle reversible compression W/(k_B*T)={work:.6f}")
+epsilon = 0.01
+imperfect = np.log(2) - entropy(epsilon)
+assert imperfect &lt; np.log(2)
+print(f"1-percent residual error: entropy bound={imperfect:.6f}")
+q_bath = np.log(2) + 0.2
+memory_entropy_change = -np.log(2)
+total = q_bath + memory_entropy_change
+assert np.isclose(total, 0.2)
+print(f"example total entropy production / k_B={total:.6f}")
+print("all dimensionless entropy and work checks passed")
+</code></pre>
+<pre><code class="output">P(bit=1)=0.00: reset bound Q/(k_B*T)&gt;=-0.000000
+P(bit=1)=0.10: reset bound Q/(k_B*T)&gt;=0.325083
+P(bit=1)=0.25: reset bound Q/(k_B*T)&gt;=0.562335
+P(bit=1)=0.50: reset bound Q/(k_B*T)&gt;=0.693147
+P(bit=1)=1.00: reset bound Q/(k_B*T)&gt;=-0.000000
+one-particle reversible compression W/(k_B*T)=0.693147
+1-percent residual error: entropy bound=0.637146
+example total entropy production / k_B=0.200000
+all dimensionless entropy and work checks passed
+</code></pre>
+<p>The unbiased distribution has the largest reset lower bound among these examples. The gas integral agrees with \(\ln2\), while allowing residual error reduces the entropy decrease demanded of the memory. The last line of numbers uses an artificial excess heat of \(0.2\,k_{\rm B}T\); the resulting entropy production is \(0.2\,k_{\rm B}\). This example exists to check the signs and units of the balance, not to estimate dissipation in a real device.</p>
+
+<h2 id="limits">3.6 Model boundaries</h2>
+<p>The derived one-bit formula assumes symmetric degenerate logical states, a specified initial distribution, no usable side information, an ideal isothermal reservoir, and a completed apparatus cycle. None of those conditions is supplied by a Boolean truth table. Heat, supplied work, internal-energy change, and entropy production must be kept separate until the first and second laws connect them under the physical model.</p>
+<p>Reversible logic can preserve information while actual engineering dissipates heat. Conversely, logical erasure of random data can approach a thermodynamically reversible entropy transfer. Finite reservoirs, correlations, nondegenerate energy levels, imperfect reset, and finite-time control modify the task or its attainable cost. These are reasons to state the model precisely, rather than reasons to assign a universal heat cost to every computational step.</p>
+<p>The next chapter returns to isolated qubit manipulation. Rotations preserve a closed pure state's norm and do not themselves enact a many-to-one reset. Bloch geometry will describe those operations before density operators account for mixtures and uncontrolled information transfer.</p>
+
+<h2 id="exercises">3.7 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex1">1. Repair an entropy sign error</h3><p>An argument says: “Reset lowers memory entropy by \(k_{\rm B}\ln2\), therefore the universe gains exactly \(k_{\rm B}\ln2\).” Identify the missing quantity and state the reversible limiting balance.</p><details><summary>Solution</summary><p>The bath entropy change is missing. The memory change is \(-k_{\rm B}\ln2\); in the ideal reversible limit the bath change is \(+k_{\rm B}\ln2\). Their sum is zero. If more heat is exported, the bath increase exceeds that magnitude and total entropy production is positive. The second law bounds the total, not the memory's entropy alone.</p></details></article>
+<article class="exercise"><h3 id="ex2">2. Compute a biased reset bound</h3><p>A symmetric bit has probability \(1/4\) of one. Derive its dimensionless perfect-reset lower bound and compare it with the unbiased case.</p><details><summary>Solution</summary><p>Equation (3.5) gives \(Q_{\rm bath}/(k_{\rm B}T)\geq-(1/4)\ln(1/4)-(3/4)\ln(3/4)=0.562335\), as evaluated by the lab. The unbiased value is \(\ln2=0.693147\). Bias reduces the preparation's uncertainty; the number of nominal physical states remains two. These are average entropy-accounting bounds under the same physical assumptions.</p></details></article>
+<article class="exercise"><h3 id="ex3">3. A counterexample to a per-cell charge</h3><p>A cell is known with certainty to contain one. Does mapping it to zero require the unbiased-bit bound? Give a reversible logical rule appropriate to the known input.</p><details><summary>Solution</summary><p>The distribution has zero entropy, so the entropy-reduction argument does not impose \(k_{\rm B}T\ln2\). Apply NOT, \(b\mapsto1-b\), which is reversible and maps the known one to zero. This is not a universal reset of an unknown bit: it would map an unknown zero to one. The distinction between a known preparation and an arbitrary input is essential. Practical implementation may still dissipate energy.</p></details></article>
+<article class="exercise"><h3 id="ex4">4. Diagnose an integral and its units</h3><p>Derive the reversible isothermal work to halve the volume of \(N_{\rm gas}\) independent ideal particles. Explain why using \(PV=N_{\rm gas}RT\) is inconsistent when \(N_{\rm gas}\) is a particle count.</p><details><summary>Solution</summary><p>The equation of state for a particle count is \(PV'=N_{\rm gas}k_{\rm B}T\). Hence \(W_{\rm on}=-N_{\rm gas}k_{\rm B}T\int_V^{V/2}dV'/V'=N_{\rm gas}k_{\rm B}T\ln2\). The molar gas constant \(R\) multiplies the number of moles, not the number of particles. Replacing \(k_{\rm B}\) by \(R\) without changing the amount variable mixes units and normalization.</p></details></article>
+<article class="exercise"><h3 id="ex5">5. Include side information in the task</h3><p>Two classical registers contain the same unknown bit, \((x,m)=(x,x)\). Show that an XOR operation can clear \(m\) without destroying the information in \(x\). Explain why this does not contradict the stated reset bound.</p><details><summary>Solution</summary><p>Apply \((x,m)\mapsto(x,m\oplus x)\), giving \((x,0)\). The map on all input pairs is a reversible permutation. The random bit remains in the first register, so the operation has not destroyed all records of \(x\). The reset bound in (3.4) excludes usable side information and requires the other apparatus resources to be returned. Discarding or later erasing the remaining register is another physical operation that must be accounted for.</p></details></article>
+<article class="exercise"><h3 id="ex6">6. Implement a bias and reset-error sweep</h3><p>Extend the laboratory over a grid of initial \(p\) and final \(\varepsilon\). Compute the entropy-difference bound \(h_{\rm e}(p)-h_{\rm e}(\varepsilon)\). Explain what a negative value does and does not imply.</p><details><summary>Solution</summary><p>Use nested loops over the two probabilities and subtract the entropies computed by <code>entropy</code>. The unbiased-to-low-error examples give positive lower bounds; equal entropies give zero. When the final entropy exceeds the initial entropy, the bound is negative. It allows a negative heat export within this entropy balance, meaning the memory could absorb heat while becoming less certain under an appropriate process. A negative lower bound does not force a particular apparatus to extract heat, prove that it saturates the bound, or establish a complete cyclic engine. Energy changes, controller resources, and the physical realization still need specification.</p></details></article>
+
+<h2 id="primary-sources">3.8 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=XEZ7bH11Hds">Mitra, W1L4, Principle of Information Eraser</a>: complete available auto-captions read. Entropy signs, particle/mole normalization, and controller accounting are clarified by the explicit model and derivations.</li><li><a href="https://arxiv.org/pdf/physics/0210005">Charles Bennett, Notes on Landauer's Principle, Reversible Computation, and Maxwell's Demon, PDF pages 1–3</a>: logical versus physical reversibility, reversible recording, and the control-flow boundary of a complete demon cycle.</li><li><a href="https://arxiv.org/pdf/1306.4352">David Reeb and Michael Wolf, An improved Landauer Principle with finite-size corrections, §§2–3, Theorem 3 on PDF page 9, and §6</a>: a precise quantum setup, nonnegative corrections, and limits on equality. The quantum equality theorem is cited, not re-proved here. The thermodynamic balance and ideal-gas example are separately derived in this chapter.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-02.html">Previous chapter</a> <a href="chapter-04.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

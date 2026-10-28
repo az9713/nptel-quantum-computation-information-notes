@@ -1,0 +1,251 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Bloch geometry, spin rotations, and Euler decomposition</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>4. Bloch geometry, spin rotations, and Euler decomposition</h1>
+<p class="lead">A quarter turn about the Y axis takes \(|0\rangle\) to \(|+\rangle\), but it is not the Hadamard gate: its action on \(|1\rangle\) has a different sign. A gate must have the intended action on every input, including complex superpositions. Bloch geometry explains the state motion; matrix factorization establishes the complete gate.</p>
+<p class="source-note"><strong>Lecture material:</strong> W1L5 introduces pure-state Bloch coordinates; W2L1 develops active/passive rotations and generators; W2L2 expands the spin rotation and constructs Hadamard; W2L3 proves an axis-alignment factorization. <strong>Primary-reference extensions:</strong> <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Preskill, Chapter 2, §2.2.1</a>, supplies the spin representation; <a href="https://arxiv.org/pdf/quant-ph/9503016">Barenco et al., Lemma 4.1, PDF pages 8–9</a>, supplies the general three-rotation decomposition. Their rotation signs are translated into the convention declared here. <strong>Original teaching constructions:</strong> the full conjugation derivation, explicit Euler-angle extraction, phase-sensitive counterexample, numerical laboratory, and exercises. Machine captions establish the lecture sequence; ambiguous signs are resolved by matrix algebra.</p>
+
+<h2 id="model">4.1 From a spinor to observable coordinates <a class="timestamp" href="https://www.youtube.com/watch?v=fbK5QYKHtXs&amp;t=33s">W1L5 0:33</a></h2>
+<p>Fix an orthonormal basis \(|0\rangle=(1,0)^{\mathsf T}\), \(|1\rangle=(0,1)^{\mathsf T}\) of \(\mathbb C^2\). A normalized pure qubit vector is \(|\psi\rangle=a|0\rangle+b|1\rangle\), where \(a,b\) are complex and \(|a|^2+|b|^2=1\). Vectors differing by a common phase \(e^{i\chi}\), for real \(\chi\), represent the same isolated pure state. This identification is a quantum postulate: it follows operationally from the Born probabilities, since every overlap magnitude is unchanged.</p>
+<p>Write the magnitudes as \(|a|=\cos(\theta/2)\), \(|b|=\sin(\theta/2)\), with \(0\leq\theta\leq\pi\). Removing the phase of the first nonzero coefficient gives the representative
+\[
+|\psi(\theta,\phi)\rangle=\cos\frac{\theta}{2}|0\rangle+
+e^{i\phi}\sin\frac{\theta}{2}|1\rangle,\qquad 0\leq\phi\lt2\pi.
+\tag{4.1}
+\]
+At a pole one coefficient vanishes and its phase is undefined, so \(\phi\) is redundant there. Two real parameters describe a generic pure qubit state; the original two complex amplitudes carried four real parameters, reduced by normalization and a common phase.</p>
+<p>The <dfn>Pauli matrices</dfn> are the Hermitian matrices
+\[
+X=\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix},\quad
+Y=\begin{pmatrix}0&amp;-i\\i&amp;0\end{pmatrix},\quad
+Z=\begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}.
+\tag{4.2}
+\]
+Write \(\boldsymbol{\sigma}=(X,Y,Z)\). Each matrix squares to \(I_2\), has trace zero, and has eigenvalues \(+1,-1\). For a Hermitian observable \(A\), the Born expectation is \(\langle A\rangle=\langle\psi|A|\psi\rangle\). Define the real <dfn>Bloch vector</dfn> by \(\mathbf r=(\langle X\rangle,\langle Y\rangle,\langle Z\rangle)\). These are expectations estimated on separately prepared copies, rather than simultaneous definite values attached to one qubit.</p>
+<div class="prop"><strong>Proposition 4.1 — Pure-state coordinates.</strong> The vector associated with (4.1) is
+\[
+\mathbf r=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta),
+\qquad\|\mathbf r\|=1.
+\tag{4.3}
+\]</div>
+<div class="proof"><p>For the general amplitudes, multiplication gives
+\[
+\langle X\rangle=a^*b+b^*a=2\operatorname{Re}(a^*b),\quad
+\langle Y\rangle=-ia^*b+ib^*a=2\operatorname{Im}(a^*b),\quad
+\langle Z\rangle=|a|^2-|b|^2.
+\]
+Insert \(a=\cos(\theta/2)\), \(b=e^{i\phi}\sin(\theta/2)\), and use \(2\sin(\theta/2)\cos(\theta/2)=\sin\theta\). The squared components sum to \(\sin^2\theta+\cos^2\theta=1\). Every common phase cancels from \(a^*b\) and the two populations. <span class="qed">∎</span></p></div>
+<p>The north and south poles are \(|0\rangle\) and \(|1\rangle\). The positive and negative X directions are \(|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2\). The Y directions are \(|\pm y\rangle=(|0\rangle\pm i|1\rangle)/\sqrt2\). Thus the relative phase distinguishes equatorial directions even though every equatorial state has equal computational-basis probabilities. For \(\theta=\pi/3,\phi=\pi/2\), the state is \((\sqrt3/2,i/2)^{\mathsf T}\), with Bloch vector \((0,\sqrt3/2,1/2)\). Its Y measurement gives \(+1\) with probability \((1+\sqrt3/2)/2\), whereas its Z measurement gives \(+1\) with probability \(3/4\).</p>
+<p>More generally, for a real unit vector \(\mathbf u\), the spin-direction observable is \(\mathbf u\cdot\boldsymbol{\sigma}\). Its projectors are \((I_2\pm\mathbf u\cdot\boldsymbol{\sigma})/2\), as follows from its square being identity. The two outcome probabilities are therefore \((1\pm\mathbf u\cdot\mathbf r)/2\). This equation gives the geometric dot product an operational meaning. The components of a Bloch vector are not the components of the two-entry state vector in physical space.</p>
+
+<h2 id="convention">4.2 Fix the rotation convention before comparing signs <a class="timestamp" href="https://www.youtube.com/watch?v=hrkmrOR0cCs&amp;t=78s">W2L1 1:18</a></h2>
+<p>An <dfn>active rotation</dfn> changes a vector while the coordinate axes remain fixed. A <dfn>passive rotation</dfn> changes the axes used to describe the same vector. We use an active right-handed convention: a positive angle about the positive Z axis sends the positive X direction toward positive Y. Its real matrix is
+\[
+\mathsf R_z(\vartheta)=
+\begin{pmatrix}\cos\vartheta&amp;-\sin\vartheta&amp;0\\
+\sin\vartheta&amp;\cos\vartheta&amp;0\\0&amp;0&amp;1\end{pmatrix}.
+\tag{4.4}
+\]
+Axes rotated actively by \(\vartheta\) describe fixed-vector coordinates with the inverse matrix \(\mathsf R_z(-\vartheta)\). The distinction concerns what is transformed, not a universal rule that active rotations are clockwise. Clockwise also depends on the viewing direction.</p>
+<p>The lecture motivates generators using spatial wavefunctions. In this convention an actively rotated scalar wavefunction satisfies \(\psi'(\mathbf x)=\psi(\mathsf R_z^{-1}\mathbf x)\). For a small angle, its argument is \((x+\vartheta y,y-\vartheta x,z)+O(\vartheta^2)\). Taylor expansion gives \(\psi'=\psi+\vartheta(y\partial_x-x\partial_y)\psi+O(\vartheta^2)\). With the orbital angular-momentum operator \(L_z=-i\hbar(x\partial_y-y\partial_x)\), this is \(\psi'=(I-i\vartheta L_z/\hbar)\psi+O(\vartheta^2)\). Composing many small rotations motivates the exponential \(e^{-i\vartheta L_z/\hbar}\).</p>
+<p>A qubit spinor uses the spin-\(1/2\) representation, with generators \(S_k=\hbar\sigma_k/2\). Here \(\hbar\) is the reduced Planck constant and \(S_k\) has angular-momentum units. This representation is a physical input, not a consequence of Taylor-expanding a scalar spatial wavefunction. The corresponding qubit rotation is
+\[
+R_{\mathbf u}(\vartheta)=
+\exp[-i\vartheta(\mathbf u\cdot\boldsymbol{\sigma})/2].
+\tag{4.5}
+\]
+The bold real axis \(\mathbf u\) is distinct from the input Bloch vector \(\mathbf r\); the rotation angle \(\vartheta\) is distinct from the state's polar coordinate \(\theta\).</p>
+
+<h2 id="exponential">4.3 Exponentiate the generator and derive the state motion <a class="timestamp" href="https://www.youtube.com/watch?v=TtJjIJmIOfY&amp;t=275s">W2L2 4:35</a></h2>
+<p>Direct matrix multiplication gives \(XY=iZ\), \(YZ=iX\), \(ZX=iY\), and the reverse products have opposite signs. Together with \(X^2=Y^2=Z^2=I_2\), these imply, for real vectors \(\mathbf a,\mathbf b\),
+\[
+(\mathbf a\cdot\boldsymbol{\sigma})(\mathbf b\cdot\boldsymbol{\sigma})
+=(\mathbf a\cdot\mathbf b)I_2+i(\mathbf a\times\mathbf b)\cdot\boldsymbol{\sigma}.
+\tag{4.6}
+\]
+To see the mechanism, equal-index terms supply \(\sum_k a_kb_k I_2\). The XY and YX terms together supply \(i(a_xb_y-a_yb_x)Z\); the other pairs supply the remaining cross-product components. For a unit axis, \(N=\mathbf u\cdot\boldsymbol{\sigma}\) therefore obeys \(N^2=I_2\).</p>
+<div class="prop"><strong>Proposition 4.2 — Spinor rotation and Rodrigues formula.</strong> For every real unit axis and real angle,
+\[
+R_{\mathbf u}(\vartheta)=
+\cos\frac{\vartheta}{2}I_2-i\sin\frac{\vartheta}{2}N.
+\tag{4.7}
+\]
+If \(|\psi'\rangle=R_{\mathbf u}(\vartheta)|\psi\rangle\), its Bloch vector is
+\[
+\mathbf r'=\cos\vartheta\,\mathbf r+
+(1-\cos\vartheta)(\mathbf u\cdot\mathbf r)\mathbf u+
+\sin\vartheta\,(\mathbf u\times\mathbf r).
+\tag{4.8}
+\]</div>
+<div class="proof"><p>Every even power of \(N\) equals identity and every odd power equals \(N\). Grouping the absolutely convergent exponential series into those two classes gives the cosine and sine in (4.7). Since \(N^\dagger=N\) and \(N^2=I_2\), multiplying by the adjoint gives \(R^\dagger R=I_2\).</p><p>Introduce the pure projector \(P=|\psi\rangle\langle\psi|=(I_2+\mathbf r\cdot\boldsymbol{\sigma})/2\); this equality follows by substituting the amplitudes and (4.3), without assuming a mixed-state formalism. Put \(c=\cos(\vartheta/2)\), \(s=\sin(\vartheta/2)\). The transformed projector is \(RPR^\dagger\). Expanding its Pauli part gives
+\[
+R(\mathbf r\cdot\boldsymbol{\sigma})R^\dagger
+=c^2\mathbf r\cdot\boldsymbol{\sigma}
++ics[(\mathbf r\cdot\boldsymbol{\sigma})N-N(\mathbf r\cdot\boldsymbol{\sigma})]
++s^2N(\mathbf r\cdot\boldsymbol{\sigma})N.
+\]
+Equation (4.6) makes the middle term \(2cs(\mathbf u\times\mathbf r)\cdot\boldsymbol{\sigma}\). Applying it twice gives \(N(\mathbf r\cdot\boldsymbol{\sigma})N=2(\mathbf u\cdot\mathbf r)N-\mathbf r\cdot\boldsymbol{\sigma}\). Collect coefficients and use \(c^2-s^2=\cos\vartheta\), \(2s^2=1-\cos\vartheta\), \(2cs=\sin\vartheta\). This proves (4.8). <span class="qed">∎</span></p></div>
+<p>The component parallel to the axis remains unchanged; the perpendicular plane rotates by \(\vartheta\). Equation (4.8) preserves lengths and orientation, so it is a proper three-dimensional rotation. For \(\mathbf u=\hat{\mathbf z}\), it reproduces (4.4). For \(\mathbf u=\hat{\mathbf y}\) and \(\mathbf r=\hat{\mathbf z}\), a positive quarter turn gives \(\hat{\mathbf x}\), confirming the opening example and fixing the cross-product sign.</p>
+<p>Conjugation identities follow from the same calculation. In particular, \(R_z(\vartheta)XR_z^\dagger(\vartheta)=X\cos\vartheta+Y\sin\vartheta\), \(R_y(\vartheta)ZR_y^\dagger(\vartheta)=Z\cos\vartheta+X\sin\vartheta\), and \(R_x(\vartheta)YR_x^\dagger(\vartheta)=Y\cos\vartheta+Z\sin\vartheta\). Each identity reduces to its unchanged Pauli operator at angle zero. Also \(XR_y(\vartheta)X=R_y(-\vartheta)\) and \(XR_z(\vartheta)X=R_z(-\vartheta)\), because conjugating the generator reverses its sign. These endpoint and generator checks prevent interchange of axes in an identity list.</p>
+
+<h2 id="gates">4.4 A state transfer is weaker than a gate identity <a class="timestamp" href="https://www.youtube.com/watch?v=TtJjIJmIOfY&amp;t=733s">W2L2 12:13</a></h2>
+<p>From (4.7),
+\[
+R_y(\pi/2)=\frac1{\sqrt2}\begin{pmatrix}1&amp;-1\\1&amp;1\end{pmatrix},
+\qquad H_{\mathrm{gate}}=\frac1{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix}.
+\tag{4.9}
+\]
+Both send \(|0\rangle\) to \(|+\rangle\). However, the rotation sends \(|1\rangle\) to \(-|-\rangle\), while Hadamard sends it to \(|-\rangle\). These gates are not related by one common phase: their first columns agree and their second columns disagree. Applied to a superposition, that relative difference changes observable interference.</p>
+<p>The missing operation can be supplied in two equivalent ways. Direct multiplication gives
+\[
+H_{\mathrm{gate}}=R_y(\pi/2)Z=iR_x(\pi)R_y(\pi/2).
+\tag{4.10}
+\]
+For the second equality, \(R_x(\pi)=-iX\) and \(XR_y(\pi/2)=H_{\mathrm{gate}}\). Matrix products act from right to left. This recovers the lecture's two-rotation construction while retaining the phase needed for exact matrix equality. Alternatively, \(H_{\mathrm{gate}}=(X+Z)/\sqrt2\) is a Pauli-axis matrix, so it is a half-turn about \((1,0,1)/\sqrt2\), multiplied by \(i\).</p>
+<p>A \(2\pi\) spinor rotation gives \(R_{\mathbf u}(2\pi)=-I_2\), while a \(4\pi\) rotation gives \(I_2\). Either sign produces the same isolated-state Bloch vector, because the projector contains both the ket and its adjoint. The map from determinant-one qubit unitaries to real proper rotations therefore identifies \(R\) and \(-R\). Its kernel contains only these two matrices: a matrix commuting with both X and Z must be scalar, and determinant one restricts that scalar to \(\pm1\). This is the concrete meaning of the two-to-one spinor description.</p>
+<p>A phase on an entire isolated state is unobservable, but a phase on only one coherently controlled branch is relative. For example, controlling the operator \(-I_2\) gives \(|0\rangle\langle0|\otimes I_2-|1\rangle\langle1|\otimes I_2=Z\otimes I_2\). It changes a control prepared in \(|+\rangle\) to \(|-\rangle\). Consequently, dropping a phase from a gate before placing it inside a controlled construction needs a separate phase-accounting argument.</p>
+
+<h2 id="alignment">4.5 Align an axis, rotate, and undo the alignment <a class="timestamp" href="https://www.youtube.com/watch?v=XhI45Ob4Ikc&amp;t=544s">W2L3 9:04</a></h2>
+<p>Let the desired rotation axis have spherical coordinates \(\mathbf u=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta)\). Define \(V=R_z(\phi)R_y(\theta)\). The conjugation identities give
+\[
+VZV^\dagger=\cos\theta Z+\sin\theta(\cos\phi X+\sin\phi Y)
+=\mathbf u\cdot\boldsymbol{\sigma}.
+\]
+Using \(VZ^kV^\dagger=(VZV^\dagger)^k\) in the exponential series proves
+\[
+R_{\mathbf u}(\vartheta)=
+R_z(\phi)R_y(\theta)R_z(\vartheta)R_y(-\theta)R_z(-\phi).
+\tag{4.11}
+\]
+The rightmost pair maps the axis to Z, the central operation rotates about Z, and the leftmost pair restores the original orientation. The argument applies to an arbitrary input vector, not only a vector pointing along the axis. An axis eigenstate merely acquires a phase; vectors off the axis move.</p>
+<p>The X coefficient in the conjugated generator is \(\sin\theta\cos\phi\). Replacing that X by Z would fail both the coefficient comparison and the test \(\theta=\pi/2,\phi=0\), which must give an X rotation. This direct algebra resolves the uncertain axis names in the machine captions. The five-factor alignment identity is exact, but it is not yet the general three-factor Euler representation.</p>
+
+<h2 id="euler">4.6 Extract three Euler rotations from any one-qubit unitary</h2>
+<p>The group \(U(2)\) consists of the complex two-by-two matrices obeying \(U^\dagger U=I_2\). Its subgroup \(SU(2)\) also has determinant one. Let \(\alpha\) be any real solution of \(e^{2i\alpha}=\det U\), and put \(W=e^{-i\alpha}U\). Then \(W\in SU(2)\). The choice of square root changes \(W\) by a minus sign and does not make the factorization unique.</p>
+<div class="prop"><strong>Proposition 4.3 — Z–Y–Z decomposition.</strong> Every \(U\in U(2)\) can be written
+\[
+U=e^{i\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)
+\tag{4.12}
+\]
+with real angles. One may choose \(0\leq\gamma\leq\pi\). The statement is the single-qubit factorization of <a href="https://arxiv.org/pdf/quant-ph/9503016">Barenco et al., Lemma 4.1, PDF pages 8–9</a>; the following derivation uses our negative-exponent convention.</div>
+<div class="proof"><p>Let the first column of \(W\) be \((a,b)^{\mathsf T}\). Its norm is one. An orthogonal normalized second column is \(e^{i\eta}(-b^*,a^*)^{\mathsf T}\). Its determinant is \(e^{i\eta}(|a|^2+|b|^2)\), so determinant one fixes \(e^{i\eta}=1\). Therefore
+\[
+W=\begin{pmatrix}a&amp;-b^*\\b&amp;a^*\end{pmatrix}.
+\]
+Direct multiplication gives
+\[
+R_z(\beta)R_y(\gamma)R_z(\delta)=
+\begin{pmatrix}
+e^{-i(\beta+\delta)/2}\cos(\gamma/2)&amp;-e^{-i(\beta-\delta)/2}\sin(\gamma/2)\\
+e^{i(\beta-\delta)/2}\sin(\gamma/2)&amp;e^{i(\beta+\delta)/2}\cos(\gamma/2)
+\end{pmatrix}.
+\tag{4.13}
+\]
+If \(a,b\ne0\), choose \(\gamma=2\operatorname{atan2}(|b|,|a|)\), \(\beta=\arg b-\arg a\), and \(\delta=-\arg b-\arg a\). The first column agrees, and the determinant-one form determines the second. If \(b=0\), choose \(\gamma=0,\beta=-2\arg a,\delta=0\). If \(a=0\), choose \(\gamma=\pi,\beta=2\arg b,\delta=0\). These endpoint cases avoid taking the argument of zero and complete the proof. <span class="qed">∎</span></p></div>
+<p>The function \(\operatorname{atan2}(y,x)\) returns the angle whose sine and cosine have the signs and ratio specified by \(y,x\); here both inputs are nonnegative. Arguments are defined modulo \(2\pi\), so extracted angles can jump at a branch cut even while the matrix varies smoothly. At \(\gamma=0\), only \(\beta+\delta\) affects the product. At \(\gamma=\pi\), only their difference affects it. These extraction formulas therefore require singular branches and do not define a unique continuously varying triple across their endpoint cases.</p>
+<p>For a concrete nonsingular case, take \(\alpha=0.2,\beta=0.3,\gamma=1.1,\delta=-0.7\) radians. Equation (4.13) has \(a=e^{0.2i}\cos(0.55)\), \(b=e^{0.5i}\sin(0.55)\). The extraction gives \(\beta=0.5-0.2=0.3\), \(\delta=-0.5-0.2=-0.7\) and the original middle angle. Multiplying by \(e^{0.2i}\) restores the prescribed \(U\). Reconstruction of the matrix is the meaningful check; recovering an arbitrarily chosen equivalent angle tuple is not.</p>
+
+<h2 id="lab">4.7 Executable rotation and reconstruction checks</h2>
+<p>The standalone NumPy lab compares spinor expectations with the derived coordinates, checks Rodrigues motion on complex states, reconstructs random unitaries and both Euler singular endpoints, and verifies the exact Hadamard identity. The seeded random sample tests implementations of the proved identities; it is not a proof of decomposition or a physical calibration experiment.</p>
+<pre><code class="language-python" data-file="ch04_lab.py">"""Spinor rotations, Bloch vectors, and nonsingular/singular Euler recovery."""
+import numpy as np
+
+identity = np.eye(2, dtype=complex)
+x = np.array([[0, 1], [1, 0]], complex)
+y = np.array([[0, -1j], [1j, 0]])
+z = np.diag([1, -1])
+paulis = [x, y, z]
+
+
+def rotation(axis, angle):
+    axis = np.asarray(axis, dtype=float)
+    assert np.isclose(axis @ axis, 1)
+    generator = sum(v * p for v, p in zip(axis, paulis))
+    return np.cos(angle / 2) * identity - 1j * np.sin(angle / 2) * generator
+
+
+def bloch(vector):
+    return np.array([np.vdot(vector, p @ vector).real for p in paulis])
+
+
+def euler(unitary):
+    assert np.allclose(unitary.conj().T @ unitary, identity)
+    phase = np.angle(np.linalg.det(unitary)) / 2
+    special = np.exp(-1j * phase) * unitary
+    a, b = special[:, 0]
+    middle = 2 * np.arctan2(abs(b), abs(a))
+    if abs(b) &lt; 1e-12:
+        left, right = -2 * np.angle(a), 0.0
+    elif abs(a) &lt; 1e-12:
+        left, right = 2 * np.angle(b), 0.0
+    else:
+        left = np.angle(b) - np.angle(a)
+        right = -np.angle(b) - np.angle(a)
+    return phase, left, middle, right
+
+
+def reconstruct(angles):
+    phase, left, middle, right = angles
+    return (np.exp(1j * phase) * rotation([0, 0, 1], left)
+            @ rotation([0, 1, 0], middle) @ rotation([0, 0, 1], right))
+
+
+theta, phi = np.pi / 3, np.pi / 2
+state = np.array([np.cos(theta / 2), np.exp(1j * phi) * np.sin(theta / 2)])
+assert np.allclose(bloch(state), [0, np.sqrt(3) / 2, 0.5])
+print("Complex-state Bloch vector:", bloch(state).round(6).tolist())
+random = np.random.default_rng(20261028)
+largest = 0.0
+for _ in range(96):
+    axis = random.normal(size=3)
+    axis /= np.linalg.norm(axis)
+    angle = random.uniform(-4 * np.pi, 4 * np.pi)
+    vector = random.normal(size=2) + 1j * random.normal(size=2)
+    vector /= np.linalg.norm(vector)
+    gate = rotation(axis, angle)
+    r = bloch(vector)
+    expected = (np.cos(angle) * r
+                + (1 - np.cos(angle)) * (axis @ r) * axis
+                + np.sin(angle) * np.cross(axis, r))
+    assert np.allclose(bloch(gate @ vector), expected, atol=1e-12)
+    phase = random.uniform(-np.pi, np.pi)
+    gate *= np.exp(1j * phase)
+    residual = np.max(np.abs(gate - reconstruct(euler(gate))))
+    largest = max(largest, residual)
+    assert residual &lt; 1e-12
+for middle in [0.0, np.pi]:
+    gate = reconstruct([0.2, 0.7, middle, -0.3])
+    assert np.allclose(gate, reconstruct(euler(gate)), atol=1e-12)
+hadamard = np.array([[1, 1], [1, -1]]) / np.sqrt(2)
+quarter = rotation([0, 1, 0], np.pi / 2)
+assert np.allclose(1j * rotation([1, 0, 0], np.pi) @ quarter, hadamard)
+assert not np.allclose(quarter, hadamard)
+assert np.allclose(rotation([0, 0, 1], 2 * np.pi), -identity)
+assert np.allclose(bloch(-state), bloch(state))
+print("Ninety-six complex rotation/Euler checks passed: True")
+print("Euler endpoint branches passed: True")
+print("Hadamard equals i Rx(pi) Ry(pi/2): True")
+print("A 2pi spinor rotation is -I; its Bloch action is identity: True")
+print("Largest reconstruction residual below 1e-12:", largest &lt; 1e-12)
+</code></pre>
+<pre><code class="output">Complex-state Bloch vector: [0.0, 0.866025, 0.5]
+Ninety-six complex rotation/Euler checks passed: True
+Euler endpoint branches passed: True
+Hadamard equals i Rx(pi) Ry(pi/2): True
+A 2pi spinor rotation is -I; its Bloch action is identity: True
+Largest reconstruction residual below 1e-12: True
+</code></pre>
+<p>The phase-sensitive test uses every matrix entry. It would reject the quarter-turn matrix as a substitute for Hadamard despite their identical outputs on \(|0\rangle\). The \(2\pi\) check separately compares spinors and Bloch vectors, demonstrating why a sign can be retained algebraically and disappear from an isolated-state measurement.</p>
+
+<h2 id="limits">4.8 Scope and limits</h2>
+<p>These results concern ideal single-qubit unitaries. They do not make arbitrary multi-qubit dynamics a spatial rotation of one Bloch sphere, or turn nonunitary measurement into a rotation. The sphere represents pure qubit rays; the next chapter constructs interior points using density operators. For an abstract qubit, Bloch axes label observables and need not coincide with three physical directions of a device.</p>
+<p>Euler existence also supplies no pulse duration, control amplitude, noise budget or uniquely optimal hardware compilation. Implementing Z and Y rotations is an additional experimental capability. The reliable mathematical procedure is to declare a convention, derive the full operator, and compare its action on a basis or all matrix entries.</p>
+
+<h2 id="exercises">4.9 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex4-1">1. Recover a complex direction</h3><p>Find the Bloch vector and X/Y/Z positive-outcome probabilities for \((|0\rangle+i|1\rangle)/\sqrt2\). Explain what distinguishes it from \(|+\rangle\).</p><details><summary>Solution</summary><p>Here \(a^*b=i/2\), so (4.3) gives \((0,1,0)\). The probabilities are \(1/2,1,1/2\). For \(|+\rangle\), the vector is \((1,0,0)\), giving \(1,1/2,1/2\). Their computational populations agree, but their relative phases produce different interference in transverse measurement bases.</p></details></article>
+<article class="exercise"><h3 id="ex4-2">2. Test an identity before expanding it</h3><p>A proposed formula is \(R_y(\vartheta)XR_y^\dagger(\vartheta)=Z\cos\vartheta+X\sin\vartheta\). Reject it with a limiting case, then derive the correct expression.</p><details><summary>Solution</summary><p>At zero angle the left side is X and the proposed right side is Z. Equation (4.8) rotates the positive X direction to \((\cos\vartheta,0,-\sin\vartheta)\). Thus the correct conjugation is \(X\cos\vartheta-Z\sin\vartheta\). One can verify the cross-product sign from \(\hat{\mathbf y}\times\hat{\mathbf x}=-\hat{\mathbf z}\), or expand the Pauli products.</p></details></article>
+<article class="exercise"><h3 id="ex4-3">3. Diagnose a gate from one test input</h3><p>Evaluate the outputs of \(R_y(\pi/2)\) and Hadamard on \(|+\rangle\). Why did a test on \(|0\rangle\) fail to distinguish them?</p><details><summary>Solution</summary><p>The rotation gives \((0,1)^{\mathsf T}=|1\rangle\); Hadamard gives \((1,0)^{\mathsf T}=|0\rangle\). Their second columns differ by a sign, while their first columns coincide. The \(|+\rangle\) input coherently combines both columns and makes that relative sign observable. One successful state transfer does not establish equality of two linear maps.</p></details></article>
+<article class="exercise"><h3 id="ex4-4">4. Handle an Euler endpoint</h3><p>Decompose \(W=\operatorname{diag}(e^{i\zeta},e^{-i\zeta})\). Give two angle triples and explain why a phase of a zero matrix entry must not be used.</p><details><summary>Solution</summary><p>Take \(\gamma=0,\beta=-2\zeta,\delta=0\), or \(\gamma=0,\beta=0,\delta=-2\zeta\). Since \(R_y(0)=I_2\), only \(\beta+\delta=-2\zeta\) matters. Here \(b=0\) has no well-defined argument. The nonsingular extraction formulas must be replaced by the endpoint branch, rather than assigning a physical meaning to a library's arbitrary arg(0) convention.</p></details></article>
+<article class="exercise"><h3 id="ex4-5">5. Audit the phase resource</h3><p>A compiler replaces \(R_z(2\pi)\) by identity inside a coherently controlled operation. Use a control in \(|+\rangle\) and any target state to determine whether the replacement is harmless.</p><details><summary>Solution</summary><p>The actual target operation is \(-I_2\). Its controlled version equals \(Z\otimes I_2\), so the joint input \(|+\rangle|\psi\rangle\) becomes \(|-\rangle|\psi\rangle\). Controlling identity leaves \(|+\rangle|\psi\rangle\) unchanged. Measuring the control in the X basis distinguishes them perfectly. The target sign was global only when acting on the entire isolated target preparation, not when attached to one branch of a superposition.</p></details></article>
+<article class="exercise"><h3 id="ex4-6">6. Sweep a coordinate singularity</h3><p>Extend the lab to sweep \(U(\varepsilon)=R_z(0.7)R_y(\varepsilon)R_z(-0.2)\) through zero middle angle. Compare reconstructed matrices and extracted angles. State which error is physically meaningful.</p><details><summary>Solution</summary><p>For each real \(\varepsilon\) near zero, extract the tuple and compute the maximum absolute entry of \(U-U_{\mathrm{reconstructed}}\). It should remain near floating-point precision. The middle angle is constrained to \([0,\pi]\), so negative input angles require equivalent changes of the other two angles. At zero only their sum is identifiable. A tuple jump with a small matrix residual is a coordinate change, while a stable large residual indicates an incorrect decomposition or branch convention. Also compare transformed Bloch vectors to check the active-rotation sign.</p></details></article>
+
+<h2 id="primary-sources">4.10 Primary sources</h2>
+<ul><li>NPTEL, Prof. Chiranjib Mitra: <a href="https://www.youtube.com/watch?v=fbK5QYKHtXs">W1L5, Bloch sphere representation of Spin states</a>; <a href="https://www.youtube.com/watch?v=hrkmrOR0cCs">W2L1, Rotation on Bloch-sphere I</a>; <a href="https://www.youtube.com/watch?v=TtJjIJmIOfY">W2L2, Rotation on Bloch-sphere II</a>; <a href="https://www.youtube.com/watch?v=XhI45Ob4Ikc">W2L3, Euler decomposition</a>.</li><li>John Preskill, <a href="https://www.preskill.caltech.edu/ph219/chap2_15.pdf">Quantum Information, Chapter 2</a>, §2.2.1: pure qubits, spin rotations and the Bloch sphere. The quantum representation is physical input; the matrix consequences are derived here.</li><li>A. Barenco et al., <a href="https://arxiv.org/pdf/quant-ph/9503016">Elementary gates for quantum computation</a>, arXiv quant-ph/9503016v1 (1995), Lemmas 4.1–4.2, PDF pages 8–9. Its displayed Y and Z rotations have the opposite angle signs to ours. Replacing those angles by their negatives translates its existence statement; (4.13) fixes our explicit reconstruction convention.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-03.html">Previous chapter</a> <a href="chapter-05.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

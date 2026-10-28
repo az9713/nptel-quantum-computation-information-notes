@@ -1,0 +1,7 @@
+f=(0, 0): P(first=0)=1.000000, P(first=1)=0.000000
+f=(0, 1): P(first=0)=0.000000, P(first=1)=1.000000
+f=(1, 0): P(first=0)=0.000000, P(first=1)=1.000000
+f=(1, 1): P(first=0)=1.000000, P(first=1)=0.000000
+balanced success at preparation angle 0.3: 0.912668
+plus-target balanced input incorrectly returns 0 with probability 1
+all finite oracle and probability checks passed

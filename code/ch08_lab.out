@@ -1,0 +1,25 @@
+three-term state: dimensions=2x2, Schmidt rank=2
+  singular values: [0.934172 0.356822]
+  rho_A spectrum: [0.872678 0.127322]
+  rho_B spectrum: [0.872678 0.127322]
+  entanglement entropy=0.550048 bits
+  wrong-conjugation residual=0.000000
+complex qubit-qutrit: dimensions=2x3, Schmidt rank=2
+  singular values: [0.866025 0.5     ]
+  rho_A spectrum: [0.75 0.25]
+  rho_B spectrum: [7.500000e-01 2.500000e-01 9.812634e-18]
+  entanglement entropy=0.811278 bits
+  wrong-conjugation residual=1.414214
+product state: dimensions=2x2, Schmidt rank=1
+  singular values: [1. 0.]
+  rho_A spectrum: [1. 0.]
+  rho_B spectrum: [1. 0.]
+  entanglement entropy=0.000000 bits
+  wrong-conjugation residual=0.000000
+Bell state: dimensions=2x2, Schmidt rank=2
+  singular values: [0.707107 0.707107]
+  rho_A spectrum: [0.5 0.5]
+  rho_B spectrum: [0.5 0.5]
+  entanglement entropy=1.000000 bits
+  wrong-conjugation residual=0.000000
+three-term reduced eigenvalues: [0.872678 0.127322]

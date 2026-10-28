@@ -1,0 +1,13 @@
+four-symbol: H=1.750000, L=1.750000, Kraft=1.000000
+eight-symbol: H=2.000000, L=2.000000, Kraft=1.000000
+iid binary source p=(0.9, 0.1)
+m=1: H/m=0.468996, L/m=1.000000, excess=0.531004
+m=2: H/m=0.468996, L/m=0.645000, excess=0.176004
+m=3: H/m=0.468996, L/m=0.532667, excess=0.063671
+m=4: H/m=0.468996, L/m=0.492550, excess=0.023554
+m=5: H/m=0.468996, L/m=0.480194, excess=0.011198
+rain surprise=7.643856 bits
+no-rain surprise=0.007232 bits
+fair die H=2.584963 bits
+biased die H=2.160964 bits
+Toffoli permutation: [0, 1, 2, 3, 4, 5, 7, 6]

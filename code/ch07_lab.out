@@ -1,0 +1,11 @@
+Bell: S(AB)=0.000000, S(A)=1.000000, S(B)=1.000000
+product: S(AB)=0.000000, S(A)=0.000000, S(B)=0.000000
+classical mixture: S(AB)=1.000000, S(A)=1.000000, S(B)=1.000000
+unread Z-measurement on B: A remains I/2
+unread X-measurement on B: A remains I/2
+S(diag(3/4,1/4))=0.811278
+p=0.00: local entropy=-0.000000
+p=0.25: local entropy=0.811278
+p=0.50: local entropy=1.000000
+p=0.75: local entropy=0.811278
+p=1.00: local entropy=-0.000000

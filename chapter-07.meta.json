@@ -1,0 +1,114 @@
+{
+  "chapter": 7,
+  "title": "Quantum entropy, two-qubit entanglement, and partial trace",
+  "status": "complete; independent round2 ACCEPT",
+  "recordings": [
+    {
+      "video_id": "Z_KrcBOovjQ",
+      "course_label": "W4L1",
+      "course_order": 16,
+      "duration_seconds": 1782
+    },
+    {
+      "video_id": "Nxms9nDrC_4",
+      "course_label": "W4L2",
+      "course_order": 17,
+      "duration_seconds": 1821
+    },
+    {
+      "video_id": "6qJxrIf7KeA",
+      "course_label": "W4L3",
+      "course_order": 18,
+      "duration_seconds": 1890
+    }
+  ],
+  "sections": [
+    {
+      "id": "model",
+      "video_id": "Z_KrcBOovjQ",
+      "start_seconds": 120,
+      "end_seconds": 1770,
+      "lecture_material": "Spectral entropy and finite pure/mixed examples",
+      "research_extension": "Singular logarithm defined through continuous spectral function",
+      "teaching_construction": "Explicit entropy invariance proof"
+    },
+    {
+      "id": "product",
+      "video_id": "Nxms9nDrC_4",
+      "start_seconds": 480,
+      "end_seconds": 1810,
+      "lecture_material": "Product vectors, Bell basis, and global purity",
+      "research_extension": "Coefficient-matrix factorization criterion",
+      "teaching_construction": "Determinant check rather than a sign-count rule"
+    },
+    {
+      "id": "partial",
+      "video_id": "6qJxrIf7KeA",
+      "start_seconds": 43,
+      "end_seconds": 1500,
+      "lecture_material": "Bell-state partial trace",
+      "research_extension": "Local-prediction characterization from Preskill equations2.62–2.67",
+      "teaching_construction": "Index proof, uniqueness, positivity, and trace proof"
+    },
+    {
+      "id": "local-entropy",
+      "video_id": "6qJxrIf7KeA",
+      "start_seconds": 1500,
+      "end_seconds": 1890,
+      "lecture_material": "Global purity and local mixedness",
+      "research_extension": "Conditioning versus unread measurement; no-signalling",
+      "teaching_construction": "Classical correlated counterexample and parameter family"
+    }
+  ],
+  "references": [
+    {
+      "title": "John Preskill, Quantum Information, Chapter2",
+      "url": "https://www.preskill.caltech.edu/ph219/chap2_15.pdf",
+      "supports": "Partial trace, local prediction identity, conditional ensembles and no-signalling",
+      "locator_checked": "§2.3.1 PDF pages19–20 eqs2.62–2.67; §2.5.3 PDF pages30–31"
+    }
+  ],
+  "source_uncertainties": [
+    "Auto-captions garble some normalizing factors; all states are normalized and independently checked here.",
+    "W4L3 spoken opening mislabels the week; topic and official video-ID mapping agree.",
+    "No full slide/audio review is claimed."
+  ],
+  "symbols": [
+    "rho",
+    "lambda_j",
+    "S",
+    "H_A,H_B",
+    "d",
+    "A",
+    "i,j,mu,nu indices",
+    "Phi/Psi Bell states",
+    "omega_AB",
+    "p",
+    "P_k"
+  ],
+  "exercises": 6,
+  "code_check": {
+    "command": "python code/ch07_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch07_lab.out"
+  },
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch07-r1.md",
+      "report_sha256": "f611a4fecd1a7b1c5a01ace5cf9c6edd17416af2f369ccbc6cb4c962814afce0",
+      "verdict": "See report",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch07-r2.md",
+      "report_sha256": "559740e7adccc3070d30cb57180af19dc51289ba6c0db85207c62440f858af0d",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "accepted_body_sha256": "c4d312f3c11897de1529af1188997dba1087b7f5a1f08148748a52e9638c4108",
+  "canonical_body_sha256": "c4d312f3c11897de1529af1188997dba1087b7f5a1f08148748a52e9638c4108",
+  "body_sha256": "5195d4db77e1c55229dfd0c5ac21a7c8949fd9f98124c2608182bc3ae5457099"
+}

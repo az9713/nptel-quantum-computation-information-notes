@@ -1,0 +1,164 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Deutsch&#x27;s algorithm: one query and observable interference</title><link rel="stylesheet" href="assets/book.css"><script src="assets/math-config.js"></script><script defer src="assets/mathjax-tex-svg.js"></script><script defer src="assets/book.js"></script></head><body><a class="skip" href="#chapter-content">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Quantum Computation and Quantum Information</a><nav class="course-nav" aria-label="Course"><a href="index.html">Contents</a><a href="source-map.html">Source map</a><a href="references.html">Primary references</a><a href="notation.html">Notation</a><a href="code-lab.html">Code laboratory</a><a href="evidence.html">Evidence and limitations</a></nav></header><div class="layout"><aside class="toc" id="chapter-toc" aria-label="Contents"></aside><main><div class="reading-tools"><button id="theme-toggle" type="button">Light theme</button><button id="text-toggle" type="button">Larger text</button><button id="solutions-toggle" type="button" aria-pressed="false">All solutions</button><button id="print-page" type="button">Print / PDF</button></div><article id="chapter-content"><h1>2. Deutsch's algorithm: one query and observable interference</h1>
+<p class="lead">An unknown Boolean function has two input values and two output values. The task is to decide whether its two outputs agree, while using as few evaluations as possible. A deterministic classical procedure must inspect both inputs in the worst case. A quantum procedure can obtain the required parity with one coherent oracle query. The improvement concerns this specified access model; constructing the oracle and operating a physical device are separate costs.</p>
+<p class="source-note"><strong>Lecture material:</strong> <a href="https://www.youtube.com/watch?v=XU-Y8Nay3wo">W1L3</a> introduces classical gates, the reversible Boolean oracle, Hadamard preparation, phase kickback, and readout. <strong>Primary-reference clarification:</strong> <a href="https://arxiv.org/pdf/quant-ph/9708016">Cleve, Ekert, Macchiavello, and Mosca, §2, PDF pages 4–5</a>, supplies the exact one-query formulation and distinguishes it from earlier versions. <strong>Original teaching constructions:</strong> the adversary proof, explicit four-oracle matrices, preparation-error calculation, laboratory, and worked exercises. A spoken equality/“balanced” label slip is resolved by the Boolean definition and the final circuit calculation, rather than copied into the exposition.</p>
+
+<h2 id="model">2.1 The problem and its classical query cost <a class="timestamp" href="https://www.youtube.com/watch?v=XU-Y8Nay3wo&amp;t=300s">W1L3 5:00</a></h2>
+<p>A Boolean function here is a map \(f:\{0,1\}\to\{0,1\}\). Its complete truth table is the ordered pair \((f(0),f(1))\). There are four possible tables because each output has two choices. A function is <em>constant</em> when its two outputs agree and <em>balanced</em> when they differ. For this one-bit domain every Boolean function belongs to exactly one of these two classes; no additional promise on the input is needed.</p>
+<p>Write \(a\oplus b\) for addition modulo two, also called exclusive OR or XOR. Its four values are \(0\oplus0=0\), \(0\oplus1=1\), \(1\oplus0=1\), and \(1\oplus1=0\). The desired answer is the bit \(s=f(0)\oplus f(1)\): zero for a constant function and one for a balanced function.</p>
+<table><thead><tr><th>Truth table</th><th>Function class</th><th>Required answer \(s\)</th></tr></thead><tbody><tr><td>\((0,0)\)</td><td>constant</td><td>0</td></tr><tr><td>\((0,1)\)</td><td>balanced</td><td>1</td></tr><tr><td>\((1,0)\)</td><td>balanced</td><td>1</td></tr><tr><td>\((1,1)\)</td><td>constant</td><td>0</td></tr></tbody></table>
+<p>In the classical query model a query chooses \(x\) and returns \(f(x)\). Work done between queries is not counted in the query total. This idealization isolates the information supplied by access to the function. It does not claim that processing, memory, or communication is free in a real implementation.</p>
+<div class="prop"><strong>Proposition 2.1 — Exact deterministic classical query cost.</strong> Any classical deterministic algorithm that determines \(f(0)\oplus f(1)\) correctly for every Boolean truth table requires two queries in the worst case.</div>
+<div class="proof"><p>Suppose the algorithm makes only one query, at some chosen input \(x\), and receives a bit \(b\). The unqueried value can equal \(b\), making the function constant, or equal \(1-b\), making it balanced. Both functions produce the same observed answer to that single query. A deterministic algorithm must then return the same classification for both and be wrong on one. Querying both inputs and XORing the answers succeeds, so two queries are also sufficient. <span class="qed">∎</span></p></div>
+<p>The proof compares algorithms with a specified access rule. It remains true if a classical call is packaged as a reversible operation returning an auxiliary bit \(y\oplus f(x)\), because knowing \(y\) recovers only the one value \(f(x)\). Allowing an unknown truth table to be printed in one response would define a different oracle and invalidate the comparison.</p>
+<p>Random guessing changes the allowed error, not the meaning of the problem. With a uniformly random choice among the four truth tables, one classical answer leaves two equally likely compatible tables of opposite parity. Thus one query cannot improve average success beyond one half under that prior. Since worst-case success cannot exceed average success for every table at once, no randomized one-query method has success strictly greater than one half on every table. An exact zero-error algorithm certainly cannot obtain the answer from that information. The quantum procedure will achieve certainty in its ideal model.</p>
+
+<h3 id="classical-gates">Why reversible embedding matters</h3>
+<p>A two-input, one-output classical gate can lose information about its input. AND maps \((0,0),(0,1),(1,0)\) to the same output zero; knowing the output cannot identify which pair occurred. A NOT gate \(x\mapsto x\oplus1\) is bijective and is its own inverse. These logical properties do not, by themselves, specify the heat dissipated by an apparatus; Chapter 3 supplies the physical assumptions needed for that question.</p>
+<p>A unitary gate on a fixed finite state space must be invertible. The rule \(|x\rangle\mapsto|f(x)\rangle\) therefore cannot serve as a unitary for every Boolean function: a constant function maps two orthogonal inputs to the same vector. The standard construction preserves the input and places the function value into a second qubit by XOR. That construction is bijective even when \(f\) is not.</p>
+
+<h2 id="oracle">2.2 The reversible oracle and phase kickback <a class="timestamp" href="https://www.youtube.com/watch?v=XU-Y8Nay3wo&amp;t=480s">W1L3 8:00</a></h2>
+<div class="def"><strong>Definition 2.1 — Boolean oracle.</strong> With input qubit \(x\) first and target qubit \(y\) second, define the linear operator \(U_f\) on the two-qubit computational basis by
+\[
+U_f|x,y\rangle=|x,y\oplus f(x)\rangle.
+\tag{2.1}
+\]
+Its action on every other vector is defined by linearity. One application is counted as one quantum query.</div>
+<p>Applying the same map twice returns \(y\oplus f(x)\oplus f(x)=y\). Hence \(U_f^2=I_4\). It also permutes the four computational-basis vectors, so its columns are an orthonormal basis and \(U_f^\dagger U_f=I_4\). This establishes unitarity for every truth table. The inverse rule depends on the same unknown function, but no inversion of the Boolean map \(f\) is required.</p>
+<p>Let \(X=\begin{pmatrix}0&1\\1&0\end{pmatrix}\) be the bit-flip matrix and \(I_2\) the identity on one qubit. If \(P_x=|x\rangle\langle x|\) is the projector onto input label \(x\), then
+\[
+U_f=P_0\otimes X^{f(0)}+P_1\otimes X^{f(1)}.
+\tag{2.2}
+\]
+The exponent is either zero or one, so \(X^0=I_2\) and \(X^1=X\). Equation (2.2) is a block-diagonal matrix: in the first input subspace the target gets the operation associated with \(f(0)\); in the second it gets the operation associated with \(f(1)\). This explicit operator also fixes all phases on superpositions. A device with the same basis-label truth table but additional unknown input-dependent phases would be a different coherent oracle.</p>
+<p>Define the normalized target states \(|+\rangle=(|0\rangle+|1\rangle)/\sqrt2\) and \(|-\rangle=(|0\rangle-|1\rangle)/\sqrt2\). Multiplying by \(X\) gives \(X|+\rangle=|+\rangle\) and \(X|-\rangle=-|-\rangle\). Their eigenvalues, rather than an observable target bit flip, will determine the useful response.</p>
+<div class="prop"><strong>Proposition 2.2 — Phase kickback.</strong> For each basis value \(x\),
+\[
+U_f|x\rangle|-\rangle=(-1)^{f(x)}|x\rangle|-\rangle.
+\tag{2.3}
+\]
+The oracle leaves the target vector unchanged up to its eigenvalue and places a function-dependent phase on the input branch.</div>
+<div class="proof"><p>Expand the target and apply (2.1) to each term:
+\[
+U_f|x\rangle|-\rangle
+=\frac{|x\rangle}{\sqrt2}
+\left(|f(x)\rangle-|1\oplus f(x)\rangle\right).
+\]
+For \(f(x)=0\), the parenthesis is \(|0\rangle-|1\rangle\). For \(f(x)=1\), it is \(|1\rangle-|0\rangle\), its negative. These are exactly the two values of \((-1)^{f(x)}\), proving (2.3). <span class="qed">∎</span></p></div>
+<p>For one fixed \(x\), this phase is global on that state and has no observable effect. When the input is a superposition of zero and one, the two branches can acquire different signs. Their relative sign is observable after an operation that recombines the input amplitudes. This distinction explains why merely preparing many basis inputs is insufficient: the readout must depend on their relative phase.</p>
+<p>If the target were \(|+\rangle\), its bit-flip eigenvalue would be \(+1\) for both possible function values. Then \(U_f|x\rangle|+\rangle=|x\rangle|+\rangle\), independent of \(f\). The preparation of \(|-\rangle\) is therefore a functional component of the algorithm, not an arbitrary convenient choice.</p>
+
+<h2 id="interference">2.3 The complete one-query circuit <a class="timestamp" href="https://www.youtube.com/watch?v=XU-Y8Nay3wo&amp;t=1381s">W1L3 23:01</a></h2>
+<p>Let \(H_{\rm gate}=2^{-1/2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\) denote the Hadamard matrix introduced in Chapter 1. Direct multiplication gives \(H_{\rm gate}^2=I_2\), \(H_{\rm gate}|0\rangle=|+\rangle\), and \(H_{\rm gate}|1\rangle=|-\rangle\). Begin in the two-qubit state \(|0\rangle|1\rangle\), and apply the following operations in order: Hadamard to each qubit; one \(U_f\); Hadamard to the first qubit; computational-basis measurement of the first qubit.</p>
+<p>After preparation the state is \(|+\rangle|-\rangle\). Linearity and (2.3) give the post-query state
+\[
+\frac{(-1)^{f(0)}|0\rangle+(-1)^{f(1)}|1\rangle}{\sqrt2}
+\otimes|-\rangle.
+\tag{2.4}
+\]
+The target remains a separate factor. In this particular calculation the input and target are not entangled at the displayed stages; a blanket claim that every useful quantum query requires entanglement between these two registers would be false.</p>
+<p>The final Hadamard changes the first factor to
+\[
+\frac{(-1)^{f(0)}+(-1)^{f(1)}}2|0\rangle+
+\frac{(-1)^{f(0)}-(-1)^{f(1)}}2|1\rangle.
+\tag{2.5}
+\]
+If the function values agree, the first coefficient is \(+1\) or \(-1\) and the second is zero. If they differ, the first coefficient is zero and the second is \(+1\) or \(-1\). The squared moduli therefore put all probability on the required bit.</p>
+<div class="thm"><strong>Theorem 2.1 — Exact Deutsch classification.</strong> In the ideal oracle model (2.1), the circuit above returns \(s=f(0)\oplus f(1)\) with probability one using one oracle query.</div>
+<div class="proof"><p>Equation (2.5) equals \((-1)^{f(0)}|s\rangle\): for \(s=0\) the two signs add, and for \(s=1\) they subtract. The final two-qubit state is
+\[
+(-1)^{f(0)}|f(0)\oplus f(1)\rangle\otimes|-\rangle.
+\tag{2.6}
+\]
+Its common factor \((-1)^{f(0)}\) does not affect measurement probabilities. Computational-basis readout of the first qubit therefore yields the required parity with certainty. Only the single occurrence of \(U_f\) queries the unknown function. <span class="qed">∎</span></p></div>
+<p>The observable answer is one global property of the truth table. Constant-zero and constant-one oracles produce the same first-qubit outcome. Their different common signs cannot be read as an extra function value in this circuit. Similarly, the two balanced functions give the same classification. The computation has arranged interference to isolate one bit that matters to the question; it has not made both entries independently available in one measurement.</p>
+<p>The exact circuit is developed in <a href="https://arxiv.org/pdf/quant-ph/9708016">Cleve and colleagues, §2, equations (2.1)–(2.4)</a>. Their paper describes it as an improved version of the original algorithm. The mathematical result here does not depend on assigning the exact formulation to every historical use of the name “Deutsch's algorithm.”</p>
+
+<h3 id="preparation-error">A preparation error exposes the mechanism</h3>
+<p>To identify which assumption creates certainty, replace the target preparation by
+\[
+|\eta_\theta\rangle=\cos\theta\,|-\rangle+\sin\theta\,|+\rangle,
+\]
+where \(\theta\) is real. The two basis vectors are orthonormal, so this remains normalized. Keep the first input in \(|+\rangle\). The \(|-\rangle\) component follows the useful phase-kickback calculation, while the \(|+\rangle\) component is unaffected by every oracle. After the final Hadamard the state is
+\[
+\cos\theta\,(-1)^{f(0)}|s\rangle|-\rangle
++\sin\theta\,|0\rangle|+\rangle.
+\tag{2.7}
+\]
+This follows by applying the circuit separately to the two orthogonal target components and recombining linearly.</p>
+<p>For a balanced function, \(s=1\). The first-qubit probability of the correct outcome is \(\cos^2\theta\); the target components are orthogonal, so their probabilities add without a cross term. For a constant function both components have first label zero, so classification still succeeds with probability one. At \(\theta=0\) the ideal algorithm is recovered; at \(\theta=\pi/2\) the target is \(|+\rangle\) and the circuit always returns zero. The laboratory's \(\theta=0.3\) example gives balanced-case success 0.912668.</p>
+<p>This calculation is a controlled model of one coherent preparation error. It is not a general noise model or an error rate measured on hardware. Its value is diagnostic: the algorithm's certainty is traced to a specific bit-flip eigenstate, and degrading that preparation has a calculable consequence. Chapters 15–17 introduce channels and dynamical noise models for more general failures.</p>
+
+<h2 id="lab">2.4 Laboratory: enumerate every oracle</h2>
+<p>The program constructs each oracle as a four-by-four permutation matrix in the order \(00,01,10,11\). For every truth table it verifies unitarity and self-inversion, propagates the prepared state, and sums over the target output to obtain first-qubit probabilities. It then checks (2.7) for a balanced oracle and an incorrect \(|+\rangle\) target. Inputs are all four truth tables and the specified preparation angle; outputs are deterministic probabilities, not sampled shots or runtime benchmarks.</p>
+<pre><code class="language-python" data-file="ch02_lab.py">"""Deutsch query calculation, including a controlled preparation error."""
+import numpy as np
+
+h = np.array([[1, 1], [1, -1]]) / np.sqrt(2)
+identity = np.eye(2)
+initial = np.array([0, 1, 0, 0], dtype=complex)
+minus = np.array([1, -1]) / np.sqrt(2)
+plus = np.array([1, 1]) / np.sqrt(2)
+
+
+def oracle(truth):
+    matrix = np.zeros((4, 4))
+    for x in (0, 1):
+        for y in (0, 1):
+            matrix[2 * x + (y ^ truth[x]), 2 * x + y] = 1
+    return matrix
+
+
+for truth in [(0, 0), (0, 1), (1, 0), (1, 1)]:
+    uf = oracle(truth)
+    assert np.allclose(uf.T @ uf, np.eye(4))
+    assert np.allclose(uf @ uf, np.eye(4))
+    final = np.kron(h, identity) @ uf @ np.kron(h, h) @ initial
+    marginal = np.abs(final.reshape(2, 2))**2
+    marginal = marginal.sum(axis=1)
+    parity = truth[0] ^ truth[1]
+    assert np.isclose(marginal[parity], 1)
+    print(f"f={truth}: P(first=0)={marginal[0]:.6f}, "
+          f"P(first=1)={marginal[1]:.6f}")
+
+theta = 0.3
+ancilla = np.cos(theta) * minus + np.sin(theta) * plus
+state = np.kron(plus, ancilla)
+final = np.kron(h, identity) @ oracle((0, 1)) @ state
+success = (np.abs(final.reshape(2, 2))**2).sum(axis=1)[1]
+assert np.isclose(success, np.cos(theta)**2)
+print(f"balanced success at preparation angle 0.3: {success:.6f}")
+blind = np.kron(h, identity) @ oracle((0, 1)) @ np.kron(plus, plus)
+assert np.isclose((np.abs(blind.reshape(2, 2))**2).sum(axis=1)[0], 1)
+print("plus-target balanced input incorrectly returns 0 with probability 1")
+print("all finite oracle and probability checks passed")
+</code></pre>
+<pre><code class="output">f=(0, 0): P(first=0)=1.000000, P(first=1)=0.000000
+f=(0, 1): P(first=0)=0.000000, P(first=1)=1.000000
+f=(1, 0): P(first=0)=0.000000, P(first=1)=1.000000
+f=(1, 1): P(first=0)=1.000000, P(first=1)=0.000000
+balanced success at preparation angle 0.3: 0.912668
+plus-target balanced input incorrectly returns 0 with probability 1
+all finite oracle and probability checks passed
+</code></pre>
+<p>Every constant table returns first label zero and every balanced table returns one. The preparation-error example agrees with the derived \(\cos^2\theta\) law. The calculation checks all functions in this finite problem, so the classical adversary proof and quantum algebra can be compared directly. It does not test physical access to an unknown oracle: the simulator is given the truth table to construct the matrix, while query complexity treats that matrix's use as a primitive.</p>
+
+<h2 id="limits">2.5 What the query advantage does and does not establish</h2>
+<p>The exact comparison is two deterministic classical queries versus one ideal quantum query for classifying a one-bit Boolean function. The circuit also requires input preparation, three Hadamard operations in total, and a readout. The accounting does not assign an absolute duration to any step. If classical queries can be run concurrently, the wall-clock comparison changes even though the total query count does not. A demonstration that encodes a known truth table into a matrix is a useful implementation of the mechanism, but it is not a timing test of an expensive unknown function.</p>
+<p>The oracle must implement the specified coherent action, including its relative phases. A device that evaluates a classical bit and irreversibly records which input branch was used can destroy the coherence needed for (2.5). A black box's classical truth table alone therefore does not guarantee the quantum access assumed by the theorem. Larger algorithms must justify their coherent arithmetic and accuracy requirements explicitly.</p>
+<p>The appearance of a superposition is also insufficient on its own. Without the final Hadamard, both constant and balanced cases in (2.4) have identical first-qubit computational probabilities. The final interference operation is what makes parity observable. Classical logical irreversibility and the cost of resetting a physical memory remain separate issues, which motivate the next chapter.</p>
+
+<h2 id="exercises">2.6 Exercises with worked solutions</h2>
+<article class="exercise"><h3 id="ex1">1. Derive self-inversion</h3><p>Show that \(U_f^2=I_4\) for every Boolean function, including constant functions. Explain why this does not imply that \(f\) itself is invertible.</p><details><summary>Solution</summary><p>On every basis pair, applying the oracle twice gives \((x,y\oplus f(x)\oplus f(x))=(x,y)\). Linearity extends the identity to every vector. The joint map preserves \(x\), whereas \(f\) alone can send both input bits to the same output. Reversibility belongs to the enlarged pair transformation, not to the single-output Boolean function.</p></details></article>
+<article class="exercise"><h3 id="ex2">2. Compute the complement oracle</h3><p>For \(f(0)=1,f(1)=0\), write the four-column oracle matrix and the final state of the ideal circuit.</p><details><summary>Solution</summary><p>The first two basis states are exchanged and the last two are unchanged:
+\[
+U_f=\begin{pmatrix}0&1&0&0\\1&0&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}.
+\]
+Equation (2.6) gives \(-|1\rangle|-\rangle\), since the parity is one and \(f(0)=1\). The global minus sign does not change the certain first outcome one. Squaring the matrix gives the identity as required.</p></details></article>
+<article class="exercise"><h3 id="ex3">3. Remove the final Hadamard</h3><p>Give a counterexample to the claim that the two function classes can already be distinguished by computational-basis readout immediately after the oracle.</p><details><summary>Solution</summary><p>For the constant-zero table the first factor in (2.4) is \(|+\rangle\); for \(f(x)=x\) it is \(|-\rangle\). Both yield probabilities \(1/2,1/2\) in that basis. They are orthogonal states and could be distinguished in another measurement basis, but the specified readout fails. The final Hadamard implements the required change of basis before computational readout.</p></details></article>
+<article class="exercise"><h3 id="ex4">4. Diagnose an incorrect target</h3><p>The first qubit is correctly prepared as \(|+\rangle\), but the target is \(|0\rangle\). For a balanced function determine the classification success probability after the usual final Hadamard.</p><details><summary>Solution</summary><p>Since \(|0\rangle=(|+\rangle+|-\rangle)/\sqrt2\), equation (2.7) applies with \(\cos^2\theta=\sin^2\theta=1/2\). In a balanced case the useful component gives first label one and the other gives zero. Summing over the orthogonal target states gives success probability \(1/2\). This failure is a preparation issue, not an incorrect XOR truth table.</p></details></article>
+<article class="exercise"><h3 id="ex5">5. Decide which resource improved</h3><p>Suppose each classical evaluation can run on a separate processor at the same time, and a quantum implementation spends substantial time preparing and reading its qubits. Which conclusions of Theorem 2.1 remain valid? Which timing conclusion is unsupported?</p><details><summary>Solution</summary><p>The exact deterministic classical total-query requirement remains two, and the ideal coherent quantum circuit still uses one oracle invocation. Two classical processors may perform their calls concurrently, so two total calls need not take twice the elapsed time of one call. State preparation, coherent oracle construction, control, and readout also contribute to the quantum duration. The theorem therefore does not establish a factor-of-two physical speedup in this scenario; actual durations and implementation assumptions would be needed.</p></details></article>
+<article class="exercise"><h3 id="ex6">6. Implement a preparation sweep</h3><p>Modify the laboratory to sweep \(\theta\) from zero to \(\pi/2\) and verify the predicted success curves for all four truth tables. State the two endpoint behaviors and explain the asymmetric response of constant and balanced functions.</p><details><summary>Solution</summary><p>For each angle construct \(\cos\theta|-\rangle+\sin\theta|+\rangle\), tensor it with \(|+\rangle\), apply the oracle and final first-qubit Hadamard, and sum the squared amplitudes over the target index. Compare the probability at the required parity with one for constant tables and \(\cos^2\theta\) for balanced tables. At zero all four succeed; at \(\pi/2\) constants succeed and balanced tables fail. The asymmetry occurs because an unaffected \(|+\rangle\) target makes the first qubit return to zero, which happens to be the correct constant answer. The test must compare classes separately rather than hide them in one averaged success number.</p></details></article>
+
+<h2 id="primary-sources">2.7 Primary sources</h2>
+<ul><li><a href="https://www.youtube.com/watch?v=XU-Y8Nay3wo">Mitra, W1L3, Deutsch Algorithm</a>: complete available auto-captions read, including the oracle, phase calculation, circuit, and classification. The prose corrects normalization and label ambiguities by explicit algebra.</li><li><a href="https://arxiv.org/pdf/quant-ph/9708016">R. Cleve, A. Ekert, C. Macchiavello, and M. Mosca, Quantum Algorithms Revisited, §2, PDF pages 4–5</a>: exact one-query circuit and distinction from the original formulation. The adversary argument, finite oracle matrices, and preparation sweep are independently developed teaching constructions here.</li></ul>
+</article><nav class="page-turn" aria-label="Chapter navigation"><a href="chapter-01.html">Previous chapter</a> <a href="chapter-03.html">Next chapter</a></nav></main></div><footer class="site-footer">Independent educational rewrite of Prof. Chiranjib Mitra’s NPTEL course, IISER Kolkata; coordinated by IIT Madras. Recordings and papers are linked, not redistributed. <a href="evidence.html">Verification scope</a>.</footer></body></html>

@@ -1,0 +1,137 @@
+{
+  "chapter": 19,
+  "title": "Mixed-state entanglement, convexity, and partial transpose",
+  "status": "complete; independent round2 ACCEPT",
+  "sections": [
+    {
+      "id": "thermal",
+      "video_id": "LzHRsvVpYpg",
+      "course_order": 58,
+      "start_seconds": 36,
+      "end_seconds": 1853,
+      "lecture_material": "Heisenberg spin-pair Hamiltonian and thermal state",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "model",
+      "video_id": "LzHRsvVpYpg",
+      "course_order": 58,
+      "start_seconds": 1853,
+      "end_seconds": 2035,
+      "lecture_material": "Separable product mixtures",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "model",
+      "video_id": "ykHW2-iBznk",
+      "course_order": 59,
+      "start_seconds": 323,
+      "end_seconds": 1040,
+      "lecture_material": "Convex segments and filled sets",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "partial-transpose",
+      "video_id": "ykHW2-iBznk",
+      "course_order": 59,
+      "start_seconds": 1059,
+      "end_seconds": 1623,
+      "lecture_material": "Subsystem transpose, Bell and product examples",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    },
+    {
+      "id": "white-noise-family",
+      "video_id": "ykHW2-iBznk",
+      "course_order": 59,
+      "start_seconds": 1632,
+      "end_seconds": 1883,
+      "lecture_material": "Singlet/white-noise partial-transpose threshold",
+      "research_extension": "Derived and cited qualifications are distinguished in chapter prose",
+      "teaching_construction": "Explicit algebra, finite examples, executed lab, and full exercise solutions"
+    }
+  ],
+  "references": [
+    {
+      "title": "Horodecki, Horodecki, Horodecki, Separability of mixed states (1996)",
+      "url": "https://arxiv.org/pdf/quant-ph/9605038",
+      "locator_checked": "Theorem 3, PDF p8"
+    }
+  ],
+  "symbols": [
+    "rho",
+    "p_j",
+    "T_B",
+    "H_A",
+    "H_B"
+  ],
+  "exercises": 6,
+  "review_rounds": [
+    {
+      "round": 1,
+      "report_id": "ch19-r1.md",
+      "report_sha256": "67c802c5452d07dc8c20de5c536caa0e7f705f0653ff291b622ac7ad20dc80ee",
+      "verdict": "ACCEPT",
+      "accepted_current_content": false
+    },
+    {
+      "round": 2,
+      "report_id": "ch19-r2.md",
+      "report_sha256": "964c87a0d56b51584ef583f207c2ca16ba29cc03cdff09db6a02112e57baf039",
+      "verdict": "ACCEPT",
+      "accepted_current_content": true
+    }
+  ],
+  "source_uncertainties": [
+    "All assigned timestamped machine transcript text read sequentially; no full audiovisual review claimed.",
+    "Machine technical recognition is fallible; formulas are checked by derivation, primary references, and selected frames.",
+    "The partition function traces the unnormalized Boltzmann operator, not the normalized density state.",
+    "The zero-temperature singlet conclusion is restricted by field strength.",
+    "Matrix change under partial transpose does not itself certify entanglement; positivity is the criterion.",
+    "A parallelogram needs independent parameters; weights constrained to sum one give a segment.",
+    "Bell partial-transpose eigenvalues retain the factor one half.",
+    "General low-dimensional sufficiency is cited, not proved; the noise-family boundary has an explicit product decomposition."
+  ],
+  "recordings": [
+    {
+      "video_id": "LzHRsvVpYpg",
+      "course_label": "W12L3",
+      "course_order": 58,
+      "duration_seconds": 2052
+    },
+    {
+      "video_id": "ykHW2-iBznk",
+      "course_label": "W12L4",
+      "course_order": 59,
+      "duration_seconds": 2118
+    }
+  ],
+  "visual_evidence": [
+    {
+      "course_order": 58,
+      "frame_paths": [
+        "sources/frames/58_LzHRsvVpYpg/t1630.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    },
+    {
+      "course_order": 59,
+      "frame_paths": [
+        "sources/frames/59_ykHW2-iBznk/t1500.jpg"
+      ],
+      "scope": "Selected frame notation check; not full visual review"
+    }
+  ],
+  "code_check": {
+    "command": "python code/ch19_lab.py",
+    "exit_code": 0,
+    "stdout_path": "code/ch19_lab.out"
+  },
+  "accepted_html_sha256": "faef92d69d752a39257ea932f27d2b1c1485817fd33ea81a41e48c28d561f12b",
+  "accepted_body_sha256": "faef92d69d752a39257ea932f27d2b1c1485817fd33ea81a41e48c28d561f12b",
+  "canonical_body_sha256": "faef92d69d752a39257ea932f27d2b1c1485817fd33ea81a41e48c28d561f12b",
+  "body_sha256": "e41e07d335d739f7058eb1007302611090d9a0f62b7c38f3b377f6ab84e08b4f"
+}

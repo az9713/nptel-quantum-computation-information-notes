@@ -40,7 +40,7 @@ Every chapter has two independent agent editorial review rounds. Sidecars retain
 - `source-free-validation.json`: the copied export checked without private inputs.
 - `verification-environment.json`: the execution environment. Exact stdout was verified with Python 3.13.5, NumPy 2.2.6 and SciPy 1.16.0 on Windows AMD64; floating-point details may vary elsewhere.
 
-Publication checks are recorded separately from scientific, code and reader checks. See [WORKFLOW.md](WORKFLOW.md) for the production process.
+[Publication checks](publication-validation.json) record served-file integrity and live desktop/mobile reader behavior for the named content commit, separately from scientific, code and local reader checks. See [WORKFLOW.md](WORKFLOW.md) for the production process.
 
 ## Source coverage and limits
 

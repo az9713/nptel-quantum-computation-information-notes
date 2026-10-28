@@ -2234,6 +2234,12 @@
       "purpose": "Portable reader tooling, documentation or validation evidence",
       "source_dependencies": [],
       "primary": false
+    },
+    {
+      "path": "publication-validation.json",
+      "purpose": "Live HTTP integrity, desktop/mobile reader and search checks for the recorded content commit",
+      "source_dependencies": [],
+      "primary": false
     }
   ]
 }

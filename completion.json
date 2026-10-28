@@ -33,6 +33,6 @@
   "publication": {
     "repository": "https://github.com/az9713/nptel-quantum-computation-information-notes",
     "pages_url": "https://az9713.github.io/nptel-quantum-computation-information-notes/",
-    "verification": "See publication-validation.json after deployment"
+    "verification": "Live served-file integrity and desktop/mobile browser checks passed; see publication-validation.json for the checked content commit and scope."
   }
 }
